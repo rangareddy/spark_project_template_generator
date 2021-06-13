@@ -6,7 +6,7 @@ import org.apache.spark.sql.SparkSession;
 
 import java.io.Serializable;
 
-public class ${projectBuilder.className} implements Serializable {
+public class ${projectBuilder.javaClassName} implements Serializable {
     public static void main(String[] args) {
 
         String appName = "${projectBuilder.className} Example";

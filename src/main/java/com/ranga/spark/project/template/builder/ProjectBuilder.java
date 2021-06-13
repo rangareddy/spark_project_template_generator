@@ -10,6 +10,7 @@ public class ProjectBuilder {
     private String projectTargetPath;
     private String packageName;
     private String className;
+    private String javaClassName;
     private String fullClassName;
     private String runScriptName;
     private String runScriptPath;
@@ -117,6 +118,10 @@ public class ProjectBuilder {
         return appName;
     }
 
+    public String getJavaClassName() {
+        return javaClassName;
+    }
+
     public Properties getProperties() {
         return properties;
     }
@@ -172,6 +177,7 @@ public class ProjectBuilder {
 
         projectName =  projectNameSB.toString();
         className = classNameSB.toString()+"App";
+        javaClassName = classNameSB.toString()+"JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
     }

@@ -45,7 +45,7 @@ public class SparkProjectTemplateGenerator {
         System.out.println(scalaFile+" created successfully");
 
         // Java App Generator
-        String javaFilePath = javaMain + File.separator + packageName + File.separator + className.replace("App", "JavaApp") + ".java";
+        String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
         File javaFile = new File(javaFilePath);
         new File(javaFile.getParentFile().getAbsolutePath()).mkdirs();
         GenerateTemplate.generateTemplate(projectBuilder, "java_app_class.ftl", javaFile);
