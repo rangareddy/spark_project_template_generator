@@ -1,5 +1,13 @@
 # Spark Project Template Generator
-Used to generate Sample Spark Project Template
+
+By using this project we can generate multiple spark project templates. 
+
+## Advantages
+The advantages of this application are:
+
+1. It will create both Java and Scala based applications. 
+2. It will create the run script 
+3. Deployment steps are mentioned in README.md file.
 
 ## How to Use
 
