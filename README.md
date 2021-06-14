@@ -8,6 +8,7 @@ The advantages of this application are:
 1. It will create both Java and Scala based applications. 
 2. It will create the run script 
 3. Deployment steps are mentioned in README.md file.
+4. Built in Scala Test application
 
 ## How to Use
 
