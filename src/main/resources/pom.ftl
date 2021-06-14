@@ -25,8 +25,12 @@
 
         <spark.version>${projectBuilder.properties.sparkVersion}</spark.version>
         <spark.scope>${projectBuilder.properties.sparkScope}</spark.scope>
+
+        <scalatest.version>3.0.8</scalatest.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
+    <!-- Developers -->
     <developers>
         <developer>
             <id>rangareddy</id>
@@ -35,6 +39,7 @@
         </developer>
     </developers>
 
+    <!-- Repositories -->
     <repositories>
         <repository>
             <id>cldr-repo</id>
@@ -50,6 +55,7 @@
 
     <dependencies>
 
+        <!-- Scala Lang dependencies -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -57,15 +63,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${r"${scala.version}"}</version>
         </dependency>
 
+        <!-- Spark dependencies -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-catalyst_${r"${scala.binary.version}"}</artifactId>
+            <artifactId>spark-core_${r"${scala.binary.version}"}</artifactId>
             <version>${r"${spark.version}"}</version>
             <scope>${r"${spark.scope}"}</scope>
         </dependency>
@@ -84,6 +90,22 @@
             <scope>${r"${spark.scope}"}</scope>
         </dependency>
 
+        <!-- Scala Test dependencies -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${r"${scala.binary.version}"}</artifactId>
+            <version>${r"${scalatest.version}"}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Junit dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${r"${junit.version}"}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -97,6 +119,9 @@
                 <configuration>
                     <source>${r"${java.version}"}</source>
                     <target>${r"${java.version}"}</target>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-serial,-path</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
@@ -136,10 +161,32 @@
                         <javacArg>${r"${java.version}"}</javacArg>
                         <javacArg>-target</javacArg>
                         <javacArg>${r"${java.version}"}</javacArg>
+                        <javacArg>-Xlint:all,-serial,-path</javacArg>
                     </javacArgs>
                 </configuration>
             </plugin>
 
+            <!-- ScalaTest Maven Plugin -->
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                    <junitxml>.</junitxml>
+                    <filereports>${projectBuilder.appName}TestSuites.txt</filereports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -155,7 +202,7 @@
                         <configuration>
                             <createDependencyReducedPom>true</createDependencyReducedPom>
                             <transformers>
-                                <!-- add Main-Class to manifest file -->
+                                <!-- Add Main Class to manifest file -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>${projectBuilder.fullClassName}</mainClass>

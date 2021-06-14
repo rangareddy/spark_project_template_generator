@@ -32,9 +32,12 @@ public class SparkProjectTemplateGenerator {
         String projectTargetPath = projectBuilder.getProjectTargetPath();
         String packageName = projectBuilder.getPackageName().replace(".", "/");
         String srcMain = "src/main";
+        String testMain = "src/test";
         String packagePath = projectTargetPath + File.separator + srcMain;
         String javaMain = packagePath + File.separator + "java";
         String scalaMain = packagePath + File.separator + "scala";
+        String testPackagePath = projectTargetPath + File.separator + testMain;
+        String testScalaPath = testPackagePath + File.separator + "scala";
         String resourcesMain = packagePath + File.separator + "resources";
 
         // Scala App Generator
@@ -43,6 +46,13 @@ public class SparkProjectTemplateGenerator {
         new File(scalaFile.getParentFile().getAbsolutePath()).mkdirs();
         GenerateTemplate.generateTemplate(projectBuilder, "scala_app_class.ftl", scalaFile);
         System.out.println(scalaFile+" created successfully");
+
+        // Scala Test App Generator
+        String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className +"Test.scala";
+        File scalaTestFile = new File(scalaTestFilePath);
+        new File(scalaTestFile.getParentFile().getAbsolutePath()).mkdirs();
+        GenerateTemplate.generateTemplate(projectBuilder, "scala_app_class_test.ftl", scalaTestFile);
+        System.out.println(scalaTestFile+" created successfully");
 
         // Java App Generator
         String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";

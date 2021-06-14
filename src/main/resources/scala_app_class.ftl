@@ -1,24 +1,39 @@
 package ${projectBuilder.packageName}
 
-import org.apache.spark.sql.SparkSession
+import java.lang
+
+import org.apache.spark.sql.{Dataset, SparkSession}
 import org.apache.spark.SparkConf
+import org.apache.log4j.Logger
 
 object ${projectBuilder.className} extends App with Serializable {
 
-  val appName = "${projectBuilder.className} Example"
+    @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)
 
-  // Creating the SparkConf object
-  val sparkConf = new SparkConf().setAppName(appName).setIfMissing("spark.master", "local[*]")
+    val appName = "${projectBuilder.className} Example"
 
-  // Creating the SparkSession object
-  val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
-  println("SparkSession Created successfully")
+    // Creating the SparkConf object
+    val sparkConf = new SparkConf().setAppName(appName).setIfMissing("spark.master", "local[2]")
 
-  val dataset = spark.range(1, 1000)
-  dataset.printSchema()
-  dataset.show()
+    // Creating the SparkSession object
+    val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
+    logger.info("SparkSession created successfully")
 
-  // Close the SparkSession
-  spark.close()
-  println("SparkSession closed successfully")
+    val rangeDS = getRangeDS(spark)
+    val count = countRangeDS(rangeDS)
+    logger.info(s"Range count ${r"${count}"}")
+
+    logger.info("${projectBuilder.appName} Finished")
+
+    // Close the SparkSession
+    spark.close()
+    logger.info("SparkSession closed successfully")
+
+    def getRangeDS(spark: SparkSession, start: Long = 0, end: Long = 1000): Dataset[lang.Long] = {
+        spark.range(start, end)
+    }
+
+    def countRangeDS(rangeDS: Dataset[lang.Long]): Long = {
+        rangeDS.count()
+    }
 }
