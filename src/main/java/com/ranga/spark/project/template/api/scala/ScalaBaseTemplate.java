@@ -1,6 +1,18 @@
-package com.ranga.spark.project.template.api;
+package com.ranga.spark.project.template.api.scala;
+
+import com.ranga.spark.project.template.api.BaseTemplate;
 
 public abstract class ScalaBaseTemplate implements BaseTemplate {
+
+    private String className;
+    public ScalaBaseTemplate(String className) {
+        this.className = className;
+    }
+
+    @Override
+    public String classTemplate() {
+        return "object "+className+" extends App with Serializable";
+    }
 
     @Override
      public String importTemplate() {

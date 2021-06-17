@@ -1,23 +1,16 @@
-package com.ranga.spark.project.template.api;
+package com.ranga.spark.project.template.api.scala;
 
 public class HelloWorldTemplate extends ScalaBaseTemplate {
 
-    private String className;
-
     public HelloWorldTemplate(String className) {
-        this.className = className;
-    }
-
-    @Override
-    public String classTemplate() {
-        return "object "+className+" extends App with Serializable";
+        super(className);
     }
 
     @Override
     public String codeTemplate() {
         return  "val rangeDS = getRangeDS(spark)\n" +
                 "    val count = countRangeDS(rangeDS)\n" +
-                "    logger.info(s\"Range count ${r\"${count}\"}\")" +
+                "    logger.info(s\"Range count ${count}\")" +
                 "\n" +
                 "\n" +
                 "    def getRangeDS(spark: SparkSession, start: Long = 0, end: Long = 1000): Dataset[lang.Long] = {\n" +

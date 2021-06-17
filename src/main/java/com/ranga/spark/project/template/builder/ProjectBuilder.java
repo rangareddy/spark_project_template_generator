@@ -1,7 +1,8 @@
 package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
-import com.ranga.spark.project.template.api.HelloWorldTemplate;
+import com.ranga.spark.project.template.api.java.HelloWorldJavaTemplate;
+import com.ranga.spark.project.template.api.scala.HelloWorldTemplate;
 
 import java.io.File;
 import java.util.Properties;
@@ -63,6 +64,13 @@ public class ProjectBuilder {
         prop.setProperty("codeTemplate", template.codeTemplate());
         prop.setProperty("importTemplate", template.importTemplate());
         prop.setProperty("classTemplate", template.classTemplate());
+
+        BaseTemplate javaTemplate = new HelloWorldJavaTemplate(projectBuilder.javaClassName);
+        prop.setProperty("sparkSessionBuildJavaTemplate", javaTemplate.sparkSessionBuildTemplate());
+        prop.setProperty("sparkSessionCloseJavaTemplate", javaTemplate.sparkSessionCloseTemplate());
+        prop.setProperty("codeJavaTemplate", javaTemplate.codeTemplate());
+        prop.setProperty("importJavaTemplate", javaTemplate.importTemplate());
+        prop.setProperty("classJavaTemplate", javaTemplate.classTemplate());
 
         return projectBuilder;
     }

@@ -2,6 +2,9 @@ package com.ranga.spark.project.template;
 
 import java.io.File;
 import java.util.*;
+
+import com.ranga.spark.project.template.api.BaseTemplate;
+import com.ranga.spark.project.template.api.scala.HelloWorldTemplate;
 import com.ranga.spark.project.template.builder.ProjectBuilder;
 import com.ranga.spark.project.template.util.FileUtil;
 import com.ranga.spark.project.template.util.GenerateTemplateUtil;
@@ -46,7 +49,8 @@ public class SparkProjectTemplateGenerator {
 
         // Java App Generator
         String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
-        generateTemplate(javaFilePath, projectBuilder, "java_app_class.ftl", true);
+        //generateTemplate(javaFilePath, projectBuilder, "java_app_class.ftl", true);
+        generateTemplate(javaFilePath, projectBuilder, "java_app_class_template.ftl", true);
 
         // log4j
         String log4jPath = resourcesMain + File.separator + "log4j.properties";
