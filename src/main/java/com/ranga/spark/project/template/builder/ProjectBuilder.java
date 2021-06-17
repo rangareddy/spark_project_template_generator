@@ -57,11 +57,12 @@ public class ProjectBuilder {
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
 
-        BaseTemplate template = new HelloWorldTemplate();
+        BaseTemplate template = new HelloWorldTemplate(projectBuilder.className);
         prop.setProperty("sparkSessionBuildTemplate", template.sparkSessionBuildTemplate());
         prop.setProperty("sparkSessionCloseTemplate", template.sparkSessionCloseTemplate());
         prop.setProperty("codeTemplate", template.codeTemplate());
         prop.setProperty("importTemplate", template.importTemplate());
+        prop.setProperty("classTemplate", template.classTemplate());
 
         return projectBuilder;
     }

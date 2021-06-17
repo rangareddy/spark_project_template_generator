@@ -2,7 +2,7 @@ package ${projectBuilder.packageName}
 
 ${projectBuilder.properties.importTemplate}
 
-object ${projectBuilder.className} extends App with Serializable {
+${projectBuilder.properties.classTemplate} {
 
     ${projectBuilder.properties.sparkSessionBuildTemplate}
 

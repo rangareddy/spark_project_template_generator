@@ -2,8 +2,15 @@ package com.ranga.spark.project.template.api;
 
 public class HelloWorldTemplate extends ScalaBaseTemplate {
 
-    public HelloWorldTemplate() {
+    private String className;
 
+    public HelloWorldTemplate(String className) {
+        this.className = className;
+    }
+
+    @Override
+    public String classTemplate() {
+        return "object "+className+" extends App with Serializable";
     }
 
     @Override
