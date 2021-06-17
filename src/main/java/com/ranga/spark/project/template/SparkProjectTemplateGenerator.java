@@ -13,7 +13,9 @@ public class SparkProjectTemplateGenerator {
 
     public static void main(String[] args) throws Exception {
         Properties properties = PropertyUtil.loadProperties(args);
-        String projects[] = properties.getProperty("appName").split(",");
+        String appName = (String) properties.getOrDefault("appName", "SparkWordCount");
+        String projects[] = appName.split(",");
+
         for(String projectName : projects) {
             System.out.println("========================");
             projectBuilder = ProjectBuilder.build(projectName, properties);

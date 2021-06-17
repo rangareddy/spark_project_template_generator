@@ -19,6 +19,7 @@
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
         <scala-maven-plugin.version>4.3.1</scala-maven-plugin.version>
+        <scalatest-maven-plugin.version>2.0.0</scalatest-maven-plugin.version>
 
         <scala.version>${projectBuilder.properties.scalaVersion}</scala.version>
         <scala.binary.version>${projectBuilder.properties.scalaBinaryVersion}</scala.binary.version>
@@ -170,9 +171,9 @@
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
-                <version>2.0.0</version>
+                <version>${r"${scalatest-maven-plugin.version}"}</version>
                 <configuration>
-                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                    <reportsDirectory> ${r"${project.build.directory}"}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
                     <filereports>${projectBuilder.appName}TestSuites.txt</filereports>
                 </configuration>

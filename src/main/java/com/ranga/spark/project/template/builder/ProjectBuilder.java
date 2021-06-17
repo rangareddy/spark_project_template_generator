@@ -5,8 +5,12 @@ import java.util.Properties;
 
 public class ProjectBuilder {
 
-    private String projectName;
     private final String appName;
+    private final static String readMeName = "README.md";
+    private final String targetDir;
+    private final String delimiter;
+    private final String integration;
+    private String projectName;
     private String projectTargetPath;
     private String packageName;
     private String className;
@@ -14,32 +18,37 @@ public class ProjectBuilder {
     private String fullClassName;
     private String runScriptName;
     private String runScriptPath;
-    private final static String readMeName = "README.md";
     private String readMePath;
-    private String targetDir;
-    private static final String INTEGRATION = "Integration";
-    private static final String DELIMITER = "-";
     private String jarName;
     private String jarPath;
     private String jarVersion;
-    private static Properties pr;
     private String pomPath;
     private String jarDeployPath;
     private String deployScriptPath;
     private final Properties properties;
 
-    public ProjectBuilder(String applicationName) {
+    public ProjectBuilder(String applicationName, Properties pr) {
         properties = pr;
         appName = applicationName;
-        targetDir = pr.getProperty("targetDir");
-        if(targetDir == null || targetDir.trim().isEmpty()) {
-            targetDir =  System.getProperty("user.home");
-        }
+        targetDir = getPropertyValue("projectDir", System.getProperty("user.home"));
+        integration = getPropertyValue("appExtension", "Integration" );
+        delimiter = getPropertyValue("delimiter", "-" );
+
+        String scalaVersion = getPropertyValue("scalaVersion", "2.12.10");
+        String scalaBinaryVersion = scalaVersion.substring(0, scalaVersion.lastIndexOf("."));
+        properties.setProperty("scalaVersion", scalaVersion);
+        properties.setProperty("scalaBinaryVersion", scalaBinaryVersion);
+        properties.setProperty("sparkVersion", getPropertyValue("sparkVersion", "3.1.1"));
+        properties.setProperty("javaVersion", getPropertyValue("javaVersion", "1.8"));
+        properties.setProperty("sparkScope", getPropertyValue("sparkScope", "compile"));
+    }
+
+    private String getPropertyValue(String key, String defaultValue) {
+        return (String) properties.getOrDefault(key, defaultValue );
     }
 
     public static ProjectBuilder build(String projectName, Properties prop) {
-        pr = prop;
-        ProjectBuilder projectBuilder = new ProjectBuilder(projectName);
+        ProjectBuilder projectBuilder = new ProjectBuilder(projectName, prop);
         projectBuilder.buildProjectInfo();
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
@@ -131,37 +140,47 @@ public class ProjectBuilder {
     }
 
     public void buildRunScriptAndClassInfo() {
-        String basePackageName = (String) properties.getOrDefault("basePackageName", "com.ranga");
-        if(!basePackageName.endsWith(".")) {
-            basePackageName = basePackageName +".";
-        }
-        this.packageName = basePackageName + projectName.replace(DELIMITER + "integration", "").replace(DELIMITER, ".");
+        this.packageName = getPackage();
         this.fullClassName = packageName + "." + className;
-        String jarVersion = (String) properties.getOrDefault("jarVersion", "1.0.0-SNAPSHOT");
+        String jarVersion = getPropertyValue( "jarVersion", "1.0.0-SNAPSHOT");
         this.jarVersion = jarVersion;
         this.jarName = projectName+"-"+jarVersion+".jar";
-        String baseDeployJarPath = (String) properties.getOrDefault("baseDeployJarPath", "/apps/spark/");
-        if(!baseDeployJarPath.endsWith("/")) {
-            baseDeployJarPath = baseDeployJarPath +"/";
-        }
+        String baseDeployJarPath = getBaseDeployJarPath();
         this.jarDeployPath = baseDeployJarPath + projectName;
         this.jarPath = baseDeployJarPath + projectName + File.separator + jarName;
-        this.runScriptName = "run_"+ projectName.replace(DELIMITER, "_") + "_app.sh";
+        this.runScriptName = "run_"+ projectName.replace(delimiter, "_") + "_app.sh";
         this.deployScriptPath = jarDeployPath + File.separator + runScriptName;
         this.runScriptPath = projectTargetPath + File.separator + runScriptName;
     }
 
+    private String getBaseDeployJarPath() {
+        String baseDeployJarPath = getPropertyValue("baseDeployJarPath", "/apps/spark/");
+        if(!baseDeployJarPath.endsWith("/")) {
+            baseDeployJarPath = baseDeployJarPath +"/";
+        }
+        return baseDeployJarPath;
+    }
+
+    private String getPackage() {
+        String basePackageName = getPropertyValue("basePackageName", "com.ranga");
+        if(!basePackageName.endsWith(".")) {
+            basePackageName = basePackageName +".";
+        }
+        return basePackageName + projectName.replace(delimiter + "integration", "")
+                .replace(delimiter, ".");
+    }
+
     private void buildProjectInfo() {
         String appNameStr = appName;
-        if (!appNameStr.contains(INTEGRATION)) {
-            appNameStr = appNameStr + INTEGRATION;
+        if (!appNameStr.contains(integration)) {
+            appNameStr = appNameStr + integration;
         }
         StringBuilder projectNameSB = new StringBuilder();
         StringBuilder classNameSB = new StringBuilder();
         for (int i = 0; i < appNameStr.length(); i++) {
             if(Character.isUpperCase(appNameStr.charAt(i))) {
                 if (i != 0) {
-                    projectNameSB.append(DELIMITER);
+                    projectNameSB.append(delimiter);
                 }
                 projectNameSB.append(Character.toLowerCase(appNameStr.charAt(i)));
                 classNameSB.append(appNameStr.charAt(i));
@@ -176,8 +195,8 @@ public class ProjectBuilder {
         }
 
         projectName =  projectNameSB.toString();
-        className = classNameSB.toString()+"App";
-        javaClassName = classNameSB.toString()+"JavaApp";
+        className = classNameSB+"App";
+        javaClassName = classNameSB+"JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
     }

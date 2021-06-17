@@ -9,7 +9,7 @@ log4j.additivity.${projectBuilder.packageName}=false
 log4j.appender.console=org.apache.log4j.ConsoleAppender
 log4j.appender.console.target=System.out
 log4j.appender.console.layout=org.apache.log4j.PatternLayout
-log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n
+log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss.SSS} %t %p %c{1}: %m%n
 
 # Define rolling file appender
 log4j.appender.file=org.apache.log4j.RollingFileAppender
@@ -19,7 +19,7 @@ log4j.appender.file.Append=false
 log4j.appender.file.MaxFileSize=200MB
 log4j.appender.file.MaxBackupIndex=5
 log4j.appender.file.layout=org.apache.log4j.PatternLayout
-log4j.appender.file.layout.conversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n
+log4j.appender.file.layout.conversionPattern=%d{yy/MM/dd HH:mm:ss.SSS} %t %p %c{1}: %m%n
 
 # Settings to quiet third party logs that are too verbose
 log4j.logger.org.apache.spark.repl.Main=WARN
