@@ -38,7 +38,6 @@ targetDir=/Users/rangareddy.avula/project_templates
 ```sh
 javaVersion=1.8
 scalaVersion=2.12.11
-scalaBinaryVersion=2.12
 sparkVersion=3.0.1
 sparkScope=compile
 ```

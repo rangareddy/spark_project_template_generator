@@ -2,37 +2,31 @@ package com.ranga.spark.project.template;
 
 import java.io.File;
 import java.util.*;
-
 import com.ranga.spark.project.template.builder.ProjectBuilder;
-import com.ranga.spark.project.template.util.GenerateTemplate;
+import com.ranga.spark.project.template.util.FileUtil;
+import com.ranga.spark.project.template.util.GenerateTemplateUtil;
 import com.ranga.spark.project.template.util.PropertyUtil;
 
 public class SparkProjectTemplateGenerator {
 
-    private static ProjectBuilder projectBuilder;
-
     public static void main(String[] args) throws Exception {
         Properties properties = PropertyUtil.loadProperties(args);
         String appName = (String) properties.getOrDefault("appName", "SparkWordCount");
-        String projects[] = appName.split(",");
-
+        String[] projects = appName.split(",");
         for(String projectName : projects) {
             System.out.println("========================");
-            projectBuilder = ProjectBuilder.build(projectName, properties);
-            File projectTargetFile = new File(projectBuilder.getProjectTargetPath());
-            createProject(projectTargetFile);
-            createReadMeFile();
-            createRunScriptFile();
-            createPOMFile();
-            createSparkFiles();
+            ProjectBuilder projectBuilder = ProjectBuilder.build(projectName, properties);
+            createProjectTemplate(projectBuilder);
             System.out.println("========================\n");
         }
     }
 
-    private static void createSparkFiles() {
+    private static void createProjectTemplate(ProjectBuilder projectBuilder) {
+        File projectTargetFile = new File(projectBuilder.getProjectTargetPath());
+        FileUtil.createDir(projectTargetFile);
         String className = projectBuilder.getClassName();
         String projectTargetPath = projectBuilder.getProjectTargetPath();
-        String packageName = projectBuilder.getPackageName().replace(".", "/");
+        String packageName = projectBuilder.getPackageDir();
         String srcMain = "src/main";
         String testMain = "src/test";
         String packagePath = projectTargetPath + File.separator + srcMain;
@@ -44,72 +38,44 @@ public class SparkProjectTemplateGenerator {
 
         // Scala App Generator
         String scalaFilePath = scalaMain + File.separator + packageName + File.separator + className +".scala";
-        File scalaFile = new File( scalaFilePath);
-        new File(scalaFile.getParentFile().getAbsolutePath()).mkdirs();
-        GenerateTemplate.generateTemplate(projectBuilder, "scala_app_class.ftl", scalaFile);
-        System.out.println(scalaFile+" created successfully");
+        generateTemplate(scalaFilePath, projectBuilder, "scala_app_class_template.ftl", true);
 
         // Scala Test App Generator
         String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className +"Test.scala";
-        File scalaTestFile = new File(scalaTestFilePath);
-        new File(scalaTestFile.getParentFile().getAbsolutePath()).mkdirs();
-        GenerateTemplate.generateTemplate(projectBuilder, "scala_app_class_test.ftl", scalaTestFile);
-        System.out.println(scalaTestFile+" created successfully");
+        generateTemplate(scalaTestFilePath, projectBuilder, "scala_app_class_test.ftl", true);
 
         // Java App Generator
         String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
-        File javaFile = new File(javaFilePath);
-        new File(javaFile.getParentFile().getAbsolutePath()).mkdirs();
-        GenerateTemplate.generateTemplate(projectBuilder, "java_app_class.ftl", javaFile);
-        System.out.println(javaFile+" created successfully");
+        generateTemplate(javaFilePath, projectBuilder, "java_app_class.ftl", true);
 
         // log4j
-        String log4jFile = resourcesMain + File.separator + "log4j.properties";
-        File log4j = new File(log4jFile);
-        new File(log4j.getParentFile().getAbsolutePath()).mkdirs();
-        GenerateTemplate.generateTemplate(projectBuilder, "log4j.ftl", log4j);
-        System.out.println(log4j+" created successfully");
+        String log4jPath = resourcesMain + File.separator + "log4j.properties";
+        generateTemplate(log4jPath, projectBuilder, "log4j.ftl", true);
 
         // .gitignore
-        String gitIgnore = projectTargetPath + File.separator + ".gitignore";
-        File gitIgnoreFile = new File(gitIgnore);
-        GenerateTemplate.generateTemplate(projectBuilder, "gitignore.ftl", gitIgnoreFile);
-        System.out.println(gitIgnoreFile+" created successfully");
+        String gitIgnorePath = projectTargetPath + File.separator + ".gitignore";
+        generateTemplate(gitIgnorePath, projectBuilder, "gitignore.ftl");
+
+        // pom file
+        generateTemplate(projectBuilder.getPOMPath(), projectBuilder, "pom.ftl");
+
+        // run script
+        generateTemplate(projectBuilder.getRunScriptPath(), projectBuilder, "run_script.ftl");
+
+        // README.md
+        generateTemplate(projectBuilder.getReadMePath(), projectBuilder, "README.ftl");
     }
 
-    private static void createPOMFile() {
-        File pomFile = new File(projectBuilder.getPOMPath());
-        GenerateTemplate.generateTemplate(projectBuilder, "pom.ftl", pomFile);
-        System.out.println(pomFile+" created successfully");
+    private static  void generateTemplate(String filePath, ProjectBuilder projectBuilder, String ftlFile) {
+        generateTemplate(filePath, projectBuilder, ftlFile, false);
     }
 
-    private static void createRunScriptFile()  {
-        File runScriptFile = new File(projectBuilder.getRunScriptPath());
-        GenerateTemplate.generateTemplate(projectBuilder, "run_script.ftl", runScriptFile);
-        System.out.println(runScriptFile +" created successfully");
-    }
-
-    private static void createReadMeFile() {
-        File readMeFile = new File(projectBuilder.getReadMePath());
-        GenerateTemplate.generateTemplate(projectBuilder, "README.ftl", readMeFile);
-        System.out.println(readMeFile+" created successfully");
-    }
-
-    private static void createProject(File projectTargetFile) {
-        if (projectTargetFile.exists()) {
-            deleteProject(projectTargetFile);
+    private static  void generateTemplate(String filePath, Object templateData, String ftlFile, boolean isCreateDir) {
+        File templateFile = new File(filePath);
+        if(isCreateDir) {
+            templateFile.getParentFile().mkdirs();
         }
-        projectTargetFile.mkdirs();
-        System.out.println(projectTargetFile +" created successfully");
-    }
-
-    public static void deleteProject(File dir) {
-        File[] files = dir.listFiles();
-        if(files != null) {
-            for (final File file : files) {
-                deleteProject(file);
-            }
-        }
-        dir.delete();
+        GenerateTemplateUtil.generateTemplate(templateData, ftlFile, templateFile);
+        System.out.println(templateFile+" created successfully");
     }
 }

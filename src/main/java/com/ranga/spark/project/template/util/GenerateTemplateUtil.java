@@ -1,6 +1,5 @@
 package com.ranga.spark.project.template.util;
 
-import com.ranga.spark.project.template.builder.ProjectBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
@@ -12,33 +11,28 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenerateTemplate {
+public class GenerateTemplateUtil {
 
     private static final Configuration cfg;
+    private static final String FTL_BASE_PACKAGE_PATH = "/";
+    private static final String TEMPLATE_VERSION = "2.3.31";
+    private static final String PROJECT_BUILDER = "projectBuilder";
 
     static {
-        cfg = new Configuration(new Version("2.3.31"));
-        cfg.setClassForTemplateLoading(GenerateTemplate.class, "/");
-        cfg.setDefaultEncoding("UTF-8");
+        cfg = new Configuration(new Version(TEMPLATE_VERSION));
+        cfg.setClassForTemplateLoading(GenerateTemplateUtil.class, FTL_BASE_PACKAGE_PATH);
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 
-    public static void generateTemplate(ProjectBuilder projectBuilder, String ftlFile, File outputFile) {
+    public static void generateTemplate(Object templateData, String ftlFile, File outputFile) {
         try {
             Template template = cfg.getTemplate(ftlFile);
             Map<String, Object> input = new HashMap<>();
-            input.put("projectBuilder", projectBuilder);
-            Writer fileWriter = null;
-            try {
-                fileWriter = new FileWriter(outputFile);
+            input.put(PROJECT_BUILDER, templateData);
+            try(Writer fileWriter = new FileWriter(outputFile); ) {
                 template.process(input, fileWriter);
             } catch (Exception ex) {
                 ex.printStackTrace();
-            }
-            finally {
-                if(fileWriter != null) {
-                    fileWriter.close();
-                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

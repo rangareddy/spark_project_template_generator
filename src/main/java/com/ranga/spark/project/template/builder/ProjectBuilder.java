@@ -1,18 +1,22 @@
 package com.ranga.spark.project.template.builder;
 
+import com.ranga.spark.project.template.api.BaseTemplate;
+import com.ranga.spark.project.template.api.HelloWorldTemplate;
+
 import java.io.File;
 import java.util.Properties;
+import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 
 public class ProjectBuilder {
 
     private final String appName;
-    private final static String readMeName = "README.md";
     private final String targetDir;
     private final String delimiter;
     private final String integration;
     private String projectName;
     private String projectTargetPath;
     private String packageName;
+    private String packageDir;
     private String className;
     private String javaClassName;
     private String fullClassName;
@@ -52,6 +56,13 @@ public class ProjectBuilder {
         projectBuilder.buildProjectInfo();
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
+
+        BaseTemplate template = new HelloWorldTemplate();
+        prop.setProperty("sparkSessionBuildTemplate", template.sparkSessionBuildTemplate());
+        prop.setProperty("sparkSessionCloseTemplate", template.sparkSessionCloseTemplate());
+        prop.setProperty("codeTemplate", template.codeTemplate());
+        prop.setProperty("importTemplate", template.importTemplate());
+
         return projectBuilder;
     }
 
@@ -111,10 +122,6 @@ public class ProjectBuilder {
         return fullClassName;
     }
 
-    public String getReadMeName() {
-        return readMeName;
-    }
-
     public String getJarName() {
         return jarName;
     }
@@ -135,12 +142,17 @@ public class ProjectBuilder {
         return properties;
     }
 
+    public String getPackageDir() {
+        return packageDir;
+    }
+
     public void buildReadMeInfo() {
-        this.readMePath = projectTargetPath + File.separator + readMeName;
+        this.readMePath = projectTargetPath + File.separator + README_FILE;
     }
 
     public void buildRunScriptAndClassInfo() {
         this.packageName = getPackage();
+        this.packageDir = packageName.replace(".", "/");
         this.fullClassName = packageName + "." + className;
         String jarVersion = getPropertyValue( "jarVersion", "1.0.0-SNAPSHOT");
         this.jarVersion = jarVersion;
@@ -199,5 +211,32 @@ public class ProjectBuilder {
         javaClassName = classNameSB+"JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectBuilder{" +
+                "appName='" + appName + '\'' +
+                ", targetDir='" + targetDir + '\'' +
+                ", delimiter='" + delimiter + '\'' +
+                ", integration='" + integration + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", projectTargetPath='" + projectTargetPath + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", packageDir='" + packageDir + '\'' +
+                ", className='" + className + '\'' +
+                ", javaClassName='" + javaClassName + '\'' +
+                ", fullClassName='" + fullClassName + '\'' +
+                ", runScriptName='" + runScriptName + '\'' +
+                ", runScriptPath='" + runScriptPath + '\'' +
+                ", readMePath='" + readMePath + '\'' +
+                ", jarName='" + jarName + '\'' +
+                ", jarPath='" + jarPath + '\'' +
+                ", jarVersion='" + jarVersion + '\'' +
+                ", pomPath='" + pomPath + '\'' +
+                ", jarDeployPath='" + jarDeployPath + '\'' +
+                ", deployScriptPath='" + deployScriptPath + '\'' +
+                ", properties=" + properties +
+                '}';
     }
 }
