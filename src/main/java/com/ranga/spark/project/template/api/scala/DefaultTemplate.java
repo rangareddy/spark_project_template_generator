@@ -1,8 +1,8 @@
 package com.ranga.spark.project.template.api.scala;
 
-public class HelloWorldTemplate extends ScalaBaseTemplate {
+public class DefaultTemplate extends ScalaBaseTemplate {
 
-    public HelloWorldTemplate(String className) {
+    public DefaultTemplate(String className) {
         super(className);
     }
 

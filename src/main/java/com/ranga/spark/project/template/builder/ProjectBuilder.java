@@ -1,10 +1,5 @@
 package com.ranga.spark.project.template.builder;
 
-import com.ranga.spark.project.template.api.BaseTemplate;
-import com.ranga.spark.project.template.api.java.HelloWorldJavaTemplate;
-import com.ranga.spark.project.template.api.scala.HBaseTemplate;
-import com.ranga.spark.project.template.api.scala.HelloWorldTemplate;
-import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
@@ -53,6 +48,14 @@ public class ProjectBuilder {
         properties.setProperty("sparkScope", getPropertyValue("sparkScope", "compile"));
     }
 
+    public void setJavaTemplate(boolean javaTemplate) {
+        isJavaTemplate = javaTemplate;
+    }
+
+    public void setTemplateType(TemplateType templateType) {
+        this.templateType = templateType;
+    }
+
     private String getPropertyValue(String key, String defaultValue) {
         return (String) properties.getOrDefault(key, defaultValue );
     }
@@ -70,42 +73,7 @@ public class ProjectBuilder {
         projectBuilder.buildProjectInfo();
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
-        TemplateType templateType = TemplateType.valueOf(templateTypeName.toUpperCase());
-        if(templateType == null) {
-            templateType = TemplateType.DEFAULT;
-        }
-        projectBuilder.templateType = templateType;
-
-        BaseTemplate template = null;
-        BaseTemplate javaTemplate = null;
-        String className = projectBuilder.className;
-        switch (templateType) {
-            case HBASE :
-                template = new HBaseTemplate(className);
-                break;
-            case HIVE:
-                template = new HiveTemplate(className);
-                break;
-            default:
-                template = new HelloWorldTemplate(projectBuilder.className);
-                javaTemplate = new HelloWorldJavaTemplate(projectBuilder.javaClassName);
-        }
-
-        prop.setProperty("sparkSessionBuildTemplate", template.sparkSessionBuildTemplate());
-        prop.setProperty("sparkSessionCloseTemplate", template.sparkSessionCloseTemplate());
-        prop.setProperty("codeTemplate", template.codeTemplate());
-        prop.setProperty("importTemplate", template.importTemplate());
-        prop.setProperty("classTemplate", template.classTemplate());
-
-        if(javaTemplate != null) {
-            projectBuilder.isJavaTemplate = true;
-            prop.setProperty("sparkSessionBuildJavaTemplate", javaTemplate.sparkSessionBuildTemplate());
-            prop.setProperty("sparkSessionCloseJavaTemplate", javaTemplate.sparkSessionCloseTemplate());
-            prop.setProperty("codeJavaTemplate", javaTemplate.codeTemplate());
-            prop.setProperty("importJavaTemplate", javaTemplate.importTemplate());
-            prop.setProperty("classJavaTemplate", javaTemplate.classTemplate());
-        }
-
+        TemplateBuilder.buildTemplate(templateTypeName, projectBuilder);
         return projectBuilder;
     }
 
@@ -246,15 +214,14 @@ public class ProjectBuilder {
                     projectNameSB.append(delimiter);
                 }
                 projectNameSB.append(Character.toLowerCase(appNameStr.charAt(i)));
-                classNameSB.append(appNameStr.charAt(i));
             } else {
                 projectNameSB.append(appNameStr.charAt(i));
                 if(i == 0) {
                     classNameSB.append(Character.toUpperCase(appNameStr.charAt(i)));
                     continue;
                 }
-                classNameSB.append(appNameStr.charAt(i));
             }
+            classNameSB.append(appNameStr.charAt(i));
         }
 
         projectName =  projectNameSB.toString();
