@@ -4,6 +4,7 @@ import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.HelloWorldJavaTemplate;
 import com.ranga.spark.project.template.api.scala.HBaseTemplate;
 import com.ranga.spark.project.template.api.scala.HelloWorldTemplate;
+import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
@@ -77,9 +78,13 @@ public class ProjectBuilder {
 
         BaseTemplate template = null;
         BaseTemplate javaTemplate = null;
+        String className = projectBuilder.className;
         switch (templateType) {
             case HBASE :
-                template = new HBaseTemplate(projectBuilder.className);
+                template = new HBaseTemplate(className);
+                break;
+            case HIVE:
+                template = new HiveTemplate(className);
                 break;
             default:
                 template = new HelloWorldTemplate(projectBuilder.className);
@@ -257,32 +262,5 @@ public class ProjectBuilder {
         javaClassName = classNameSB+"JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
-    }
-
-    @Override
-    public String toString() {
-        return "ProjectBuilder{" +
-                "appName='" + appName + '\'' +
-                ", targetDir='" + targetDir + '\'' +
-                ", delimiter='" + delimiter + '\'' +
-                ", integration='" + integration + '\'' +
-                ", projectName='" + projectName + '\'' +
-                ", projectTargetPath='" + projectTargetPath + '\'' +
-                ", packageName='" + packageName + '\'' +
-                ", packageDir='" + packageDir + '\'' +
-                ", className='" + className + '\'' +
-                ", javaClassName='" + javaClassName + '\'' +
-                ", fullClassName='" + fullClassName + '\'' +
-                ", runScriptName='" + runScriptName + '\'' +
-                ", runScriptPath='" + runScriptPath + '\'' +
-                ", readMePath='" + readMePath + '\'' +
-                ", jarName='" + jarName + '\'' +
-                ", jarPath='" + jarPath + '\'' +
-                ", jarVersion='" + jarVersion + '\'' +
-                ", pomPath='" + pomPath + '\'' +
-                ", jarDeployPath='" + jarDeployPath + '\'' +
-                ", deployScriptPath='" + deployScriptPath + '\'' +
-                ", properties=" + properties +
-                '}';
     }
 }
