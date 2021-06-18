@@ -8,7 +8,7 @@ ${projectBuilder.properties.classTemplate} {
 
     ${projectBuilder.properties.codeTemplate}
 
-    logger.info("${projectBuilder.appName} Finished")
+    logger.info("${projectBuilder.appName} application processing finished")
 
     ${projectBuilder.properties.sparkSessionCloseTemplate}
 }

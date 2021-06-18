@@ -2,13 +2,11 @@ package com.ranga.spark.project.template;
 
 import java.io.File;
 import java.util.*;
-
-import com.ranga.spark.project.template.api.BaseTemplate;
-import com.ranga.spark.project.template.api.scala.HelloWorldTemplate;
 import com.ranga.spark.project.template.builder.ProjectBuilder;
 import com.ranga.spark.project.template.util.FileUtil;
 import com.ranga.spark.project.template.util.GenerateTemplateUtil;
 import com.ranga.spark.project.template.util.PropertyUtil;
+import com.ranga.spark.project.template.util.TemplateType;
 
 public class SparkProjectTemplateGenerator {
 
@@ -44,13 +42,19 @@ public class SparkProjectTemplateGenerator {
         generateTemplate(scalaFilePath, projectBuilder, "scala_app_class_template.ftl", true);
 
         // Scala Test App Generator
-        String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className +"Test.scala";
-        generateTemplate(scalaTestFilePath, projectBuilder, "scala_app_class_test.ftl", true);
+        if(projectBuilder.getTemplateType() == TemplateType.DEFAULT) {
+            String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className + "Test.scala";
+            generateTemplate(scalaTestFilePath, projectBuilder, "scala_app_class_test.ftl", true);
+        } else {
+            // run script
+            generateTemplate(projectBuilder.getRunScriptPath().replace("run_", "run_sec_"), projectBuilder, "run_sec_script.ftl");
+        }
 
         // Java App Generator
-        String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
-        //generateTemplate(javaFilePath, projectBuilder, "java_app_class.ftl", true);
-        generateTemplate(javaFilePath, projectBuilder, "java_app_class_template.ftl", true);
+        if(projectBuilder.isJavaTemplate()) {
+            String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
+            generateTemplate(javaFilePath, projectBuilder, "java_app_class_template.ftl", true);
+        }
 
         // log4j
         String log4jPath = resourcesMain + File.separator + "log4j.properties";
@@ -77,7 +81,10 @@ public class SparkProjectTemplateGenerator {
     private static  void generateTemplate(String filePath, Object templateData, String ftlFile, boolean isCreateDir) {
         File templateFile = new File(filePath);
         if(isCreateDir) {
-            templateFile.getParentFile().mkdirs();
+            boolean isCreated = templateFile.getParentFile().mkdirs();
+            if(isCreated) {
+                System.out.println(templateFile.getParentFile().getAbsolutePath() + " created.");
+            }
         }
         GenerateTemplateUtil.generateTemplate(templateData, ftlFile, templateFile);
         System.out.println(templateFile+" created successfully");

@@ -27,7 +27,7 @@ public abstract class ScalaBaseTemplate implements BaseTemplate {
     public String sparkSessionBuildTemplate() {
          return "@transient lazy val logger: Logger = Logger.getLogger(getClass.getName)\n" +
                  "\n" +
-                 "    val appName = \"${projectBuilder.className} Example\"\n" +
+                 "    val appName = \""+className+" Example\"\n" +
                  "\n" +
                  "    // Creating the SparkConf object\n" +
                  "    val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +

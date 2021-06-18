@@ -27,6 +27,12 @@
         <spark.version>${projectBuilder.properties.sparkVersion}</spark.version>
         <spark.scope>${projectBuilder.properties.sparkScope}</spark.scope>
 
+        <hbase.version>${projectBuilder.properties.hbaseVersion}</hbase.version>
+        <hbase.scope>${projectBuilder.properties.sparkScope}</hbase.scope>
+
+        <hbase.spark.version>${projectBuilder.properties.hbaseSparkVersion}</hbase.spark.version>
+        <hbase.spark.scope>${projectBuilder.properties.sparkScope}</hbase.spark.scope>
+
         <scalatest.version>3.0.8</scalatest.version>
         <junit.version>4.13.1</junit.version>
     </properties>
@@ -86,9 +92,37 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${r"${scala.binary.version}"}</artifactId>
+            <version>${r"${spark.version}"}</version>
+            <scope>${r"${spark.scope}"}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
             <artifactId>spark-hive_${r"${scala.binary.version}"}</artifactId>
             <version>${r"${spark.version}"}</version>
             <scope>${r"${spark.scope}"}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hbase.connectors.spark</groupId>
+            <artifactId>hbase-spark</artifactId>
+            <version>${r"${hbase.spark.version}"}</version>
+            <scope>${r"${hbase.spark.scope}"}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${r"${hbase.version}"}</version>
+            <scope>${r"${hbase.scope}"}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <version>${r"${hbase.version}"}</version>
+            <scope>${r"${hbase.scope}"}</scope>
         </dependency>
 
         <!-- Scala Test dependencies -->
