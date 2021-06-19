@@ -2,13 +2,21 @@ package ${projectBuilder.packageName}
 
 ${projectBuilder.properties.importTemplate}
 
+case class Employee(id:Long, name: String, age: Integer, salary: Float)
+
 ${projectBuilder.properties.classTemplate} {
 
-    ${projectBuilder.properties.sparkSessionBuildTemplate}
+    @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)
 
-    ${projectBuilder.properties.codeTemplate}
+    def main(args: Array[String]): Unit = {
+        ${projectBuilder.properties.sparkSessionBuildTemplate}
 
-    logger.info("${projectBuilder.appName} application processing finished")
+        ${projectBuilder.properties.codeTemplate}
 
-    ${projectBuilder.properties.sparkSessionCloseTemplate}
+        logger.info("${projectBuilder.appName} application processing finished")
+
+        ${projectBuilder.properties.sparkSessionCloseTemplate}
+    }
+
+    ${projectBuilder.properties.methodsTemplate}
 }

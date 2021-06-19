@@ -5,5 +5,6 @@ public interface BaseTemplate {
     String importTemplate();
     String sparkSessionBuildTemplate();
     String codeTemplate();
+    String methodsTemplate();
     String sparkSessionCloseTemplate();
 }

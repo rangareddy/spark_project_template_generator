@@ -15,12 +15,17 @@ public abstract class JavaBaseTemplate implements BaseTemplate {
     }
 
     @Override
+    public String methodsTemplate() {
+        return "";
+    }
+
+    @Override
     public String importTemplate() {
         return "import org.apache.spark.SparkConf;\n" +
-                "import org.apache.spark.sql.Dataset;\n" +
-                "import org.apache.spark.sql.SparkSession;\n" +
+                "import org.apache.spark.sql.*;\n" +
                 "import org.apache.log4j.Logger;\n" +
-                "import java.io.Serializable;";
+                "import java.io.Serializable;\n" +
+                "import java.util.*;";
     }
 
     @Override

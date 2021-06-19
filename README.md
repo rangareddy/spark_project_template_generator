@@ -76,3 +76,7 @@ $ java -jar target/spark-project-template-generator-1.0.0-SNAPSHOT.jar
 /Users/rangareddy.avula/project_templates/spark-hbase-integration/.gitignore created successfully
 ========================
 ```
+
+## Contribution
+
+Send pull requests to keep this project updated.

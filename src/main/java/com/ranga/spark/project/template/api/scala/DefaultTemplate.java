@@ -7,18 +7,28 @@ public class DefaultTemplate extends ScalaBaseTemplate {
     }
 
     @Override
-    public String codeTemplate() {
-        return  "val rangeDS = getRangeDS(spark)\n" +
-                "    val count = countRangeDS(rangeDS)\n" +
-                "    logger.info(s\"Range count ${count}\")" +
-                "\n" +
-                "\n" +
-                "    def getRangeDS(spark: SparkSession, start: Long = 0, end: Long = 1000): Dataset[lang.Long] = {\n" +
-                "        spark.range(start, end)\n" +
+    public String methodsTemplate() {
+        return  "    def getEmployeeDS(spark: SparkSession): Dataset[Employee] = {\n" +
+                "        import spark.implicits._\n" +
+                "        Seq(\n" +
+                "            Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +
+                "            Employee(2L, \"Nishanth Reddy\", 3, 180000.5f),\n" +
+                "            Employee(3L, \"Raja Sekhar Reddy\", 59, 280000.5f),\n" +
+                "            Employee(4L, \"Manoj Reddy\", 15, 8000.5f),\n" +
+                "            Employee(5L, \"Vasundra Reddy\", 55, 580000.5f)\n" +
+                "        ).toDS()\n" +
                 "    }\n" +
                 "\n" +
-                "    def countRangeDS(rangeDS: Dataset[lang.Long]): Long = {\n" +
-                "        rangeDS.count()\n" +
+                "    def getEmployeeCount(employeeDS: Dataset[Employee]): Long = {\n" +
+                "        employeeDS.count()\n" +
                 "    }";
+    }
+
+    @Override
+    public String codeTemplate() {
+        return "val employeeDS = getEmployeeDS(spark)\n" +
+                "        employeeDS.printSchema()\n" +
+                "        val employeeCount = getEmployeeCount(employeeDS)\n" +
+                "        logger.info(\"Employees count \"+employeeCount)";
     }
 }

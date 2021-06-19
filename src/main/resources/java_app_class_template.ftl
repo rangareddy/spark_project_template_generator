@@ -12,9 +12,10 @@ ${projectBuilder.properties.classJavaTemplate} {
 
         ${projectBuilder.properties.codeJavaTemplate}
 
-        logger.info("${projectBuilder.appName} Finished");
+        logger.info("${projectBuilder.appName} application processing finished");
 
         ${projectBuilder.properties.sparkSessionCloseJavaTemplate}
     }
 
+    ${projectBuilder.properties.methodsJavaTemplate}
 }

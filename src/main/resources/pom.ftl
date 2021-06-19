@@ -33,6 +33,9 @@
         <hbase.spark.version>${projectBuilder.properties.hbaseSparkVersion}</hbase.spark.version>
         <hbase.spark.scope>${projectBuilder.properties.sparkScope}</hbase.spark.scope>
 
+        <hwc.version>${projectBuilder.properties.hbaseSparkVersion}</hwc.version>
+        <hwc.scope>${projectBuilder.properties.sparkScope}</hwc.scope>
+
         <scalatest.version>3.0.8</scalatest.version>
         <junit.version>4.13.1</junit.version>
     </properties>
@@ -48,16 +51,28 @@
 
     <!-- Repositories -->
     <repositories>
+
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
         <repository>
             <id>cldr-repo</id>
             <name>Cloudera Public Repo</name>
             <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>
         </repository>
+
         <repository>
             <id>hdp-repo</id>
             <name>Hortonworks Public Repo</name>
             <url>http://repo.hortonworks.com/content/repositories/releases/</url>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -102,6 +117,13 @@
             <artifactId>spark-hive_${r"${scala.binary.version}"}</artifactId>
             <version>${r"${spark.version}"}</version>
             <scope>${r"${spark.scope}"}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hortonworks.hive</groupId>
+            <artifactId>hive-warehouse-connector_${r"${scala.binary.version}"}</artifactId>
+            <version>${r"${hwc.version}"}</version>
+            <scope>${r"${hwc.scope}"}</scope>
         </dependency>
 
         <dependency>

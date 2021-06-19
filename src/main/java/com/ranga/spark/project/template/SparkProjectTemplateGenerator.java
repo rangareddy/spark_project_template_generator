@@ -54,6 +54,8 @@ public class SparkProjectTemplateGenerator {
         if(projectBuilder.isJavaTemplate()) {
             String javaFilePath = javaMain + File.separator + packageName + File.separator + projectBuilder.getJavaClassName() + ".java";
             generateTemplate(javaFilePath, projectBuilder, "java_app_class_template.ftl", true);
+            String employeeFilePath = javaMain + File.separator + packageName + File.separator + "EmployeeBean.java";
+            generateTemplate(employeeFilePath, projectBuilder, "employee.ftl");
         }
 
         // log4j

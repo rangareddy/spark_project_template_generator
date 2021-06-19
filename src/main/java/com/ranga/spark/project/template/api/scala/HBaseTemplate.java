@@ -18,7 +18,7 @@ public class HBaseTemplate extends ScalaBaseTemplate {
         return  "case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
                 "\n" +
                 "    import spark.implicits._\n" +
-                "    var employeeDS = Seq(\n" +
+                "    val employeeDS = Seq(\n" +
                 "      Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +
                 "      Employee(2L, \"Nishanth Reddy\", 3, 180000.5f),\n" +
                 "      Employee(3L, \"Raja Sekhar Reddy\", 59, 280000.5f),\n" +

@@ -1,9 +1,11 @@
 package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
-import com.ranga.spark.project.template.api.java.HelloWorldJavaTemplate;
+import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
+import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.scala.DefaultTemplate;
 import com.ranga.spark.project.template.api.scala.HBaseTemplate;
+import com.ranga.spark.project.template.api.scala.HWCTemplate;
 import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.util.TemplateType;
 
@@ -30,6 +32,7 @@ public class TemplateBuilder {
         BaseTemplate template;
         BaseTemplate javaTemplate = null;
         String className = projectBuilder.getClassName();
+        String javaClassName = projectBuilder.getJavaClassName();
         switch (templateType) {
             case HBASE :
                 template = new HBaseTemplate(className);
@@ -37,9 +40,13 @@ public class TemplateBuilder {
             case HIVE:
                 template = new HiveTemplate(className);
                 break;
+            case HWC:
+                template = new HWCTemplate(className);
+                javaTemplate = new HWCJavaTemplate(javaClassName);
+                break;
             default:
                 template = new DefaultTemplate(className);
-                javaTemplate = new HelloWorldJavaTemplate(projectBuilder.getJavaClassName());
+                javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
 
         Properties prop = projectBuilder.getProperties();
@@ -48,6 +55,7 @@ public class TemplateBuilder {
         prop.setProperty("codeTemplate", template.codeTemplate());
         prop.setProperty("importTemplate", template.importTemplate());
         prop.setProperty("classTemplate", template.classTemplate());
+        prop.setProperty("methodsTemplate", template.methodsTemplate());
 
         if(javaTemplate != null) {
             projectBuilder.setJavaTemplate(true);
@@ -56,6 +64,7 @@ public class TemplateBuilder {
             prop.setProperty("codeJavaTemplate", javaTemplate.codeTemplate());
             prop.setProperty("importJavaTemplate", javaTemplate.importTemplate());
             prop.setProperty("classJavaTemplate", javaTemplate.classTemplate());
+            prop.setProperty("methodsJavaTemplate", javaTemplate.methodsTemplate());
         }
     }
 }

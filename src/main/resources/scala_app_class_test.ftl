@@ -3,7 +3,7 @@ package ${projectBuilder.packageName}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import ${projectBuilder.packageName}.${projectBuilder.className}.{getRangeDS, countRangeDS}
+import com.ranga.hello.world.HelloWorldIntegrationApp.{getEmployeeCount, getEmployeeDS}
 
 class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
 
@@ -19,15 +19,15 @@ class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
         spark.stop()
     }
 
-    test("Get Range DS") {
-        val rangeDS = getRangeDS(spark)
-        val rangeCount = rangeDS.count()
-        assert(rangeCount == 1000, "Range count should be 1000")
+    test("Get Employee DS") {
+        val employeeDS = getEmployeeDS(spark)
+        val rangeCount = employeeDS.count()
+        assert(rangeCount == 5, "Employee count should be 5")
     }
 
-    test("Count Range DS") {
-        val rangeDS = getRangeDS(spark)
-        val rangeCount = countRangeDS(rangeDS)
-        assert(rangeCount == 1000, "Range count should be 1000")
+    test("Count Employee DS") {
+        val rangeDS = getEmployeeDS(spark)
+        val rangeCount = getEmployeeCount(rangeDS)
+        assert(rangeCount == 5, "Employee count should be 1000")
     }
 }
