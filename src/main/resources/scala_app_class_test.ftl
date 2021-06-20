@@ -16,7 +16,7 @@ class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
     }
 
     override def afterAll(): Unit = {
-        spark.stop()
+        if (spark != null) spark.stop()
     }
 
     test("Get Employee DS") {

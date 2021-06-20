@@ -1,12 +1,23 @@
 package com.ranga.spark.project.template.builder;
 
+import com.ranga.spark.project.template.bean.DependencyBean;
+import com.ranga.spark.project.template.bean.MavenBuildToolBean;
+import com.ranga.spark.project.template.bean.ProjectInfoBean;
+import com.ranga.spark.project.template.bean.SbtBuildToolBean;
+import com.ranga.spark.project.template.util.BuildDependencyUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
 import java.util.Properties;
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
+import java.util.List;
 
 public class ProjectBuilder {
+
+    private ProjectInfoBean projectInfoBean;
+    private SbtBuildToolBean sbtBuildToolBean;
+    private MavenBuildToolBean mavenBuildToolBean;
+    private List<DependencyBean> dependencyBeanList;
 
     private final String appName;
     private final String targetDir;
@@ -31,6 +42,8 @@ public class ProjectBuilder {
     private final Properties properties;
     private boolean isJavaTemplate;
     private TemplateType templateType;
+    private String[] buildTools;
+    private String buildSbtPath;
 
     public ProjectBuilder(String applicationName, Properties pr) {
         properties = pr;
@@ -38,6 +51,9 @@ public class ProjectBuilder {
         targetDir = getPropertyValue("projectDir", System.getProperty("user.home"));
         integration = getPropertyValue("appExtension", "Integration" );
         delimiter = getPropertyValue("delimiter", "-" );
+
+        String buildToolString = getPropertyValue("buildTools", "maven");
+        buildTools = buildToolString.split(",");
 
         String scalaVersion = getPropertyValue("scalaVersion", "2.12.10");
         String scalaBinaryVersion = scalaVersion.substring(0, scalaVersion.lastIndexOf("."));
@@ -60,6 +76,14 @@ public class ProjectBuilder {
         return (String) properties.getOrDefault(key, defaultValue );
     }
 
+    public String getBuildSbtPath() {
+        return buildSbtPath;
+    }
+
+    public String[] getBuildTools() {
+        return buildTools;
+    }
+
     public static ProjectBuilder build(String projectName, Properties prop) {
         String projName = projectName;
         String templateTypeName = "default";
@@ -74,6 +98,7 @@ public class ProjectBuilder {
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
         TemplateBuilder.buildTemplate(templateTypeName, projectBuilder);
+        projectBuilder.dependencyBeanList = BuildDependencyUtil.buildDependency(projectBuilder);
         return projectBuilder;
     }
 
@@ -229,5 +254,6 @@ public class ProjectBuilder {
         javaClassName = classNameSB+"JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
+        buildSbtPath = projectTargetPath + File.separator + "build.sbt";
     }
 }

@@ -66,8 +66,22 @@ public class SparkProjectTemplateGenerator {
         String gitIgnorePath = projectTargetPath + File.separator + ".gitignore";
         generateTemplate(gitIgnorePath, projectBuilder, "gitignore.ftl");
 
-        // pom file
-        generateTemplate(projectBuilder.getPOMPath(), projectBuilder, "pom.ftl");
+        String buildTools[] = projectBuilder.getBuildTools();
+        for(String buildTool : buildTools) {
+            buildTool = buildTool.toLowerCase();
+            if("maven".equals(buildTool) || "mvn".equals(buildTool)) {
+                // pom file
+                generateTemplate(projectBuilder.getPOMPath(), projectBuilder, "pom.ftl");
+            } else if("sbt".equals(buildTool))  {
+                // build.sbt
+                generateTemplate(projectBuilder.getBuildSbtPath(), projectBuilder, "build.sbt.ftl");
+                String projectDirPath = projectTargetPath + File.separator + "project";
+                String buildPropertiesPath = projectDirPath + File.separator + "build.properties";
+                generateTemplate(buildPropertiesPath, projectBuilder, "build.properties.ftl", true);
+                String pluginsSbtPath = projectDirPath + File.separator + "plugins.sbt";
+                generateTemplate(pluginsSbtPath, projectBuilder, "plugins.sbt.ftl");
+            }
+        }
 
         // run script
         generateTemplate(projectBuilder.getRunScriptPath(), projectBuilder, "run_script.ftl");
