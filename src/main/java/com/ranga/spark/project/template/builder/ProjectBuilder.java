@@ -8,6 +8,7 @@ import com.ranga.spark.project.template.util.BuildDependencyUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 import java.util.List;
@@ -84,6 +85,26 @@ public class ProjectBuilder {
         return buildTools;
     }
 
+    public ProjectInfoBean getProjectInfoBean() {
+        return projectInfoBean;
+    }
+
+    public SbtBuildToolBean getSbtBuildToolBean() {
+        return sbtBuildToolBean;
+    }
+
+    public MavenBuildToolBean getMavenBuildToolBean() {
+        return mavenBuildToolBean;
+    }
+
+    public List<DependencyBean> getDependencyBeanList() {
+        return dependencyBeanList;
+    }
+
+    public void setDependencyBeanList(List<DependencyBean> dependencyBeanList) {
+        this.dependencyBeanList = dependencyBeanList;
+    }
+
     public static ProjectBuilder build(String projectName, Properties prop) {
         String projName = projectName;
         String templateTypeName = "default";
@@ -98,7 +119,6 @@ public class ProjectBuilder {
         projectBuilder.buildRunScriptAndClassInfo();
         projectBuilder.buildReadMeInfo();
         TemplateBuilder.buildTemplate(templateTypeName, projectBuilder);
-        projectBuilder.dependencyBeanList = BuildDependencyUtil.buildDependency(projectBuilder);
         return projectBuilder;
     }
 

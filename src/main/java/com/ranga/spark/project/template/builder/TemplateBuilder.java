@@ -7,6 +7,7 @@ import com.ranga.spark.project.template.api.scala.DefaultTemplate;
 import com.ranga.spark.project.template.api.scala.HBaseTemplate;
 import com.ranga.spark.project.template.api.scala.HWCTemplate;
 import com.ranga.spark.project.template.api.scala.HiveTemplate;
+import com.ranga.spark.project.template.util.BuildDependencyUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.util.Properties;
@@ -48,6 +49,9 @@ public class TemplateBuilder {
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
+
+        // Building Dependencies
+        projectBuilder.setDependencyBeanList(BuildDependencyUtil.buildDependency(projectBuilder));
 
         Properties prop = projectBuilder.getProperties();
         prop.setProperty("sparkSessionBuildTemplate", template.sparkSessionBuildTemplate());
