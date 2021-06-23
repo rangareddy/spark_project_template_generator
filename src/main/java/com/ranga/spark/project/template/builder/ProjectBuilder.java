@@ -19,6 +19,7 @@ public class ProjectBuilder {
     private final String delimiter;
     private final String integration;
     private final Properties properties;
+    private final String[] buildTools;
     private ProjectInfoBean projectInfoBean;
     private SbtBuildToolBean sbtBuildToolBean;
     private MavenBuildToolBean mavenBuildToolBean;
@@ -41,7 +42,6 @@ public class ProjectBuilder {
     private String deployScriptPath;
     private boolean isJavaTemplate;
     private TemplateType templateType;
-    private final String[] buildTools;
     private String buildSbtPath;
 
     public ProjectBuilder(String applicationName, Properties pr) {

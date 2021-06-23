@@ -63,16 +63,16 @@ public class ProjectInfoBean implements Serializable {
         return prerequitiesList;
     }
 
+    public void setPrerequitiesList(List<String> prerequitiesList) {
+        this.prerequitiesList = prerequitiesList;
+    }
+
     public String getRepoName() {
         return repoName;
     }
 
     public void setRepoName(String repoName) {
         this.repoName = repoName;
-    }
-
-    public void setPrerequitiesList(List<String> prerequitiesList) {
-        this.prerequitiesList = prerequitiesList;
     }
 
     public String getProjectVersion() {
@@ -111,8 +111,16 @@ public class ProjectInfoBean implements Serializable {
         return className;
     }
 
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
     public String getJavaClassName() {
         return javaClassName;
+    }
+
+    public void setJavaClassName(String javaClassName) {
+        this.javaClassName = javaClassName;
     }
 
     public String getFullClassName() {
@@ -127,8 +135,16 @@ public class ProjectInfoBean implements Serializable {
         return jarName;
     }
 
+    public void setJarName(String jarName) {
+        this.jarName = jarName;
+    }
+
     public String getJarPath() {
         return jarPath;
+    }
+
+    public void setJarPath(String jarPath) {
+        this.jarPath = jarPath;
     }
 
     public String getJarVersion() {
@@ -159,8 +175,16 @@ public class ProjectInfoBean implements Serializable {
         return runScriptName;
     }
 
+    public void setRunScriptName(String runScriptName) {
+        this.runScriptName = runScriptName;
+    }
+
     public String getRunScriptPath() {
         return runScriptPath;
+    }
+
+    public void setRunScriptPath(String runScriptPath) {
+        this.runScriptPath = runScriptPath;
     }
 
     public String getReadMePath() {
@@ -173,6 +197,10 @@ public class ProjectInfoBean implements Serializable {
 
     public String getJarDeployPath() {
         return jarDeployPath;
+    }
+
+    public void setJarDeployPath(String jarDeployPath) {
+        this.jarDeployPath = jarDeployPath;
     }
 
     public String getDeployScriptPath() {
@@ -253,34 +281,6 @@ public class ProjectInfoBean implements Serializable {
 
     public void setJavaCodeTemplate(CodeTemplateBean javaCodeTemplate) {
         this.javaCodeTemplate = javaCodeTemplate;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public void setJavaClassName(String javaClassName) {
-        this.javaClassName = javaClassName;
-    }
-
-    public void setJarName(String jarName) {
-        this.jarName = jarName;
-    }
-
-    public void setJarPath(String jarPath) {
-        this.jarPath = jarPath;
-    }
-
-    public void setRunScriptName(String runScriptName) {
-        this.runScriptName = runScriptName;
-    }
-
-    public void setRunScriptPath(String runScriptPath) {
-        this.runScriptPath = runScriptPath;
-    }
-
-    public void setJarDeployPath(String jarDeployPath) {
-        this.jarDeployPath = jarDeployPath;
     }
 
     public String getPrerequisites() {

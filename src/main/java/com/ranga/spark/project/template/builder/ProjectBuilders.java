@@ -12,6 +12,7 @@ import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
@@ -31,6 +32,7 @@ public class ProjectBuilders implements Serializable {
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
+        Map<String, String> appRuntimeValuesMap = getAppRuntimeValueMap();
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = getTemplateType(projectDetail.getTemplateName());
             String sourceProjectName = projectDetail.getSourceProjectName();
@@ -56,9 +58,9 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setPackageDir(packageDir);
             projectInfoBean.setBaseDeployJarPath(baseDeployJarPath);
             projectInfoBean.setTemplateType(templateType);
-            String className = sourceProjectName +"App";
+            String className = sourceProjectName + "App";
             projectInfoBean.setClassName(className);
-            projectInfoBean.setJavaClassName(sourceProjectName +"JavaApp");
+            projectInfoBean.setJavaClassName(sourceProjectName + "JavaApp");
             projectInfoBean.setFullClassName(packageName + "." + className);
             String jarName = projectName + "-" + jarVersion + ".jar";
             projectInfoBean.setJarName(jarName);
@@ -79,6 +81,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setReadMePath(readMePath);
             String deployScriptPath = jarDeployPath + File.separator + runScriptName;
             projectInfoBean.setDeployScriptPath(deployScriptPath);
+
             boolean isClouderaRepo = checkClouderaRepo(projectConfig.getSparkVersion());
             String repoName = "<repository>\n" +
                     "            <id>central</id>\n" +
@@ -88,7 +91,7 @@ public class ProjectBuilders implements Serializable {
                     "                <enabled>false</enabled>\n" +
                     "            </snapshots>\n" +
                     "        </repository>";
-            if(isClouderaRepo) {
+            if (isClouderaRepo) {
                 repoName = "<repository>\n" +
                         "            <id>cldr-repo</id>\n" +
                         "            <name>Cloudera Public Repo</name>\n" +
@@ -103,7 +106,7 @@ public class ProjectBuilders implements Serializable {
 
             }
             projectInfoBean.setRepoName(repoName);
-            buildTemplates(projectInfoBean);
+            buildTemplates(projectInfoBean, appRuntimeValuesMap);
             projectInfoBeanList.add(projectInfoBean);
         }
         return projectInfoBeanList;
@@ -112,14 +115,14 @@ public class ProjectBuilders implements Serializable {
     private static boolean checkClouderaRepo(String sparkVersion) {
         int count = 0;
         int index = 0;
-        while((index = sparkVersion.indexOf(".")) != -1) {
+        while ((index = sparkVersion.indexOf(".")) != -1) {
             count++;
-            sparkVersion = sparkVersion.substring(index+1);
+            sparkVersion = sparkVersion.substring(index + 1);
         }
         return count > 2;
     }
 
-    private static void buildTemplates(ProjectInfoBean projectInfoBean) {
+    private static void buildTemplates(ProjectInfoBean projectInfoBean, Map<String, String> appRuntimeValuesMap) {
         TemplateType templateType = projectInfoBean.getTemplateType();
         BaseTemplate template;
         BaseTemplate javaTemplate = null;
@@ -157,23 +160,44 @@ public class ProjectBuilders implements Serializable {
         if (!othersTemplatesDependency.isEmpty()) {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }
-        buildDependencies(dependencyBeanSet, projectInfoBean);
+        buildDependencies(dependencyBeanSet, projectInfoBean, appRuntimeValuesMap);
     }
 
-    private static void buildDependencies(Set<DependencyBean> dependencyBeanSet, ProjectInfoBean projectInfoBean) {
-        DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet);
+    private static Map<String, String> getAppRuntimeValueMap() {
+        Map<String, String> runtimeValues = new LinkedHashMap<>();
+        try {
+            Class myClass = projectConfig.getClass();
+            Field[] fields = myClass.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                String key = field.getName();
+                Object value = field.get(projectConfig);
+                if (value instanceof String) {
+                    runtimeValues.put(key, value.toString());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return runtimeValues;
+    }
+
+    private static void buildDependencies(Set<DependencyBean> dependencyBeanSet,
+                                          ProjectInfoBean projectInfoBean,
+                                          Map<String, String> appRuntimeValuesMap) {
+        DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, appRuntimeValuesMap);
 
         Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
         List<String> prerequitiesList = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
-        for(String propVersion : propertyVersions) {
-            String split[] = propVersion.split("##");
+        for (String propVersion : propertyVersions) {
+            String[] split = propVersion.split("##");
             String propName = split[0];
             String propValue = split[2];
-            if(propName.toLowerCase().endsWith("version") && !propName.contains("Binary")) {
+            if (propName.toLowerCase().endsWith("version") && !propName.contains("Binary")) {
                 String propertyName = getPropertyName(propName);
                 sb.append("* ").append(propertyName).append(":").append(propValue);
-                prerequitiesList.add(propertyName +" : "+propValue);
+                prerequitiesList.add(propertyName + " : " + propValue);
             }
         }
         projectInfoBean.setPrerequitiesList(prerequitiesList);

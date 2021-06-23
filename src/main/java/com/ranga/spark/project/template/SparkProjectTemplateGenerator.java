@@ -5,7 +5,11 @@ import com.ranga.spark.project.template.bean.ProjectConfig;
 import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import com.ranga.spark.project.template.bean.SbtBuildToolBean;
 import com.ranga.spark.project.template.builder.ProjectBuilders;
-import com.ranga.spark.project.template.util.*;
+import com.ranga.spark.project.template.util.FileUtil;
+import com.ranga.spark.project.template.util.GenerateTemplateUtil;
+import com.ranga.spark.project.template.util.TemplateType;
+import com.ranga.spark.project.template.util.YamlUtil;
+
 import java.io.File;
 import java.util.List;
 
@@ -14,7 +18,7 @@ public class SparkProjectTemplateGenerator {
     public static void main(String[] args) throws Exception {
         ProjectConfig projectConfig = YamlUtil.loadYamlFile();
         List<ProjectInfoBean> projectInfoBeanList = ProjectBuilders.buildProjects(projectConfig);
-        for(ProjectInfoBean projectInfoBean : projectInfoBeanList) {
+        for (ProjectInfoBean projectInfoBean : projectInfoBeanList) {
             createProjectTemplate(projectInfoBean);
         }
 
@@ -91,6 +95,8 @@ public class SparkProjectTemplateGenerator {
 
         // README.md
         generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
+
+        System.out.println("=======================================");
     }
 
     /*private static void createProjectTemplate(ProjectBuilder projectBuilder) {

@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class GenerateTemplateUtil {
 
-   // private static final Configuration cfg;
+    // private static final Configuration cfg;
     private static final String FTL_BASE_PACKAGE_PATH = "/";
     private static final String TEMPLATE_VERSION = "2.3.31";
     private static final String PROJECT_BUILDER = "projectBuilder";

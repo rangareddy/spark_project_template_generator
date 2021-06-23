@@ -1,11 +1,8 @@
 package com.ranga.spark.project.template.builder;
 
-import com.ranga.spark.project.template.SparkProjectTemplateGenerator;
 import com.ranga.spark.project.template.bean.DependencyBean;
-import com.ranga.spark.project.template.bean.ProjectConfig;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class DependencyBuilder implements Serializable {
@@ -18,8 +15,7 @@ public class DependencyBuilder implements Serializable {
         this.propertyVersions = versions;
     }
 
-    public static DependencyBuilder build(Set<DependencyBean> dependencyBeanSet) {
-        Map<String, String> appRuntimeValueMap = getAppRuntimeValueMap();
+    public static DependencyBuilder build(Set<DependencyBean> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
         List<DependencyBean> dependencyBeanList = new ArrayList<>(dependencyBeanSet.size());
         Set<String> versions = new LinkedHashSet<>();
         for (DependencyBean dependencyBean : dependencyBeanSet) {
@@ -66,27 +62,6 @@ public class DependencyBuilder implements Serializable {
             }
         }
         return updatedDependency;
-    }
-
-    private static Map<String, String> getAppRuntimeValueMap() {
-        Map<String, String> runtimeValues = new LinkedHashMap<>();
-        ClassLoader classLoader = SparkProjectTemplateGenerator.class.getClassLoader();
-        try {
-            Class aClass = classLoader.loadClass(ProjectConfig.class.getName());
-            Field[] fields = aClass.getDeclaredFields();
-            Object instance = aClass.newInstance();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                String key = field.getName();
-                Object value = field.get(instance);
-                if (value instanceof String) {
-                    runtimeValues.put(key, value.toString());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return runtimeValues;
     }
 
     public List<DependencyBean> getDependencyBeanList() {

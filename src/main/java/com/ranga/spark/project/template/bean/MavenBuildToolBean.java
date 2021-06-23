@@ -5,6 +5,7 @@ import com.ranga.spark.project.template.builder.DependencyBuilder;
 public class MavenBuildToolBean extends BuildToolBean {
 
     private String pomFile = "pom.xml";
+
     public MavenBuildToolBean(String dependencies, String propertyVersions) {
         super(dependencies, propertyVersions);
     }
@@ -34,7 +35,7 @@ public class MavenBuildToolBean extends BuildToolBean {
             xmlString.append(tabDelim).append("\t<artifactId>").append(artifactId).append("</artifactId>\n");
             xmlString.append(tabDelim).append("\t<version>").append(version).append("</version>\n");
             if (scope != null && !scope.isEmpty()) {
-                xmlString.append(tabDelim).append("\t<scope>" ).append(scope).append("</scope>\n");
+                xmlString.append(tabDelim).append("\t<scope>").append(scope).append("</scope>\n");
             }
             xmlString.append(tabDelim).append("</dependency>");
 
