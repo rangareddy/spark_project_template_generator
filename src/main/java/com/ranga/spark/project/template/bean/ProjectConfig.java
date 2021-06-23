@@ -22,11 +22,17 @@ public class ProjectConfig implements Serializable {
     private String hbaseSparkVersion = "";
     private String hbaseSparkScope = "";
     private List<DependencyBean> defaultTemplate;
-    private List<DependencyBean> hiveTemplate = Collections.emptyList();
-    private List<DependencyBean> hbaseTemplate = Collections.emptyList();
-    private List<DependencyBean> hwcTemplate = Collections.emptyList();
+    private List<DependencyBean> hiveTemplate;
+    private List<DependencyBean> hbaseTemplate;
+    private List<DependencyBean> hwcTemplate;
     private String sbtVersion = "1.4.7";
 
+    // IIB
+    {
+        hiveTemplate = Collections.emptyList();
+        hbaseTemplate = Collections.emptyList();
+        hwcTemplate = Collections.emptyList();
+    }
     public String getScalaVersion() {
         return scalaVersion;
     }
@@ -210,6 +216,9 @@ public class ProjectConfig implements Serializable {
                 ", hbaseSparkScope='" + hbaseSparkScope + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
+                ", hbaseTemplate=" + hbaseTemplate +
+                ", hwcTemplate=" + hwcTemplate +
+                ", sbtVersion='" + sbtVersion + '\'' +
                 '}';
     }
 }

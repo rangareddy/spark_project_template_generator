@@ -7,8 +7,6 @@ import java.util.List;
 
 public class ProjectInfoBean implements Serializable {
 
-    private CodeTemplateBean scalaCodeTemplate;
-    private CodeTemplateBean javaCodeTemplate;
     private String projectName;
     private String projectDirectory;
     private String sourceProjectName;
@@ -33,11 +31,14 @@ public class ProjectInfoBean implements Serializable {
     private String packageDir;
     private String baseDeployJarPath;
     private String delimiter;
-    private MavenBuildToolBean mavenBuildToolBean;
-    private SbtBuildToolBean sbtBuildToolBean;
     private String prerequisites;
     private String javaVersion;
-    private List<String> prerequitiesList;
+    private List<String> prerequisitesList;
+    private String setUpInstructions = "";
+    private CodeTemplateBean scalaCodeTemplate;
+    private CodeTemplateBean javaCodeTemplate;
+    private MavenBuildToolBean mavenBuildToolBean;
+    private SbtBuildToolBean sbtBuildToolBean;
 
     public ProjectInfoBean() {
 
@@ -59,12 +60,12 @@ public class ProjectInfoBean implements Serializable {
         this.javaVersion = javaVersion;
     }
 
-    public List<String> getPrerequitiesList() {
-        return prerequitiesList;
+    public List<String> getPrerequisitesList() {
+        return prerequisitesList;
     }
 
-    public void setPrerequitiesList(List<String> prerequitiesList) {
-        this.prerequitiesList = prerequitiesList;
+    public void setPrerequisitesList(List<String> prerequisitesList) {
+        this.prerequisitesList = prerequisitesList;
     }
 
     public String getRepoName() {
@@ -291,6 +292,14 @@ public class ProjectInfoBean implements Serializable {
         this.prerequisites = prerequisites;
     }
 
+    public String getSetUpInstructions() {
+        return setUpInstructions;
+    }
+
+    public void setSetUpInstructions(String setUpInstructions) {
+        this.setUpInstructions = setUpInstructions;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
@@ -310,6 +319,7 @@ public class ProjectInfoBean implements Serializable {
                 ", jarPath='" + jarPath + '\'' +
                 ", jarVersion='" + jarVersion + '\'' +
                 ", isJavaTemplate=" + isJavaTemplate +
+                ", repoName='" + repoName + '\'' +
                 ", runScriptName='" + runScriptName + '\'' +
                 ", runScriptPath='" + runScriptPath + '\'' +
                 ", readMePath='" + readMePath + '\'' +
@@ -323,6 +333,8 @@ public class ProjectInfoBean implements Serializable {
                 ", sbtBuildToolBean=" + sbtBuildToolBean +
                 ", prerequisites='" + prerequisites + '\'' +
                 ", javaVersion='" + javaVersion + '\'' +
+                ", prerequisitesList=" + prerequisitesList +
+                ", setUpInstructions='" + setUpInstructions + '\'' +
                 '}';
     }
 }

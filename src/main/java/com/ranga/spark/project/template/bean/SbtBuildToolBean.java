@@ -2,6 +2,8 @@ package com.ranga.spark.project.template.bean;
 
 import com.ranga.spark.project.template.builder.DependencyBuilder;
 
+import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
+
 public class SbtBuildToolBean extends BuildToolBean {
 
     private final String buildSbtName = "build.sbt";
@@ -18,7 +20,7 @@ public class SbtBuildToolBean extends BuildToolBean {
         StringBuilder dependencies = new StringBuilder();
 
         for (String property : dependencyBuilder.getPropertyVersions()) {
-            String[] split = property.split("##");
+            String[] split = property.split(VERSION_DELIMITER);
             String propertyName = split[0];
             String propertyValue = split[2];
             String propertyKey = "lazy val " + propertyName + " = " + propertyValue;
@@ -34,10 +36,12 @@ public class SbtBuildToolBean extends BuildToolBean {
             if (scope != null && !scope.isEmpty()) {
                 scopeVal = "% \"" + scope + "\"";
             }
-            if (groupId.equals("org.apache.spark") || groupId.equals("org.scalatest")) {
-                dependencies.append("\"" + groupId + "\" %% \"" + artifactId + "\" % " + version + scopeVal + ",");
+            if (groupId.equals("org.apache.spark")) {
+                dependencies.append("\"").append(groupId).append("\" %% \"").append(artifactId).append("\" % ").append(version)
+                        .append(scopeVal).append(",");
             } else {
-                dependencies.append("\"" + groupId + "\" % \"" + artifactId + "\" % " + version + scopeVal + ",");
+                dependencies.append("\"").append(groupId).append("\" % \"").append(artifactId).append("\" % ").append(version).
+                        append(scopeVal).append(",");
             }
         }
         return new SbtBuildToolBean(dependencies.toString(), propertyVersions.toString());

@@ -55,7 +55,9 @@ public class MavenBuildToolBean extends BuildToolBean {
     @Override
     public String toString() {
         return "MavenBuildToolBean{" +
-                "pomFile='" + pomFile + '\'' +
+                "pomFile='" + pomFile + "\'," +
+                "propertyVersions='" + super.getPropertyVersions() + "\'," +
+                "dependencies='" + super.getDependencies() + "\'," +
                 '}';
     }
 }

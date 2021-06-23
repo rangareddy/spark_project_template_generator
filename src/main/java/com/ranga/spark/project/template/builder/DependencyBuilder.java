@@ -5,6 +5,8 @@ import com.ranga.spark.project.template.bean.DependencyBean;
 import java.io.Serializable;
 import java.util.*;
 
+import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
+
 public class DependencyBuilder implements Serializable {
 
     private List<DependencyBean> dependencyBeanList;
@@ -55,7 +57,7 @@ public class DependencyBuilder implements Serializable {
                 if (propertyName.contains(key)) {
                     String versionValue = runtimeValueMap.get(key);
                     String versionKey = getVersionKey(key);
-                    versions.add(key + "##" + versionKey + "##" + versionValue);
+                    versions.add(key + VERSION_DELIMITER + versionKey + VERSION_DELIMITER + versionValue);
                     updatedDependency = propertyName.replace(key, versionKey);
                     break;
                 }

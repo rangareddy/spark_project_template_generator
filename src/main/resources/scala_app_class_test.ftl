@@ -3,7 +3,7 @@ package ${projectBuilder.packageName}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import com.ranga.hello.world.HelloWorldIntegrationApp.{getEmployeeCount, getEmployeeDS}
+import ${projectBuilder.className}.{getEmployeeCount, getEmployeeDS}
 
 class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
 

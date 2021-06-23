@@ -30,8 +30,7 @@ public class HiveTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return "        case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
-                "\n" +
+        return "\n" +
                 "        import spark.implicits._\n" +
                 "        val employeeDS = Seq(\n" +
                 "          Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +

@@ -2,9 +2,11 @@
 
 ## Prerequisites
 
-<#list projectBuilder.prerequitiesList as prerequisite>
+<#list projectBuilder.prerequisitesList as prerequisite>
   * ${prerequisite}
 </#list>
+
+${projectBuilder.setUpInstructions}
 
 ## Login to spark gateway node (for example mynode.host.com) and create the application deployment directory `${projectBuilder.jarDeployPath}`.
 ```sh

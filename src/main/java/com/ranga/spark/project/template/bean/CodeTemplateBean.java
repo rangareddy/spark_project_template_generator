@@ -3,24 +3,13 @@ package com.ranga.spark.project.template.bean;
 import java.io.Serializable;
 
 public class CodeTemplateBean implements Serializable {
+
     private String importTemplate;
     private String classTemplate;
     private String sparkSessionBuildTemplate;
     private String sparkSessionCloseTemplate;
     private String codeTemplate;
     private String methodsTemplate;
-
-    public CodeTemplateBean() {
-    }
-
-    public CodeTemplateBean(String importTemplate, String classTemplate, String sparkSessionBuildTemplate, String sparkSessionCloseTemplate, String codeTemplate, String methodsTemplate) {
-        this.importTemplate = importTemplate;
-        this.classTemplate = classTemplate;
-        this.sparkSessionBuildTemplate = sparkSessionBuildTemplate;
-        this.sparkSessionCloseTemplate = sparkSessionCloseTemplate;
-        this.codeTemplate = codeTemplate;
-        this.methodsTemplate = methodsTemplate;
-    }
 
     public String getImportTemplate() {
         return importTemplate;

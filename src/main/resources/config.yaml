@@ -1,12 +1,6 @@
 projectDetails:
   - projectName: "HelloWorld"
     templateName: "default"
-  - projectName: "SparkHive"
-    templateName: "hive"
-  - projectName: "SparkHbase"
-    templateName: "hbase"
-  - projectName: "SparkHwc"
-    templateName: "hwc"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.ranga"
 baseDeployJarPath: "/apps/spark/"

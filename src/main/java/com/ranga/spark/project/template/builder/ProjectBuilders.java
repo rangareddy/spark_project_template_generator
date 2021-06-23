@@ -8,6 +8,7 @@ import com.ranga.spark.project.template.api.scala.HBaseTemplate;
 import com.ranga.spark.project.template.api.scala.HWCTemplate;
 import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.bean.*;
+import com.ranga.spark.project.template.util.AppConstants;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
@@ -83,6 +84,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setDeployScriptPath(deployScriptPath);
 
             boolean isClouderaRepo = checkClouderaRepo(projectConfig.getSparkVersion());
+
             String repoName = "<repository>\n" +
                     "            <id>central</id>\n" +
                     "            <name>Maven Central</name>\n" +
@@ -92,16 +94,17 @@ public class ProjectBuilders implements Serializable {
                     "            </snapshots>\n" +
                     "        </repository>";
             if (isClouderaRepo) {
+
                 repoName = "<repository>\n" +
                         "            <id>cldr-repo</id>\n" +
                         "            <name>Cloudera Public Repo</name>\n" +
-                        "            <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>\n" +
+                        "            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>\n" +
                         "        </repository>\n" +
                         "\n" +
                         "        <repository>\n" +
                         "            <id>hdp-repo</id>\n" +
                         "            <name>Hortonworks Public Repo</name>\n" +
-                        "            <url>http://repo.hortonworks.com/content/repositories/releases/</url>\n" +
+                        "            <url>https://repo.hortonworks.com/content/repositories/releases/</url>\n" +
                         "        </repository>\n";
 
             }
@@ -114,7 +117,7 @@ public class ProjectBuilders implements Serializable {
 
     private static boolean checkClouderaRepo(String sparkVersion) {
         int count = 0;
-        int index = 0;
+        int index;
         while ((index = sparkVersion.indexOf(".")) != -1) {
             count++;
             sparkVersion = sparkVersion.substring(index + 1);
@@ -166,7 +169,7 @@ public class ProjectBuilders implements Serializable {
     private static Map<String, String> getAppRuntimeValueMap() {
         Map<String, String> runtimeValues = new LinkedHashMap<>();
         try {
-            Class myClass = projectConfig.getClass();
+            Class<? extends ProjectConfig> myClass = projectConfig.getClass();
             Field[] fields = myClass.getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
@@ -185,23 +188,21 @@ public class ProjectBuilders implements Serializable {
     private static void buildDependencies(Set<DependencyBean> dependencyBeanSet,
                                           ProjectInfoBean projectInfoBean,
                                           Map<String, String> appRuntimeValuesMap) {
+
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, appRuntimeValuesMap);
 
         Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
-        List<String> prerequitiesList = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
+        List<String> PrerequisitesList = new ArrayList<>(propertyVersions.size());
         for (String propVersion : propertyVersions) {
-            String[] split = propVersion.split("##");
+            String[] split = propVersion.split(AppConstants.VERSION_DELIMITER);
             String propName = split[0];
             String propValue = split[2];
             if (propName.toLowerCase().endsWith("version") && !propName.contains("Binary")) {
                 String propertyName = getPropertyName(propName);
-                sb.append("* ").append(propertyName).append(":").append(propValue);
-                prerequitiesList.add(propertyName + " : " + propValue);
+                PrerequisitesList.add(propertyName + " : " + propValue);
             }
         }
-        projectInfoBean.setPrerequitiesList(prerequitiesList);
-        projectInfoBean.setPrerequisites(sb.toString());
+        projectInfoBean.setPrerequisitesList(PrerequisitesList);
 
         for (String buildTool : projectConfig.getBuildTools().split(",")) {
             if ("maven".equals(buildTool) || "mvn".equals(buildTool)) {
@@ -286,7 +287,7 @@ public class ProjectBuilders implements Serializable {
 
     private static String getScalaBinaryVersion(String scalaBinaryVersion, String scalaVersion) {
         String tempScalaBinaryVersion = scalaVersion.substring(0, scalaVersion.lastIndexOf("."));
-        if (scalaBinaryVersion == null || !tempScalaBinaryVersion.equals(scalaBinaryVersion)) {
+        if (!tempScalaBinaryVersion.equals(scalaBinaryVersion)) {
             scalaBinaryVersion = tempScalaBinaryVersion;
         }
         return scalaBinaryVersion;
