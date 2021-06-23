@@ -1,11 +1,11 @@
 package com.ranga.spark.project.template.bean;
 
 import com.ranga.spark.project.template.builder.DependencyBuilder;
+import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
 
 public class MavenBuildToolBean extends BuildToolBean {
 
-    private String pomFile = "pom.xml";
-
+    private static final String pomFile = "pom.xml";
     public MavenBuildToolBean(String dependencies, String propertyVersions) {
         super(dependencies, propertyVersions);
     }
@@ -16,7 +16,7 @@ public class MavenBuildToolBean extends BuildToolBean {
         propertyVersions.append("\n");
         String tabDelim = "\t\t";
         for (String property : dependencyBuilder.getPropertyVersions()) {
-            String[] split = property.split("##");
+            String[] split = property.split(VERSION_DELIMITER);
             String propertyName = split[1];
             String propertyValue = split[2];
             String propertyKey = "<" + propertyName + ">" + propertyValue + "</" + propertyName + ">";
@@ -48,16 +48,12 @@ public class MavenBuildToolBean extends BuildToolBean {
         return pomFile;
     }
 
-    public void setPomFile(String pomFile) {
-        this.pomFile = pomFile;
-    }
-
     @Override
     public String toString() {
         return "MavenBuildToolBean{" +
-                "pomFile='" + pomFile + "\'," +
-                "propertyVersions='" + super.getPropertyVersions() + "\'," +
-                "dependencies='" + super.getDependencies() + "\'," +
+                "pomFile='" + pomFile + "'," +
+                "propertyVersions='" + super.getPropertyVersions() + "'," +
+                "dependencies='" + super.getDependencies() + "'," +
                 '}';
     }
 }

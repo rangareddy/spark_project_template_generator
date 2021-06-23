@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ProjectConfig implements Serializable {
 
     private List<ProjectDetailBean> projectDetails;
@@ -21,18 +22,18 @@ public class ProjectConfig implements Serializable {
     private String hwcScope = "compile";
     private String hbaseSparkVersion = "";
     private String hbaseSparkScope = "";
+    private String sbtVersion = "1.4.7";
+
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
     private List<DependencyBean> hwcTemplate;
-    private String sbtVersion = "1.4.7";
 
     // IIB
     {
-        hiveTemplate = Collections.emptyList();
-        hbaseTemplate = Collections.emptyList();
-        hwcTemplate = Collections.emptyList();
+        hiveTemplate = hbaseTemplate = hwcTemplate = Collections.emptyList();
     }
+
     public String getScalaVersion() {
         return scalaVersion;
     }

@@ -5,6 +5,7 @@ import com.ranga.spark.project.template.util.TemplateType;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ProjectInfoBean implements Serializable {
 
     private String projectName;

@@ -10,18 +10,19 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+
 import static com.ranga.spark.project.template.util.AppConstants.*;
 
 public class GenerateTemplateUtil {
 
-    private static Configuration cfg;
-    static
-    {
+    private static final Configuration cfg;
+
+    static {
         cfg = new Configuration(new Version(TEMPLATE_VERSION));
         cfg.setClassForTemplateLoading(GenerateTemplateUtil.class, FTL_BASE_PACKAGE_PATH);
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
-    
+
     public static void generateTemplate(Object templateData, String ftlFile, File outputFile) {
         try {
             Template template = cfg.getTemplate(ftlFile);

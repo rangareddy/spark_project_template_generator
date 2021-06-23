@@ -2,6 +2,7 @@ package com.ranga.spark.project.template.bean;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class CodeTemplateBean implements Serializable {
 
     private String importTemplate;

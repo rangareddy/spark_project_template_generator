@@ -10,6 +10,9 @@ import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.bean.*;
 import com.ranga.spark.project.template.util.AppConstants;
 import com.ranga.spark.project.template.util.TemplateType;
+import com.ranga.spark.project.template.util.TemplateUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -20,7 +23,7 @@ import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 
 public class ProjectBuilders implements Serializable {
     private static ProjectConfig projectConfig;
-
+    private static Map<String, String> appRuntimeValuesMap;
     public static List<ProjectInfoBean> buildProjects(ProjectConfig config) {
         projectConfig = config;
         List<ProjectDetailBean> projectDetails = projectConfig.getProjectDetails();
@@ -33,9 +36,10 @@ public class ProjectBuilders implements Serializable {
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
-        Map<String, String> appRuntimeValuesMap = getAppRuntimeValueMap();
+        appRuntimeValuesMap = getAppRuntimeValueMap();
+
         for (ProjectDetailBean projectDetail : projectDetails) {
-            TemplateType templateType = getTemplateType(projectDetail.getTemplateName());
+            TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
             String sourceProjectName = projectDetail.getSourceProjectName();
             String projectName = getProjectName(projectDetail);
             String projectVersion = getUpdatedValue(projectDetail.getProjectVersion(), projectConfig.getJarVersion());
@@ -43,6 +47,18 @@ public class ProjectBuilders implements Serializable {
             String packageName = getPackageName(projectName, projectDetail);
             String packageDir = packageName.replace(".", "/");
             String delimiter = projectDetail.getDelimiter();
+            String className = sourceProjectName + "App";
+            String javaClassName = sourceProjectName + "JavaApp";
+            String jarVersion = projectConfig.getJarVersion();
+            String jarName = projectName + "-" + jarVersion + ".jar";
+            String fullClassName = packageName + "." + className;
+            String jarDeployPath = baseDeployJarPath + projectName;
+            String jarPath = jarDeployPath + File.separator + jarName;
+            String runScriptName = "run_" + projectName.replace(delimiter, "_") + "_app.sh";
+            String runScriptPath = projectDir + File.separator + runScriptName;
+            String readMePath = projectDir + File.separator + README_FILE;
+            String deployScriptPath = jarDeployPath + File.separator + runScriptName;
+            String repoName = getRepositoryNames();
 
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
@@ -52,67 +68,49 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setJavaVersion(javaVersion);
             projectInfoBean.setScalaBinaryVersion(scalaBinaryVersion);
             projectInfoBean.setProjectDirectory(projectDir);
-            String jarVersion = projectConfig.getJarVersion();
             projectInfoBean.setJarVersion(jarVersion);
             projectInfoBean.setPackageName(packageName);
             projectInfoBean.setDelimiter(delimiter);
             projectInfoBean.setPackageDir(packageDir);
             projectInfoBean.setBaseDeployJarPath(baseDeployJarPath);
             projectInfoBean.setTemplateType(templateType);
-            String className = sourceProjectName + "App";
             projectInfoBean.setClassName(className);
-            projectInfoBean.setJavaClassName(sourceProjectName + "JavaApp");
-            projectInfoBean.setFullClassName(packageName + "." + className);
-            String jarName = projectName + "-" + jarVersion + ".jar";
+            projectInfoBean.setJavaClassName(javaClassName);
+            projectInfoBean.setFullClassName(fullClassName);
             projectInfoBean.setJarName(jarName);
-
-            String jarDeployPath = baseDeployJarPath + projectName;
             projectInfoBean.setJarDeployPath(jarDeployPath);
-
-            String jarPath = jarDeployPath + File.separator + jarName;
             projectInfoBean.setJarPath(jarPath);
-
-            String runScriptName = "run_" + projectName.replace(delimiter, "_") + "_app.sh";
             projectInfoBean.setRunScriptName(runScriptName);
-
-            String runScriptPath = projectDir + File.separator + runScriptName;
             projectInfoBean.setRunScriptPath(runScriptPath);
-
-            String readMePath = projectDir + File.separator + README_FILE;
             projectInfoBean.setReadMePath(readMePath);
-            String deployScriptPath = jarDeployPath + File.separator + runScriptName;
             projectInfoBean.setDeployScriptPath(deployScriptPath);
-
-            boolean isClouderaRepo = checkClouderaRepo(projectConfig.getSparkVersion());
-
-            String repoName = "<repository>\n" +
-                    "            <id>central</id>\n" +
-                    "            <name>Maven Central</name>\n" +
-                    "            <url>https://repo1.maven.org/maven2</url>\n" +
-                    "            <snapshots>\n" +
-                    "                <enabled>false</enabled>\n" +
-                    "            </snapshots>\n" +
-                    "        </repository>";
-            if (isClouderaRepo) {
-
-                repoName = "<repository>\n" +
-                        "            <id>cldr-repo</id>\n" +
-                        "            <name>Cloudera Public Repo</name>\n" +
-                        "            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>\n" +
-                        "        </repository>\n" +
-                        "\n" +
-                        "        <repository>\n" +
-                        "            <id>hdp-repo</id>\n" +
-                        "            <name>Hortonworks Public Repo</name>\n" +
-                        "            <url>https://repo.hortonworks.com/content/repositories/releases/</url>\n" +
-                        "        </repository>\n";
-
-            }
             projectInfoBean.setRepoName(repoName);
-            buildTemplates(projectInfoBean, appRuntimeValuesMap);
+            buildTemplates(projectInfoBean);
             projectInfoBeanList.add(projectInfoBean);
         }
         return projectInfoBeanList;
+    }
+
+    private static String getRepositoryNames() {
+        boolean isClouderaRepo = checkClouderaRepo(projectConfig.getSparkVersion());
+        List<RepositoryBean> repositories = new ArrayList<>(3);
+        repositories.add(new RepositoryBean("central", "Maven Central", "https://repo1.maven.org/maven2"));
+        if (isClouderaRepo) {
+            repositories.add(new RepositoryBean("cldr-repo", "Cloudera Public Repo", "https://repository.cloudera.com/artifactory/cloudera-repos/"));
+            repositories.add(new RepositoryBean("hdp-repo", "Hortonworks Public Repo", "https://repo.hortonworks.com/content/repositories/releases/"));
+        }
+
+        StringBuilder repoSB = new StringBuilder();
+        repoSB.append("\n");
+        for(RepositoryBean repositoryBean : repositories) {
+            repoSB.append("\t\t<repository>");
+            repoSB.append("\t\t\t<id>").append(repositoryBean.getId()).append("</id>");
+            repoSB.append("\t\t\t<name>").append(repositoryBean.getName()).append("</name>");
+            repoSB.append("\t\t\t<url>").append(repositoryBean.getUrl()).append("</url>");
+            repoSB.append("\t\t</repository>");
+            repoSB.append("\n");
+        }
+        return repoSB.toString();
     }
 
     private static boolean checkClouderaRepo(String sparkVersion) {
@@ -125,7 +123,7 @@ public class ProjectBuilders implements Serializable {
         return count > 2;
     }
 
-    private static void buildTemplates(ProjectInfoBean projectInfoBean, Map<String, String> appRuntimeValuesMap) {
+    private static void buildTemplates(ProjectInfoBean projectInfoBean) {
         TemplateType templateType = projectInfoBean.getTemplateType();
         BaseTemplate template;
         BaseTemplate javaTemplate = null;
@@ -152,18 +150,20 @@ public class ProjectBuilders implements Serializable {
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
 
-        projectInfoBean.setScalaCodeTemplate(getCodeTemplateBean(template));
+        CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
+        projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
 
         if (javaTemplate != null) {
             projectInfoBean.setJavaTemplate(true);
-            projectInfoBean.setJavaCodeTemplate(getCodeTemplateBean(javaTemplate));
+            codeTemplateBean = TemplateUtil.getCodeTemplateBean(javaTemplate);
+            projectInfoBean.setJavaCodeTemplate(codeTemplateBean);
         }
 
         Set<DependencyBean> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
-        if (!othersTemplatesDependency.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(othersTemplatesDependency)) {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }
-        buildDependencies(dependencyBeanSet, projectInfoBean, appRuntimeValuesMap);
+        buildDependencies(dependencyBeanSet, projectInfoBean);
     }
 
     private static Map<String, String> getAppRuntimeValueMap() {
@@ -186,8 +186,7 @@ public class ProjectBuilders implements Serializable {
     }
 
     private static void buildDependencies(Set<DependencyBean> dependencyBeanSet,
-                                          ProjectInfoBean projectInfoBean,
-                                          Map<String, String> appRuntimeValuesMap) {
+                                          ProjectInfoBean projectInfoBean) {
 
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, appRuntimeValuesMap);
 
@@ -229,38 +228,10 @@ public class ProjectBuilders implements Serializable {
         return projectNameSB.toString();
     }
 
-    private static CodeTemplateBean getCodeTemplateBean(BaseTemplate template) {
-        CodeTemplateBean codeTemplateBean = new CodeTemplateBean();
-        codeTemplateBean.setCodeTemplate(template.codeTemplate());
-        codeTemplateBean.setClassTemplate(template.classTemplate());
-        codeTemplateBean.setImportTemplate(template.importTemplate());
-        codeTemplateBean.setMethodsTemplate(template.methodsTemplate());
-        codeTemplateBean.setSparkSessionBuildTemplate(template.sparkSessionBuildTemplate());
-        codeTemplateBean.setSparkSessionCloseTemplate(template.sparkSessionCloseTemplate());
-        return codeTemplateBean;
-    }
-
-    private static TemplateType getTemplateType(String templateTypeName) {
-        TemplateType[] templateTypes = TemplateType.values();
-        TemplateType templateType = null;
-        for (TemplateType tType : templateTypes) {
-            if (tType.name().equals(templateTypeName.toUpperCase())) {
-                templateType = tType;
-                break;
-            }
-        }
-
-        if (templateType == null) {
-            throw new RuntimeException("TemplateType not found");
-        }
-        return templateType;
-    }
-
     private static String getPackageName(String projectName, ProjectDetailBean projectDetailBean) {
         String projectPackage = projectName
                 .replace(projectDetailBean.getDelimiter() + projectDetailBean.getProjectExtension(), "")
                 .replace(projectDetailBean.getDelimiter(), ".");
-
         String basePackage = projectConfig.getBasePackageName();
         if (basePackage.endsWith(".")) {
             return basePackage + projectPackage;
@@ -287,16 +258,13 @@ public class ProjectBuilders implements Serializable {
 
     private static String getScalaBinaryVersion(String scalaBinaryVersion, String scalaVersion) {
         String tempScalaBinaryVersion = scalaVersion.substring(0, scalaVersion.lastIndexOf("."));
-        if (!tempScalaBinaryVersion.equals(scalaBinaryVersion)) {
+        if (!StringUtils.equals(tempScalaBinaryVersion, scalaBinaryVersion)) {
             scalaBinaryVersion = tempScalaBinaryVersion;
         }
         return scalaBinaryVersion;
     }
 
     private static String getUpdatedValue(String value, String defaultValue) {
-        if (value == null) {
-            value = defaultValue;
-        }
-        return value;
+        return StringUtils.defaultString(value, defaultValue);
     }
 }

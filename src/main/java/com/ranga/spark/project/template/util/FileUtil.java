@@ -5,19 +5,22 @@ import java.io.File;
 public class FileUtil {
     public static void createDir(File dirFile) {
         if (dirFile.exists()) {
-            deleteProject(dirFile);
+            boolean isDeleted = deleteProject(dirFile);
+            if(isDeleted)
+                System.out.println(dirFile + " deleted successfully");
         }
-        dirFile.mkdirs();
-        System.out.println(dirFile + " created successfully");
+        boolean isCreated = dirFile.mkdirs();
+        if(isCreated)
+            System.out.println(dirFile + " created successfully");
     }
 
-    public static void deleteProject(File dir) {
+    public static boolean deleteProject(File dir) {
         File[] files = dir.listFiles();
         if (files != null) {
             for (final File file : files) {
                 deleteProject(file);
             }
         }
-        dir.delete();
+        return dir.delete();
     }
 }

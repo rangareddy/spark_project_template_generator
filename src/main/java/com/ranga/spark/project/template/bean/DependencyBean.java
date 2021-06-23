@@ -3,6 +3,7 @@ package com.ranga.spark.project.template.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class DependencyBean implements Serializable {
 
     private String groupId;
@@ -10,12 +11,8 @@ public class DependencyBean implements Serializable {
     private String version;
     private String scope;
 
-    public DependencyBean() {
-
-    }
-
     public DependencyBean(String groupId, String artifactId, String version) {
-        this(groupId, artifactId, version, "");
+        this(groupId, artifactId, version, null);
     }
 
     public DependencyBean(String groupId, String artifactId, String version, String scope) {
