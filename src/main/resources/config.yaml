@@ -1,0 +1,31 @@
+projectDetails:
+  - projectName: "HelloWorld"
+    templateName: "default"
+baseProjectDir: "/Users/rangareddy.avula/project_templates"
+basePackageName: "com.ranga"
+baseDeployJarPath: "/apps/spark/"
+buildTools: "maven"
+jarVersion: "1.0.0-SNAPSHOT"
+scalaVersion: "2.11.12"
+scalaBinaryVersion: "2.11"
+javaVersion: "1.8"
+sparkVersion: "2.4.0.7.1.6.0-297"
+sparkScope: "provided"
+hwcVersion: "2.4.0.7.1.6.0-297"
+hwcScope: "provided"
+hbaseSparkVersion: ""
+hbaseSparkScope: ""
+defaultTemplate:
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-core_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-sql_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'
+hiveTemplate:
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-hive_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'

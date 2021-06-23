@@ -7,24 +7,27 @@ import com.ranga.spark.project.template.api.scala.DefaultTemplate;
 import com.ranga.spark.project.template.api.scala.HBaseTemplate;
 import com.ranga.spark.project.template.api.scala.HWCTemplate;
 import com.ranga.spark.project.template.api.scala.HiveTemplate;
+import com.ranga.spark.project.template.bean.DependencyBean;
 import com.ranga.spark.project.template.util.BuildDependencyUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class TemplateBuilder {
 
     public static void buildTemplate(String templateTypeName, ProjectBuilder projectBuilder) {
-        TemplateType[]templateTypes = TemplateType.values();
+        TemplateType[] templateTypes = TemplateType.values();
         TemplateType templateType = null;
-        for(TemplateType tType : templateTypes) {
-            if(tType.name().equals(templateTypeName.toUpperCase())) {
+        for (TemplateType tType : templateTypes) {
+            if (tType.name().equals(templateTypeName.toUpperCase())) {
                 templateType = tType;
                 break;
             }
         }
 
-        if(templateType == null) {
+        if (templateType == null) {
             throw new RuntimeException("TemplateType not found");
         }
 
@@ -34,8 +37,14 @@ public class TemplateBuilder {
         BaseTemplate javaTemplate = null;
         String className = projectBuilder.getClassName();
         String javaClassName = projectBuilder.getJavaClassName();
+
+        List<DependencyBean> dependencyBeanList = new ArrayList<>();
+        {
+            DependencyBean dependencyBean = new DependencyBean();
+            dependencyBeanList.add(dependencyBean);
+        }
         switch (templateType) {
-            case HBASE :
+            case HBASE:
                 template = new HBaseTemplate(className);
                 break;
             case HIVE:
@@ -52,7 +61,6 @@ public class TemplateBuilder {
 
         // Building Dependencies
         projectBuilder.setDependencyBeanList(BuildDependencyUtil.buildDependency(projectBuilder));
-
         Properties prop = projectBuilder.getProperties();
         prop.setProperty("sparkSessionBuildTemplate", template.sparkSessionBuildTemplate());
         prop.setProperty("sparkSessionCloseTemplate", template.sparkSessionCloseTemplate());
@@ -61,7 +69,7 @@ public class TemplateBuilder {
         prop.setProperty("classTemplate", template.classTemplate());
         prop.setProperty("methodsTemplate", template.methodsTemplate());
 
-        if(javaTemplate != null) {
+        if (javaTemplate != null) {
             projectBuilder.setJavaTemplate(true);
             prop.setProperty("sparkSessionBuildJavaTemplate", javaTemplate.sparkSessionBuildTemplate());
             prop.setProperty("sparkSessionCloseJavaTemplate", javaTemplate.sparkSessionCloseTemplate());

@@ -3,10 +3,15 @@ package com.ranga.spark.project.template.bean;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProjectInfoBean implements Serializable {
 
+    private CodeTemplateBean scalaCodeTemplate;
+    private CodeTemplateBean javaCodeTemplate;
     private String projectName;
+    private String projectDirectory;
+    private String sourceProjectName;
     private String projectVersion;
     private String scalaVersion;
     private String scalaBinaryVersion;
@@ -18,12 +23,21 @@ public class ProjectInfoBean implements Serializable {
     private String jarPath;
     private String jarVersion;
     private boolean isJavaTemplate;
+    private String repoName;
     private String runScriptName;
     private String runScriptPath;
     private String readMePath;
     private String jarDeployPath;
     private String deployScriptPath;
     private TemplateType templateType;
+    private String packageDir;
+    private String baseDeployJarPath;
+    private String delimiter;
+    private MavenBuildToolBean mavenBuildToolBean;
+    private SbtBuildToolBean sbtBuildToolBean;
+    private String prerequisites;
+    private String javaVersion;
+    private List<String> prerequitiesList;
 
     public ProjectInfoBean() {
 
@@ -35,6 +49,30 @@ public class ProjectInfoBean implements Serializable {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getJavaVersion() {
+        return javaVersion;
+    }
+
+    public void setJavaVersion(String javaVersion) {
+        this.javaVersion = javaVersion;
+    }
+
+    public List<String> getPrerequitiesList() {
+        return prerequitiesList;
+    }
+
+    public String getRepoName() {
+        return repoName;
+    }
+
+    public void setRepoName(String repoName) {
+        this.repoName = repoName;
+    }
+
+    public void setPrerequitiesList(List<String> prerequitiesList) {
+        this.prerequitiesList = prerequitiesList;
     }
 
     public String getProjectVersion() {
@@ -73,16 +111,8 @@ public class ProjectInfoBean implements Serializable {
         return className;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
     public String getJavaClassName() {
         return javaClassName;
-    }
-
-    public void setJavaClassName(String javaClassName) {
-        this.javaClassName = javaClassName;
     }
 
     public String getFullClassName() {
@@ -97,16 +127,8 @@ public class ProjectInfoBean implements Serializable {
         return jarName;
     }
 
-    public void setJarName(String jarName) {
-        this.jarName = jarName;
-    }
-
     public String getJarPath() {
         return jarPath;
-    }
-
-    public void setJarPath(String jarPath) {
-        this.jarPath = jarPath;
     }
 
     public String getJarVersion() {
@@ -125,20 +147,20 @@ public class ProjectInfoBean implements Serializable {
         isJavaTemplate = javaTemplate;
     }
 
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
+    }
+
     public String getRunScriptName() {
         return runScriptName;
     }
 
-    public void setRunScriptName(String runScriptName) {
-        this.runScriptName = runScriptName;
-    }
-
     public String getRunScriptPath() {
         return runScriptPath;
-    }
-
-    public void setRunScriptPath(String runScriptPath) {
-        this.runScriptPath = runScriptPath;
     }
 
     public String getReadMePath() {
@@ -151,10 +173,6 @@ public class ProjectInfoBean implements Serializable {
 
     public String getJarDeployPath() {
         return jarDeployPath;
-    }
-
-    public void setJarDeployPath(String jarDeployPath) {
-        this.jarDeployPath = jarDeployPath;
     }
 
     public String getDeployScriptPath() {
@@ -173,10 +191,114 @@ public class ProjectInfoBean implements Serializable {
         this.templateType = templateType;
     }
 
+    public String getSourceProjectName() {
+        return sourceProjectName;
+    }
+
+    public void setSourceProjectName(String sourceProjectName) {
+        this.sourceProjectName = sourceProjectName;
+    }
+
+    public String getProjectDirectory() {
+        return projectDirectory;
+    }
+
+    public void setProjectDirectory(String projectDirectory) {
+        this.projectDirectory = projectDirectory;
+    }
+
+    public String getPackageDir() {
+        return packageDir;
+    }
+
+    public void setPackageDir(String packageDir) {
+        this.packageDir = packageDir;
+    }
+
+    public String getBaseDeployJarPath() {
+        return baseDeployJarPath;
+    }
+
+    public void setBaseDeployJarPath(String baseDeployJarPath) {
+        this.baseDeployJarPath = baseDeployJarPath;
+    }
+
+    public MavenBuildToolBean getMavenBuildToolBean() {
+        return mavenBuildToolBean;
+    }
+
+    public void setMavenBuildToolBean(MavenBuildToolBean mavenBuildToolBean) {
+        this.mavenBuildToolBean = mavenBuildToolBean;
+    }
+
+    public SbtBuildToolBean getSbtBuildToolBean() {
+        return sbtBuildToolBean;
+    }
+
+    public void setSbtBuildToolBean(SbtBuildToolBean sbtBuildToolBean) {
+        this.sbtBuildToolBean = sbtBuildToolBean;
+    }
+
+    public CodeTemplateBean getScalaCodeTemplate() {
+        return scalaCodeTemplate;
+    }
+
+    public void setScalaCodeTemplate(CodeTemplateBean scalaCodeTemplate) {
+        this.scalaCodeTemplate = scalaCodeTemplate;
+    }
+
+    public CodeTemplateBean getJavaCodeTemplate() {
+        return javaCodeTemplate;
+    }
+
+    public void setJavaCodeTemplate(CodeTemplateBean javaCodeTemplate) {
+        this.javaCodeTemplate = javaCodeTemplate;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public void setJavaClassName(String javaClassName) {
+        this.javaClassName = javaClassName;
+    }
+
+    public void setJarName(String jarName) {
+        this.jarName = jarName;
+    }
+
+    public void setJarPath(String jarPath) {
+        this.jarPath = jarPath;
+    }
+
+    public void setRunScriptName(String runScriptName) {
+        this.runScriptName = runScriptName;
+    }
+
+    public void setRunScriptPath(String runScriptPath) {
+        this.runScriptPath = runScriptPath;
+    }
+
+    public void setJarDeployPath(String jarDeployPath) {
+        this.jarDeployPath = jarDeployPath;
+    }
+
+    public String getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(String prerequisites) {
+        this.prerequisites = prerequisites;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
-                "projectName='" + projectName + '\'' +
+                "scalaCodeTemplate=" + scalaCodeTemplate +
+                ", javaCodeTemplate=" + javaCodeTemplate +
+                ", projectName='" + projectName + '\'' +
+                ", projectDirectory='" + projectDirectory + '\'' +
+                ", sourceProjectName='" + sourceProjectName + '\'' +
                 ", projectVersion='" + projectVersion + '\'' +
                 ", scalaVersion='" + scalaVersion + '\'' +
                 ", scalaBinaryVersion='" + scalaBinaryVersion + '\'' +
@@ -194,6 +316,13 @@ public class ProjectInfoBean implements Serializable {
                 ", jarDeployPath='" + jarDeployPath + '\'' +
                 ", deployScriptPath='" + deployScriptPath + '\'' +
                 ", templateType=" + templateType +
+                ", packageDir='" + packageDir + '\'' +
+                ", baseDeployJarPath='" + baseDeployJarPath + '\'' +
+                ", delimiter='" + delimiter + '\'' +
+                ", mavenBuildToolBean=" + mavenBuildToolBean +
+                ", sbtBuildToolBean=" + sbtBuildToolBean +
+                ", prerequisites='" + prerequisites + '\'' +
+                ", javaVersion='" + javaVersion + '\'' +
                 '}';
     }
 }

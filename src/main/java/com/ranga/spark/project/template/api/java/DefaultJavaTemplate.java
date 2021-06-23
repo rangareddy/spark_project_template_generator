@@ -8,7 +8,7 @@ public class DefaultJavaTemplate extends JavaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return  "// Creating a dataset\n" +
+        return "// Creating a dataset\n" +
                 "        Dataset<EmployeeBean> employeeDF = getEmployeeDS(spark);\n" +
                 "        employeeDF.printSchema();\n" +
                 "        employeeDF.show(false);\n" +

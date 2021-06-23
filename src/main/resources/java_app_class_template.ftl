@@ -1,21 +1,21 @@
 package ${projectBuilder.packageName};
 
-${projectBuilder.properties.importJavaTemplate}
+${projectBuilder.javaCodeTemplate.importTemplate}
 
-${projectBuilder.properties.classJavaTemplate} {
+${projectBuilder.javaCodeTemplate.classTemplate} {
 
     private static final Logger logger = Logger.getLogger(${projectBuilder.javaClassName}.class.getName());
 
     public static void main(String[] args) {
 
-        ${projectBuilder.properties.sparkSessionBuildJavaTemplate}
+        ${projectBuilder.javaCodeTemplate.sparkSessionBuildTemplate}
 
-        ${projectBuilder.properties.codeJavaTemplate}
+        ${projectBuilder.javaCodeTemplate.codeTemplate}
 
-        logger.info("${projectBuilder.appName} application processing finished");
+        logger.info("${projectBuilder.projectName} application processing finished");
 
-        ${projectBuilder.properties.sparkSessionCloseJavaTemplate}
+        ${projectBuilder.javaCodeTemplate.sparkSessionCloseTemplate}
     }
 
-    ${projectBuilder.properties.methodsJavaTemplate}
+    ${projectBuilder.javaCodeTemplate.methodsTemplate}
 }

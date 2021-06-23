@@ -18,7 +18,7 @@ public class HWCJavaTemplate extends JavaBaseTemplate {
                 "        String table_name = \"employee\";\n" +
                 "        String database_table_name = database_name +\".\"+table_name;\n" +
                 "        HiveWarehouseSession hive = HiveWarehouseSession.session(spark).build();\n" +
-                "        logger.info(\"HiveWarehouseSession created successfully\");"+
+                "        logger.info(\"HiveWarehouseSession created successfully\");" +
                 "\n" +
                 "        // Create a Database\n" +
                 "        hive.createDatabase(database_name, true);\n" +

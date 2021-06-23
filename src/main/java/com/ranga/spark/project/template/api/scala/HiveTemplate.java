@@ -2,7 +2,8 @@ package com.ranga.spark.project.template.api.scala;
 
 public class HiveTemplate extends ScalaBaseTemplate {
 
-    private String className;
+    private final String className;
+
     public HiveTemplate(String className) {
         super(className);
         this.className = className;
@@ -17,7 +18,7 @@ public class HiveTemplate extends ScalaBaseTemplate {
 
     @Override
     public String sparkSessionBuildTemplate() {
-        return  "    val appName = \""+className+" Example\"\n" +
+        return "    val appName = \"" + className + " Example\"\n" +
                 "\n" +
                 "    // Creating the SparkConf object\n" +
                 "    val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
@@ -29,7 +30,7 @@ public class HiveTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return  "case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
+        return "case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
                 "\n" +
                 "    import spark.implicits._\n" +
                 "    val employeeDS = Seq(\n" +

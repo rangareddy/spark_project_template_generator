@@ -4,26 +4,25 @@ import com.ranga.spark.project.template.bean.DependencyBean;
 import com.ranga.spark.project.template.bean.MavenBuildToolBean;
 import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import com.ranga.spark.project.template.bean.SbtBuildToolBean;
-import com.ranga.spark.project.template.util.BuildDependencyUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Properties;
-import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 import java.util.List;
+import java.util.Properties;
+
+import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 
 public class ProjectBuilder {
-
-    private ProjectInfoBean projectInfoBean;
-    private SbtBuildToolBean sbtBuildToolBean;
-    private MavenBuildToolBean mavenBuildToolBean;
-    private List<DependencyBean> dependencyBeanList;
 
     private final String appName;
     private final String targetDir;
     private final String delimiter;
     private final String integration;
+    private final Properties properties;
+    private ProjectInfoBean projectInfoBean;
+    private SbtBuildToolBean sbtBuildToolBean;
+    private MavenBuildToolBean mavenBuildToolBean;
+    private List<DependencyBean> dependencyBeanList;
     private String projectName;
     private String projectTargetPath;
     private String packageName;
@@ -40,18 +39,17 @@ public class ProjectBuilder {
     private String pomPath;
     private String jarDeployPath;
     private String deployScriptPath;
-    private final Properties properties;
     private boolean isJavaTemplate;
     private TemplateType templateType;
-    private String[] buildTools;
+    private final String[] buildTools;
     private String buildSbtPath;
 
     public ProjectBuilder(String applicationName, Properties pr) {
         properties = pr;
         appName = applicationName;
         targetDir = getPropertyValue("projectDir", System.getProperty("user.home"));
-        integration = getPropertyValue("appExtension", "Integration" );
-        delimiter = getPropertyValue("delimiter", "-" );
+        integration = getPropertyValue("appExtension", "Integration");
+        delimiter = getPropertyValue("delimiter", "-");
 
         String buildToolString = getPropertyValue("buildTools", "maven");
         buildTools = buildToolString.split(",");
@@ -65,16 +63,25 @@ public class ProjectBuilder {
         properties.setProperty("sparkScope", getPropertyValue("sparkScope", "compile"));
     }
 
-    public void setJavaTemplate(boolean javaTemplate) {
-        isJavaTemplate = javaTemplate;
-    }
+    public static ProjectBuilder build(String projectName, Properties prop) {
+        String projName = projectName;
+        String templateTypeName = "default";
+        if (projectName.contains("#")) {
+            String[] split = projectName.split("#");
+            projName = split[0];
+            templateTypeName = split[1];
+        }
 
-    public void setTemplateType(TemplateType templateType) {
-        this.templateType = templateType;
+        ProjectBuilder projectBuilder = new ProjectBuilder(projName, prop);
+        projectBuilder.buildProjectInfo();
+        projectBuilder.buildRunScriptAndClassInfo();
+        projectBuilder.buildReadMeInfo();
+        TemplateBuilder.buildTemplate(templateTypeName, projectBuilder);
+        return projectBuilder;
     }
 
     private String getPropertyValue(String key, String defaultValue) {
-        return (String) properties.getOrDefault(key, defaultValue );
+        return (String) properties.getOrDefault(key, defaultValue);
     }
 
     public String getBuildSbtPath() {
@@ -105,29 +112,20 @@ public class ProjectBuilder {
         this.dependencyBeanList = dependencyBeanList;
     }
 
-    public static ProjectBuilder build(String projectName, Properties prop) {
-        String projName = projectName;
-        String templateTypeName = "default";
-        if(projectName.contains("#")) {
-            String split[] = projectName.split("#");
-            projName = split[0];
-            templateTypeName = split[1];
-        }
-
-        ProjectBuilder projectBuilder = new ProjectBuilder(projName, prop);
-        projectBuilder.buildProjectInfo();
-        projectBuilder.buildRunScriptAndClassInfo();
-        projectBuilder.buildReadMeInfo();
-        TemplateBuilder.buildTemplate(templateTypeName, projectBuilder);
-        return projectBuilder;
-    }
-
     public TemplateType getTemplateType() {
         return templateType;
     }
 
+    public void setTemplateType(TemplateType templateType) {
+        this.templateType = templateType;
+    }
+
     public boolean isJavaTemplate() {
         return isJavaTemplate;
+    }
+
+    public void setJavaTemplate(boolean javaTemplate) {
+        isJavaTemplate = javaTemplate;
     }
 
     public String getDeployScriptPath() {
@@ -218,29 +216,29 @@ public class ProjectBuilder {
         this.packageName = getPackage();
         this.packageDir = packageName.replace(".", "/");
         this.fullClassName = packageName + "." + className;
-        String jarVersion = getPropertyValue( "jarVersion", "1.0.0-SNAPSHOT");
+        String jarVersion = getPropertyValue("jarVersion", "1.0.0-SNAPSHOT");
         this.jarVersion = jarVersion;
-        this.jarName = projectName+"-"+jarVersion+".jar";
+        this.jarName = projectName + "-" + jarVersion + ".jar";
         String baseDeployJarPath = getBaseDeployJarPath();
         this.jarDeployPath = baseDeployJarPath + projectName;
         this.jarPath = baseDeployJarPath + projectName + File.separator + jarName;
-        this.runScriptName = "run_"+ projectName.replace(delimiter, "_") + "_app.sh";
+        this.runScriptName = "run_" + projectName.replace(delimiter, "_") + "_app.sh";
         this.deployScriptPath = jarDeployPath + File.separator + runScriptName;
         this.runScriptPath = projectTargetPath + File.separator + runScriptName;
     }
 
     private String getBaseDeployJarPath() {
         String baseDeployJarPath = getPropertyValue("baseDeployJarPath", "/apps/spark/");
-        if(!baseDeployJarPath.endsWith("/")) {
-            baseDeployJarPath = baseDeployJarPath +"/";
+        if (!baseDeployJarPath.endsWith("/")) {
+            baseDeployJarPath = baseDeployJarPath + "/";
         }
         return baseDeployJarPath;
     }
 
     private String getPackage() {
         String basePackageName = getPropertyValue("basePackageName", "com.ranga");
-        if(!basePackageName.endsWith(".")) {
-            basePackageName = basePackageName +".";
+        if (!basePackageName.endsWith(".")) {
+            basePackageName = basePackageName + ".";
         }
         return basePackageName + projectName.replace(delimiter + "integration", "")
                 .replace(delimiter, ".");
@@ -254,14 +252,14 @@ public class ProjectBuilder {
         StringBuilder projectNameSB = new StringBuilder();
         StringBuilder classNameSB = new StringBuilder();
         for (int i = 0; i < appNameStr.length(); i++) {
-            if(Character.isUpperCase(appNameStr.charAt(i))) {
+            if (Character.isUpperCase(appNameStr.charAt(i))) {
                 if (i != 0) {
                     projectNameSB.append(delimiter);
                 }
                 projectNameSB.append(Character.toLowerCase(appNameStr.charAt(i)));
             } else {
                 projectNameSB.append(appNameStr.charAt(i));
-                if(i == 0) {
+                if (i == 0) {
                     classNameSB.append(Character.toUpperCase(appNameStr.charAt(i)));
                     continue;
                 }
@@ -269,9 +267,9 @@ public class ProjectBuilder {
             classNameSB.append(appNameStr.charAt(i));
         }
 
-        projectName =  projectNameSB.toString();
-        className = classNameSB+"App";
-        javaClassName = classNameSB+"JavaApp";
+        projectName = projectNameSB.toString();
+        className = classNameSB + "App";
+        javaClassName = classNameSB + "JavaApp";
         projectTargetPath = targetDir + File.separator + projectName;
         pomPath = projectTargetPath + File.separator + "pom.xml";
         buildSbtPath = projectTargetPath + File.separator + "build.sbt";

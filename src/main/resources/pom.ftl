@@ -7,35 +7,18 @@
     <groupId>${projectBuilder.packageName}</groupId>
     <artifactId>${projectBuilder.projectName}</artifactId>
     <version>${projectBuilder.jarVersion}</version>
-    <name>${projectBuilder.appName} Application</name>
+    <name>${projectBuilder.projectName} Application</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version>${projectBuilder.properties.javaVersion}</java.version>
-
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
         <scala-maven-plugin.version>4.3.1</scala-maven-plugin.version>
         <scalatest-maven-plugin.version>2.0.0</scalatest-maven-plugin.version>
-
-        <scala.version>${projectBuilder.properties.scalaVersion}</scala.version>
-        <scala.binary.version>${projectBuilder.properties.scalaBinaryVersion}</scala.binary.version>
-
-        <spark.version>${projectBuilder.properties.sparkVersion}</spark.version>
-        <spark.scope>${projectBuilder.properties.sparkScope}</spark.scope>
-
-        <hbase.version>${projectBuilder.properties.hbaseVersion}</hbase.version>
-        <hbase.scope>${projectBuilder.properties.sparkScope}</hbase.scope>
-
-        <hbase.spark.version>${projectBuilder.properties.hbaseSparkVersion}</hbase.spark.version>
-        <hbase.spark.scope>${projectBuilder.properties.sparkScope}</hbase.spark.scope>
-
-        <hwc.version>${projectBuilder.properties.hbaseSparkVersion}</hwc.version>
-        <hwc.scope>${projectBuilder.properties.sparkScope}</hwc.scope>
-
+        ${projectBuilder.mavenBuildToolBean.propertyVersions}
         <scalatest.version>3.0.8</scalatest.version>
         <junit.version>4.13.1</junit.version>
     </properties>
@@ -52,27 +35,7 @@
     <!-- Repositories -->
     <repositories>
 
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>cldr-repo</id>
-            <name>Cloudera Public Repo</name>
-            <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>
-        </repository>
-
-        <repository>
-            <id>hdp-repo</id>
-            <name>Hortonworks Public Repo</name>
-            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
-        </repository>
-
+        ${projectBuilder.repoName}
     </repositories>
 
     <dependencies>
@@ -90,62 +53,7 @@
             <version>${r"${scala.version}"}</version>
         </dependency>
 
-        <!-- Spark dependencies -->
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-hive_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hortonworks.hive</groupId>
-            <artifactId>hive-warehouse-connector_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${hwc.version}"}</version>
-            <scope>${r"${hwc.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hbase.connectors.spark</groupId>
-            <artifactId>hbase-spark</artifactId>
-            <version>${r"${hbase.spark.version}"}</version>
-            <scope>${r"${hbase.spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${r"${hbase.version}"}</version>
-            <scope>${r"${hbase.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-server</artifactId>
-            <version>${r"${hbase.version}"}</version>
-            <scope>${r"${hbase.scope}"}</scope>
-        </dependency>
+        ${projectBuilder.mavenBuildToolBean.dependencies}
 
         <!-- Scala Test dependencies -->
         <dependency>
@@ -231,7 +139,7 @@
                 <configuration>
                     <reportsDirectory> ${r"${project.build.directory}"}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
-                    <filereports>${projectBuilder.appName}TestSuites.txt</filereports>
+                    <filereports>${projectBuilder.projectName}TestSuites.txt</filereports>
                 </configuration>
                 <executions>
                     <execution>

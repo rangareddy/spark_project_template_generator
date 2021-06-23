@@ -2,7 +2,8 @@ package com.ranga.spark.project.template.api.scala;
 
 public class HWCTemplate extends ScalaBaseTemplate {
 
-    private String className;
+    private final String className;
+
     public HWCTemplate(String className) {
         super(className);
         this.className = className;
@@ -18,7 +19,7 @@ public class HWCTemplate extends ScalaBaseTemplate {
     @Override
     public String sparkSessionBuildTemplate() {
         return "\n" +
-                "    val appName = \""+className+" Example\"\n" +
+                "    val appName = \"" + className + " Example\"\n" +
                 "        // Creating the SparkConf object\n" +
                 "        val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
                 "    \n" +

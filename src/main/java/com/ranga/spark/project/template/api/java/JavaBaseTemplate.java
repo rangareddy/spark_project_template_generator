@@ -4,14 +4,15 @@ import com.ranga.spark.project.template.api.BaseTemplate;
 
 public abstract class JavaBaseTemplate implements BaseTemplate {
 
-    private String className;
+    private final String className;
+
     public JavaBaseTemplate(String className) {
         this.className = className;
     }
 
     @Override
     public String classTemplate() {
-        return  "public class "+ className +" implements Serializable";
+        return "public class " + className + " implements Serializable";
     }
 
     @Override
@@ -30,7 +31,7 @@ public abstract class JavaBaseTemplate implements BaseTemplate {
 
     @Override
     public String sparkSessionBuildTemplate() {
-        return "String appName = \" "+className +" Example\";\n" +
+        return "String appName = \" " + className + " Example\";\n" +
                 "\n" +
                 "        // Creating the SparkConf object\n" +
                 "        SparkConf sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\");\n" +

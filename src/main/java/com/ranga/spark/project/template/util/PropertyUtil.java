@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyUtil {
-    public static Properties loadProperties(String args[]) throws Exception{
+    public static Properties loadProperties(String[] args) throws Exception {
         Properties pr = new Properties();
         InputStream inputStream = null;
         String propertyFile = null;
-        if(args.length == 0) {
+        if (args.length == 0) {
             propertyFile = "application.properties";
             inputStream = PropertyUtil.class.getClassLoader().getResourceAsStream(propertyFile);
         } else {

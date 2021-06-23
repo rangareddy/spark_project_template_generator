@@ -1,9 +1,10 @@
-# ${projectBuilder.projectName}
+# ${projectBuilder.sourceProjectName} Example
 
 ## Prerequisites
-* Spark Version :   ${projectBuilder.properties.sparkVersion}
-* Scala Version :   ${projectBuilder.properties.scalaVersion}
-* Java Version  :   ${projectBuilder.properties.javaVersion}
+
+<#list projectBuilder.prerequitiesList as prerequisite>
+  * ${prerequisite}
+</#list>
 
 ## Login to spark gateway node (for example mynode.host.com) and create the application deployment directory `${projectBuilder.jarDeployPath}`.
 ```sh

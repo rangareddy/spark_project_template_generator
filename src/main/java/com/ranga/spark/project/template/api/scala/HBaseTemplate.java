@@ -15,7 +15,7 @@ public class HBaseTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return  "case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
+        return "case class Employee(id:Long, name: String, age: Integer, salary: Float)\n" +
                 "\n" +
                 "    import spark.implicits._\n" +
                 "    val employeeDS = Seq(\n" +

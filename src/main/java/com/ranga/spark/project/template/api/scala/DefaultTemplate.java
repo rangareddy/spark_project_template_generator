@@ -8,7 +8,7 @@ public class DefaultTemplate extends ScalaBaseTemplate {
 
     @Override
     public String methodsTemplate() {
-        return  "    def getEmployeeDS(spark: SparkSession): Dataset[Employee] = {\n" +
+        return "    def getEmployeeDS(spark: SparkSession): Dataset[Employee] = {\n" +
                 "        import spark.implicits._\n" +
                 "        Seq(\n" +
                 "            Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +

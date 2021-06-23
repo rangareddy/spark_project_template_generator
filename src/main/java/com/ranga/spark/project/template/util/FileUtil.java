@@ -8,12 +8,12 @@ public class FileUtil {
             deleteProject(dirFile);
         }
         dirFile.mkdirs();
-        System.out.println(dirFile +" created successfully");
+        System.out.println(dirFile + " created successfully");
     }
 
     public static void deleteProject(File dir) {
         File[] files = dir.listFiles();
-        if(files != null) {
+        if (files != null) {
             for (final File file : files) {
                 deleteProject(file);
             }
