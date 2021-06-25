@@ -11,6 +11,9 @@ public class DependencyBean implements Serializable {
     private String version;
     private String scope;
 
+    public DependencyBean() {
+    }
+
     public DependencyBean(String groupId, String artifactId, String version) {
         this(groupId, artifactId, version, null);
     }

@@ -40,6 +40,10 @@ public class ProjectInfoBean implements Serializable {
     private CodeTemplateBean javaCodeTemplate;
     private MavenBuildToolBean mavenBuildToolBean;
     private SbtBuildToolBean sbtBuildToolBean;
+    private String sparkSubmitCommand;
+    private String sparkSubmitSecureCommand;
+    private String runScriptArguments;
+    private String runScriptSecArguments;
 
     public ProjectInfoBean() {
 
@@ -301,12 +305,42 @@ public class ProjectInfoBean implements Serializable {
         this.setUpInstructions = setUpInstructions;
     }
 
+    public String getSparkSubmitCommand() {
+        return sparkSubmitCommand;
+    }
+
+    public void setSparkSubmitCommand(String sparkSubmitCommand) {
+        this.sparkSubmitCommand = sparkSubmitCommand;
+    }
+
+    public String getSparkSubmitSecureCommand() {
+        return sparkSubmitSecureCommand;
+    }
+
+    public void setSparkSubmitSecureCommand(String sparkSubmitSecureCommand) {
+        this.sparkSubmitSecureCommand = sparkSubmitSecureCommand;
+    }
+
+    public String getRunScriptArguments() {
+        return runScriptArguments;
+    }
+
+    public void setRunScriptArguments(String runScriptArguments) {
+        this.runScriptArguments = runScriptArguments;
+    }
+
+    public String getRunScriptSecArguments() {
+        return runScriptSecArguments;
+    }
+
+    public void setRunScriptSecArguments(String runScriptSecArguments) {
+        this.runScriptSecArguments = runScriptSecArguments;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
-                "scalaCodeTemplate=" + scalaCodeTemplate +
-                ", javaCodeTemplate=" + javaCodeTemplate +
-                ", projectName='" + projectName + '\'' +
+                "projectName='" + projectName + '\'' +
                 ", projectDirectory='" + projectDirectory + '\'' +
                 ", sourceProjectName='" + sourceProjectName + '\'' +
                 ", projectVersion='" + projectVersion + '\'' +
@@ -330,12 +364,18 @@ public class ProjectInfoBean implements Serializable {
                 ", packageDir='" + packageDir + '\'' +
                 ", baseDeployJarPath='" + baseDeployJarPath + '\'' +
                 ", delimiter='" + delimiter + '\'' +
-                ", mavenBuildToolBean=" + mavenBuildToolBean +
-                ", sbtBuildToolBean=" + sbtBuildToolBean +
                 ", prerequisites='" + prerequisites + '\'' +
                 ", javaVersion='" + javaVersion + '\'' +
                 ", prerequisitesList=" + prerequisitesList +
                 ", setUpInstructions='" + setUpInstructions + '\'' +
+                ", scalaCodeTemplate=" + scalaCodeTemplate +
+                ", javaCodeTemplate=" + javaCodeTemplate +
+                ", mavenBuildToolBean=" + mavenBuildToolBean +
+                ", sbtBuildToolBean=" + sbtBuildToolBean +
+                ", sparkSubmitCommand='" + sparkSubmitCommand + '\'' +
+                ", sparkSubmitSecureCommand='" + sparkSubmitSecureCommand + '\'' +
+                ", runScriptArguments='" + runScriptArguments + '\'' +
+                ", runScriptSecArguments='" + runScriptSecArguments + '\'' +
                 '}';
     }
 }

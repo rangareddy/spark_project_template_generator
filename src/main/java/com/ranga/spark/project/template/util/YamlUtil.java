@@ -5,18 +5,31 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class YamlUtil {
-    public static ProjectConfig loadYamlFile(String[] args) throws FileNotFoundException {
-        InputStream inputStream;
-        if (args.length > 0 && args[0].endsWith("yaml")) {
-            inputStream = new FileInputStream(args[0]);
-        } else {
-            inputStream = YamlUtil.class.getClassLoader().getResourceAsStream("config.yaml");
+    public static ProjectConfig loadYamlFile(String[] args) {
+        InputStream inputStream  = null;
+        String resourceName = "config.yaml";
+        try {
+            if (args.length > 0 && args[0].endsWith("yaml")) {
+                resourceName = args[0];
+                inputStream = new FileInputStream(resourceName);
+            } else {
+                inputStream = YamlUtil.class.getClassLoader().getResourceAsStream(resourceName);
+            }
+            Yaml yaml = new Yaml(new Constructor(ProjectConfig.class));
+            return yaml.load(inputStream);
+        } catch (Exception ex) {
+            throw new RuntimeException("Exception occurred while reading the "+resourceName, ex);
+        } finally {
+            if(inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
-        Yaml yaml = new Yaml(new Constructor(ProjectConfig.class));
-        return yaml.load(inputStream);
     }
 }

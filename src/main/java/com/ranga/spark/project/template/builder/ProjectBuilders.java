@@ -9,6 +9,7 @@ import com.ranga.spark.project.template.api.scala.HWCTemplate;
 import com.ranga.spark.project.template.api.scala.HiveTemplate;
 import com.ranga.spark.project.template.bean.*;
 import com.ranga.spark.project.template.util.AppConstants;
+import com.ranga.spark.project.template.util.SparkSubmitBuildUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 import com.ranga.spark.project.template.util.TemplateUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,7 +37,7 @@ public class ProjectBuilders implements Serializable {
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
-        appRuntimeValuesMap = getAppRuntimeValueMap();
+        appRuntimeValuesMap = getAppRuntimeValueMap(projectConfig);
 
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
@@ -131,6 +132,13 @@ public class ProjectBuilders implements Serializable {
         String javaClassName = projectInfoBean.getJavaClassName();
         List<DependencyBean> defaultTemplateDependency = projectConfig.getDefaultTemplate();
         List<DependencyBean> othersTemplatesDependency = Collections.emptyList();
+        SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
+
+        List<String> argumentList = new ArrayList<>();
+        List<String> secureArgumentList = new ArrayList<>();
+        secureArgumentList.add("<PRINCIPAL>");
+        secureArgumentList.add("<KEYTAB>");
+        sparkSubmitBean.setSecureArgumentList(secureArgumentList);
         switch (templateType) {
             case HBASE:
                 template = new HBaseTemplate(className);
@@ -150,6 +158,7 @@ public class ProjectBuilders implements Serializable {
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
 
+        sparkSubmitBean.setArgumentList(argumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
 
@@ -164,17 +173,18 @@ public class ProjectBuilders implements Serializable {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }
         buildDependencies(dependencyBeanSet, projectInfoBean);
+        SparkSubmitBuildUtil.buildSparkSubmit(sparkSubmitBean, projectInfoBean);
     }
 
-    private static Map<String, String> getAppRuntimeValueMap() {
+    private static Map<String, String> getAppRuntimeValueMap(Object obj) {
         Map<String, String> runtimeValues = new LinkedHashMap<>();
         try {
-            Class<? extends ProjectConfig> myClass = projectConfig.getClass();
+            Class myClass = obj.getClass();
             Field[] fields = myClass.getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
                 String key = field.getName();
-                Object value = field.get(projectConfig);
+                Object value = field.get(obj);
                 if (value instanceof String) {
                     runtimeValues.put(key, value.toString());
                 }

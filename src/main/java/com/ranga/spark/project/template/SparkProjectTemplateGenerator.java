@@ -15,7 +15,7 @@ import java.util.List;
 
 public class SparkProjectTemplateGenerator {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ProjectConfig projectConfig = YamlUtil.loadYamlFile(args);
         List<ProjectInfoBean> projectInfoBeanList = ProjectBuilders.buildProjects(projectConfig);
         for (ProjectInfoBean projectInfoBean : projectInfoBeanList) {
@@ -40,71 +40,55 @@ public class SparkProjectTemplateGenerator {
 
         // Scala App Generator
         String scalaFilePath = scalaMain + File.separator + packageName + File.separator + className + ".scala";
-        generateTemplate(scalaFilePath, projectInfoBean, "scala_app_class_template.ftl", true);
+        GenerateTemplateUtil.generateTemplate(scalaFilePath, projectInfoBean, "scala_app_class_template.ftl", true);
 
         // Scala Test App Generator
         if (projectInfoBean.getTemplateType() == TemplateType.DEFAULT) {
             String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className + "Test.scala";
-            generateTemplate(scalaTestFilePath, projectInfoBean, "scala_app_class_test.ftl", true);
+            GenerateTemplateUtil.generateTemplate(scalaTestFilePath, projectInfoBean, "scala_app_class_test.ftl", true);
         }
         // run script
-        generateTemplate(projectInfoBean.getRunScriptPath().replace("run_", "run_sec_"), projectInfoBean, "run_sec_script.ftl");
+        GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath().replace("run_", "run_sec_"), projectInfoBean, "run_sec_script.ftl");
 
         // Java App Generator
         if (projectInfoBean.isJavaTemplate()) {
             String javaFilePath = javaMain + File.separator + packageName + File.separator + projectInfoBean.getJavaClassName() + ".java";
-            generateTemplate(javaFilePath, projectInfoBean, "java_app_class_template.ftl", true);
+            GenerateTemplateUtil.generateTemplate(javaFilePath, projectInfoBean, "java_app_class_template.ftl", true);
             String employeeFilePath = javaMain + File.separator + packageName + File.separator + "EmployeeBean.java";
-            generateTemplate(employeeFilePath, projectInfoBean, "employee.ftl");
+            GenerateTemplateUtil.generateTemplate(employeeFilePath, projectInfoBean, "employee.ftl");
         }
 
         // log4j
         String log4jPath = resourcesMain + File.separator + "log4j.properties";
-        generateTemplate(log4jPath, projectInfoBean, "log4j.ftl", true);
+        GenerateTemplateUtil.generateTemplate(log4jPath, projectInfoBean, "log4j.ftl", true);
 
         // .gitignore
         String gitIgnorePath = projectDirectory + File.separator + ".gitignore";
-        generateTemplate(gitIgnorePath, projectInfoBean, "gitignore.ftl");
+        GenerateTemplateUtil.generateTemplate(gitIgnorePath, projectInfoBean, "gitignore.ftl");
         MavenBuildToolBean mavenBuildToolBean = projectInfoBean.getMavenBuildToolBean();
         if (mavenBuildToolBean != null) {
             // pom file
             String pomFile = projectDirectory + File.separator + mavenBuildToolBean.getPomFile();
-            generateTemplate(pomFile, projectInfoBean, "pom.ftl");
+            GenerateTemplateUtil.generateTemplate(pomFile, projectInfoBean, "pom.ftl");
         }
 
         if (projectInfoBean.getSbtBuildToolBean() != null) {
             // build.sbt
             SbtBuildToolBean sbtBuildToolBean = projectInfoBean.getSbtBuildToolBean();
-            generateTemplate(sbtBuildToolBean.getBuildSbtName(), projectInfoBean, "build.sbt.ftl");
+            GenerateTemplateUtil.generateTemplate(sbtBuildToolBean.getBuildSbtName(), projectInfoBean, "build.sbt.ftl");
             String projectDirPath = projectDirectory + File.separator + "project";
             String buildPropertiesPath = projectDirPath + File.separator + "build.properties";
-            generateTemplate(buildPropertiesPath, projectInfoBean, "build.properties.ftl", true);
+            GenerateTemplateUtil.generateTemplate(buildPropertiesPath, projectInfoBean, "build.properties.ftl", true);
             String pluginsSbtPath = projectDirPath + File.separator + "plugins.sbt";
-            generateTemplate(pluginsSbtPath, projectInfoBean, "plugins.sbt.ftl");
+            GenerateTemplateUtil.generateTemplate(pluginsSbtPath, projectInfoBean, "plugins.sbt.ftl");
         }
 
         // run script
-        generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");
+        GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");
 
         // README.md
-        generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
+        GenerateTemplateUtil.generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
 
         System.out.println("=======================================");
-    }
-
-    private static void generateTemplate(String filePath, ProjectInfoBean projectInfoBean, String ftlFile) {
-        generateTemplate(filePath, projectInfoBean, ftlFile, false);
-    }
-
-    private static void generateTemplate(String filePath, Object templateData, String ftlFile, boolean isCreateDir) {
-        File templateFile = new File(filePath);
-        if (isCreateDir) {
-            boolean isCreated = templateFile.getParentFile().mkdirs();
-            if (isCreated) {
-                System.out.println(templateFile.getParentFile().getAbsolutePath() + " created.");
-            }
-        }
-        GenerateTemplateUtil.generateTemplate(templateData, ftlFile, templateFile);
-        System.out.println(templateFile + " created successfully");
     }
 }
