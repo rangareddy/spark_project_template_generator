@@ -34,7 +34,7 @@ public class HWCTemplate extends ScalaBaseTemplate {
     @Override
     public String codeTemplate() {
         return "val database_name = \"hwc_db\";\n" +
-                "        val table_name = \"employee\";\n" +
+                "        val table_name = \"employees\";\n" +
                 "        val database_table_name = database_name +\".\"+table_name;\n" +
                 "\n" +
                 "        // Create a Database\n" +
@@ -53,7 +53,7 @@ public class HWCTemplate extends ScalaBaseTemplate {
                 "        hive.dropTable(database_table_name, true, true)\n" +
                 "\n" +
                 "        // Create a Table\n" +
-                "        hive.createTable(database_table_name).ifNotExists()\n" +
+                "        hive.createTable(table_name).ifNotExists()\n" +
                 "            .column(\"id\", \"bigint\")           \n" +
                 "            .column(\"name\", \"string\")           \n" +
                 "            .column(\"age\", \"smallint\")           \n" +

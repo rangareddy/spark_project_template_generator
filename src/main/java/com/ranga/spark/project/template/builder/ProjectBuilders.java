@@ -152,6 +152,7 @@ public class ProjectBuilders implements Serializable {
         }
 
         String setupInstructions = "";
+        Map<String,String> othersConfMap = new LinkedHashMap<>();
         switch (templateType) {
             case HBASE:
                 template = new HBaseTemplate(className);
@@ -163,6 +164,26 @@ public class ProjectBuilders implements Serializable {
                 othersTemplatesDependency = projectConfig.getHiveTemplate();
                 break;
             case HWC:
+
+                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://<hiveserver2_host>:10000");
+                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://<metastore_uri>:9083");
+                othersConfMap.put("spark.sql.hive.hwc.execution.mode", "spark");
+                othersConfMap.put("spark.datasource.hive.warehouse.load.staging.dir", "/tmp");
+                othersConfMap.put("spark.datasource.hive.warehouse.read.via.llap", "false");
+                othersConfMap.put("spark.datasource.hive.warehouse.read.jdbc.mode", "cluster");
+                othersConfMap.put("spark.datasource.hive.warehouse.read.mode", "DIRECT_READER_V1");
+                othersConfMap.put("spark.kryo.registrator", "com.qubole.spark.hiveacid.util.HiveAcidKyroRegistrator");
+                othersConfMap.put("spark.sql.extensions", "com.hortonworks.spark.sql.rule.Extensions");
+
+                if(projectInfoBean.isSecureCluster()) {
+                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "true");
+                    othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "<hive.server2.authentication.kerberos.principal>");
+                } else {
+                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "false");
+                    othersConfMap.put("spark.datasource.hive.warehouse.user.name", "hive");
+                    othersConfMap.put("spark.datasource.hive.warehouse.password", "hive");
+                }
+
                 template = new HWCTemplate(className);
                 javaTemplate = new HWCJavaTemplate(javaClassName);
                 othersTemplatesDependency = projectConfig.getHwcTemplate();
@@ -171,7 +192,7 @@ public class ProjectBuilders implements Serializable {
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
-
+        sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setArgumentList(argumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
