@@ -82,7 +82,7 @@ public class SparkProjectTemplateGenerator {
         }
 
         // run script
-        if(projectInfoBean.isSecureCluster()) {
+        if (projectInfoBean.isSecureCluster()) {
             GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath().replace("run_", "run_sec_"), projectInfoBean, "run_sec_script.ftl");
         } else {
             GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");

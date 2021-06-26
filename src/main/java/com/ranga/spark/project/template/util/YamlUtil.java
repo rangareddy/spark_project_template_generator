@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 public class YamlUtil {
     public static ProjectConfig loadYamlFile(String[] args) {
-        InputStream inputStream  = null;
+        InputStream inputStream = null;
         String resourceName = "config.yaml";
         try {
             if (args.length > 0 && args[0].endsWith("yaml")) {
@@ -21,9 +21,9 @@ public class YamlUtil {
             Yaml yaml = new Yaml(new Constructor(ProjectConfig.class));
             return yaml.load(inputStream);
         } catch (Exception ex) {
-            throw new RuntimeException("Exception occurred while reading the "+resourceName, ex);
+            throw new RuntimeException("Exception occurred while reading the " + resourceName, ex);
         } finally {
-            if(inputStream != null) {
+            if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (Exception ex) {

@@ -1,73 +1,58 @@
 package com.ranga.spark.project.template.builder;
 
-import com.ranga.spark.project.template.api.BaseTemplate;
-import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
-import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
-import com.ranga.spark.project.template.api.scala.DefaultTemplate;
-import com.ranga.spark.project.template.api.scala.HBaseTemplate;
-import com.ranga.spark.project.template.api.scala.HWCTemplate;
-import com.ranga.spark.project.template.api.scala.HiveTemplate;
-import com.ranga.spark.project.template.bean.*;
-import com.ranga.spark.project.template.util.AppConstants;
-import com.ranga.spark.project.template.util.SparkSubmitBuildUtil;
+import com.ranga.spark.project.template.bean.ProjectConfig;
+import com.ranga.spark.project.template.bean.ProjectDetailBean;
+import com.ranga.spark.project.template.bean.ProjectInfoBean;
+import com.ranga.spark.project.template.util.AppUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 import com.ranga.spark.project.template.util.TemplateUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import static com.ranga.spark.project.template.util.AppConstants.DOT_DELIMITER;
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 
 public class ProjectBuilders implements Serializable {
 
-    private static ProjectConfig projectConfig;
-    private static Map<String, String> appRuntimeValuesMap;
-
-    public static List<ProjectInfoBean> buildProjects(ProjectConfig config) {
-        projectConfig = config;
-        List<ProjectDetailBean> projectDetails = projectConfig.getProjectDetails();
-        if (projectDetails == null || projectDetails.isEmpty()) {
-            throw new RuntimeException("Project details are not specified in configuration file.");
-        }
+    public static List<ProjectInfoBean> buildProjects(ProjectConfig projectConfig) {
+        List<ProjectDetailBean> projectDetails = AppUtil.getProjectDetails(projectConfig);
 
         String secureCluster = projectConfig.getSecureCluster();
-        boolean isSecureCluster = false;
-        if(StringUtils.isNotEmpty(secureCluster)) {
-            isSecureCluster = Boolean.parseBoolean(secureCluster);
-        }
+        boolean isSecureCluster = StringUtils.isNotEmpty(secureCluster) && Boolean.parseBoolean(secureCluster);
         List<ProjectInfoBean> projectInfoBeanList = new ArrayList<>(projectDetails.size());
         String scalaVersion = projectConfig.getScalaVersion();
-        String scalaBinaryVersion = getScalaBinaryVersion(projectConfig.getScalaBinaryVersion(), scalaVersion);
+        String scalaBinaryVersion = AppUtil.getScalaBinaryVersion(projectConfig.getScalaBinaryVersion(), scalaVersion);
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
-        appRuntimeValuesMap = getAppRuntimeValueMap(projectConfig);
+        Map<String, String> projectConfigMap = AppUtil.getAppRuntimeValueMap(projectConfig);
 
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
             String sourceProjectName = projectDetail.getSourceProjectName();
-            String projectName = getProjectName(projectDetail);
-            String projectVersion = getUpdatedValue(projectDetail.getProjectVersion(), projectConfig.getJarVersion());
+            String projectName = AppUtil.getProjectName(projectDetail);
+            String projectVersion = AppUtil.getUpdatedValue(projectDetail.getProjectVersion(), projectConfig.getJarVersion());
             String projectDir = baseProjectDir + File.separator + projectName;
-            String packageName = getPackageName(projectName, projectDetail);
-            String packageDir = packageName.replace(".", "/");
+            String packageName = AppUtil.getPackageName(projectName, projectConfig.getBasePackageName(), projectDetail);
+            String packageDir = packageName.replace(DOT_DELIMITER, "/");
             String delimiter = projectDetail.getDelimiter();
             String className = sourceProjectName + "App";
             String javaClassName = sourceProjectName + "JavaApp";
             String jarVersion = projectConfig.getJarVersion();
             String jarName = projectName + "-" + jarVersion + ".jar";
-            String fullClassName = packageName + "." + className;
+            String fullClassName = packageName + DOT_DELIMITER + className;
             String jarDeployPath = baseDeployJarPath + projectName;
             String jarPath = jarDeployPath + File.separator + jarName;
             String runScriptName = "run_" + projectName.replace(delimiter, "_") + "_app.sh";
             String runScriptPath = projectDir + File.separator + runScriptName;
             String readMePath = projectDir + File.separator + README_FILE;
             String deployScriptPath = jarDeployPath + File.separator + runScriptName;
-            String repoName = getRepositoryNames();
+            String repoName = AppUtil.getRepositoryNames(projectConfig);
 
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
@@ -95,228 +80,9 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setDeployScriptPath(deployScriptPath);
             projectInfoBean.setRepoName(repoName);
             projectInfoBean.setSecureCluster(isSecureCluster);
-            buildTemplates(projectInfoBean);
+            TemplateUtil.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
             projectInfoBeanList.add(projectInfoBean);
         }
         return projectInfoBeanList;
-    }
-
-    private static String getRepositoryNames() {
-        boolean isClouderaRepo = checkClouderaRepo(projectConfig.getSparkVersion());
-        List<RepositoryBean> repositories = new ArrayList<>(3);
-        repositories.add(new RepositoryBean("central", "Maven Central", "https://repo1.maven.org/maven2"));
-        if (isClouderaRepo) {
-            repositories.add(new RepositoryBean("cldr-repo", "Cloudera Public Repo", "https://repository.cloudera.com/artifactory/cloudera-repos/"));
-            repositories.add(new RepositoryBean("hdp-repo", "Hortonworks Public Repo", "https://repo.hortonworks.com/content/repositories/releases/"));
-        }
-
-        StringBuilder repoSB = new StringBuilder();
-        repoSB.append("\n");
-        for(RepositoryBean repositoryBean : repositories) {
-            repoSB.append("\t\t<repository>\n");
-            repoSB.append("\t\t\t<id>").append(repositoryBean.getId()).append("</id>\n");
-            repoSB.append("\t\t\t<name>").append(repositoryBean.getName()).append("</name>\n");
-            repoSB.append("\t\t\t<url>").append(repositoryBean.getUrl()).append("</url>\n");
-            repoSB.append("\t\t</repository>\n");
-            repoSB.append("\n");
-        }
-        return repoSB.toString();
-    }
-
-    private static boolean checkClouderaRepo(String sparkVersion) {
-        int count = 0;
-        int index;
-        while ((index = sparkVersion.indexOf(".")) != -1) {
-            count++;
-            sparkVersion = sparkVersion.substring(index + 1);
-        }
-        return count > 2;
-    }
-
-    private static void buildTemplates(ProjectInfoBean projectInfoBean) {
-        TemplateType templateType = projectInfoBean.getTemplateType();
-        BaseTemplate template;
-        BaseTemplate javaTemplate = null;
-        String className = projectInfoBean.getClassName();
-        String javaClassName = projectInfoBean.getJavaClassName();
-        List<DependencyBean> defaultTemplateDependency = projectConfig.getDefaultTemplate();
-        List<DependencyBean> othersTemplatesDependency = Collections.emptyList();
-        SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
-
-        List<String> argumentList = new ArrayList<>();
-        if(projectInfoBean.isSecureCluster()) {
-            List<String> secureArgumentList = new ArrayList<>();
-            secureArgumentList.add("<PRINCIPAL>");
-            secureArgumentList.add("<KEYTAB>");
-            sparkSubmitBean.setSecureArgumentList(secureArgumentList);
-        }
-
-        String setupInstructions = "";
-        Map<String,String> othersConfMap = new LinkedHashMap<>();
-        List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
-        switch (templateType) {
-            case HBASE:
-                template = new HBaseTemplate(className);
-                othersTemplatesDependency = projectConfig.getHbaseTemplate();
-                setupInstructions = template.setupInstructions();
-                break;
-            case HIVE:
-                template = new HiveTemplate(className);
-                othersTemplatesDependency = projectConfig.getHiveTemplate();
-                break;
-            case HWC:
-
-                runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
-                runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
-
-                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://<hiveserver2_host>:10000");
-                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://<metastore_uri>:9083");
-                othersConfMap.put("spark.sql.hive.hwc.execution.mode", "spark");
-                othersConfMap.put("spark.datasource.hive.warehouse.load.staging.dir", "/tmp");
-                othersConfMap.put("spark.datasource.hive.warehouse.read.via.llap", "false");
-                othersConfMap.put("spark.datasource.hive.warehouse.read.jdbc.mode", "cluster");
-                othersConfMap.put("spark.datasource.hive.warehouse.read.mode", "DIRECT_READER_V1");
-                othersConfMap.put("spark.kryo.registrator", "com.qubole.spark.hiveacid.util.HiveAcidKyroRegistrator");
-                othersConfMap.put("spark.sql.extensions", "com.hortonworks.spark.sql.rule.Extensions");
-
-                if(projectInfoBean.isSecureCluster()) {
-                    runScriptNotesList.add("Update `hive.server2.authentication.kerberos.principal` in `spark.sql.hive.hiveserver2.jdbc.url.principal`");
-                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "true");
-                    othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "<hive.server2.authentication.kerberos.principal>");
-                } else {
-                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "false");
-                    othersConfMap.put("spark.datasource.hive.warehouse.user.name", "hive");
-                    othersConfMap.put("spark.datasource.hive.warehouse.password", "hive");
-                }
-
-                template = new HWCTemplate(className);
-                javaTemplate = new HWCJavaTemplate(javaClassName);
-                othersTemplatesDependency = projectConfig.getHwcTemplate();
-                break;
-            default:
-                template = new DefaultTemplate(className);
-                javaTemplate = new DefaultJavaTemplate(javaClassName);
-        }
-        projectInfoBean.setRunScriptNotesList(runScriptNotesList);
-        sparkSubmitBean.setOtherConfMap(othersConfMap);
-        sparkSubmitBean.setArgumentList(argumentList);
-        CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
-        projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
-        projectInfoBean.setSetUpInstructions(setupInstructions);
-
-        if (javaTemplate != null) {
-            projectInfoBean.setJavaTemplate(true);
-            codeTemplateBean = TemplateUtil.getCodeTemplateBean(javaTemplate);
-            projectInfoBean.setJavaCodeTemplate(codeTemplateBean);
-        }
-
-        Set<DependencyBean> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
-        if (CollectionUtils.isNotEmpty(othersTemplatesDependency)) {
-            dependencyBeanSet.addAll(othersTemplatesDependency);
-        }
-        buildDependencies(dependencyBeanSet, projectInfoBean);
-        SparkSubmitBuildUtil.buildSparkSubmit(sparkSubmitBean, projectInfoBean);
-    }
-
-    private static Map<String, String> getAppRuntimeValueMap(Object obj) {
-        Map<String, String> runtimeValues = new LinkedHashMap<>();
-        try {
-            Class myClass = obj.getClass();
-            Field[] fields = myClass.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                String key = field.getName();
-                Object value = field.get(obj);
-                if (value instanceof String) {
-                    runtimeValues.put(key, value.toString());
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return runtimeValues;
-    }
-
-    private static void buildDependencies(Set<DependencyBean> dependencyBeanSet,
-                                          ProjectInfoBean projectInfoBean) {
-
-        DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, appRuntimeValuesMap);
-
-        Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
-        List<String> PrerequisitesList = new ArrayList<>(propertyVersions.size());
-        for (String propVersion : propertyVersions) {
-            String[] split = propVersion.split(AppConstants.VERSION_DELIMITER);
-            String propName = split[0];
-            String propValue = split[2];
-            if (propName.toLowerCase().endsWith("version") && !propName.contains("Binary")) {
-                String propertyName = getPropertyName(propName);
-                PrerequisitesList.add(propertyName + " : " + propValue);
-            }
-        }
-        projectInfoBean.setPrerequisitesList(PrerequisitesList);
-
-        for (String buildTool : projectConfig.getBuildTools().split(",")) {
-            if ("maven".equals(buildTool) || "mvn".equals(buildTool)) {
-                MavenBuildToolBean mavenBuildToolBean = MavenBuildToolBean.build(dependencyBuilder);
-                projectInfoBean.setMavenBuildToolBean(mavenBuildToolBean);
-            } else if ("sbt".equals(buildTool)) {
-                SbtBuildToolBean sbtBuildToolBean = SbtBuildToolBean.build(dependencyBuilder);
-                projectInfoBean.setSbtBuildToolBean(sbtBuildToolBean);
-            } else {
-                throw new RuntimeException(buildTool + " not yet implemented");
-            }
-        }
-    }
-
-    private static String getPropertyName(String propName) {
-        StringBuilder projectNameSB = new StringBuilder();
-        projectNameSB.append(Character.toUpperCase(propName.charAt(0)));
-        for (int i = 1; i < propName.length(); i++) {
-            if (Character.isUpperCase(propName.charAt(i))) {
-                projectNameSB.append(" ");
-            }
-            projectNameSB.append(propName.charAt(i));
-        }
-        return projectNameSB.toString();
-    }
-
-    private static String getPackageName(String projectName, ProjectDetailBean projectDetailBean) {
-        String projectPackage = projectName
-                .replace(projectDetailBean.getDelimiter() + projectDetailBean.getProjectExtension(), "")
-                .replace(projectDetailBean.getDelimiter(), ".");
-        String basePackage = projectConfig.getBasePackageName();
-        if (basePackage.endsWith(".")) {
-            return basePackage + projectPackage;
-        } else {
-            return basePackage + "." + projectPackage;
-        }
-    }
-
-    private static String getProjectName(ProjectDetailBean projectDetailBean) {
-        String appNameStr = projectDetailBean.getSourceProjectName();
-        StringBuilder projectNameSB = new StringBuilder();
-        for (int i = 0; i < appNameStr.length(); i++) {
-            if (Character.isUpperCase(appNameStr.charAt(i))) {
-                if (i != 0) {
-                    projectNameSB.append(projectDetailBean.getDelimiter());
-                }
-                projectNameSB.append(Character.toLowerCase(appNameStr.charAt(i)));
-            } else {
-                projectNameSB.append(appNameStr.charAt(i));
-            }
-        }
-        return projectNameSB.toString();
-    }
-
-    private static String getScalaBinaryVersion(String scalaBinaryVersion, String scalaVersion) {
-        String tempScalaBinaryVersion = scalaVersion.substring(0, scalaVersion.lastIndexOf("."));
-        if (!StringUtils.equals(tempScalaBinaryVersion, scalaBinaryVersion)) {
-            scalaBinaryVersion = tempScalaBinaryVersion;
-        }
-        return scalaBinaryVersion;
-    }
-
-    private static String getUpdatedValue(String value, String defaultValue) {
-        return StringUtils.defaultString(value, defaultValue);
     }
 }

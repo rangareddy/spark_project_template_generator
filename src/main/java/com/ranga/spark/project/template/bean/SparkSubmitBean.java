@@ -6,10 +6,10 @@ import java.util.*;
 public class SparkSubmitBean implements Serializable {
 
     private String name;
-    private String master = "yarn";
-    private String deployMode = "client";
-    private String driverMemory = "1g";
-    private String executorMemory = "1g";
+    private final String master = "yarn";
+    private final String deployMode = "client";
+    private final String driverMemory = "1g";
+    private final String executorMemory = "1g";
     private String numExecutors = "2";
     private String executorCores = "3";
     private String driverCores = "1";

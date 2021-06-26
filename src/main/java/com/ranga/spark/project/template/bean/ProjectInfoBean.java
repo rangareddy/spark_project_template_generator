@@ -340,12 +340,12 @@ public class ProjectInfoBean implements Serializable {
         this.runScriptSecArguments = runScriptSecArguments;
     }
 
-    public void setSecureCluster(boolean isSecureCluster) {
-        this.isSecureCluster = isSecureCluster;
-    }
-
     public boolean isSecureCluster() {
         return isSecureCluster;
+    }
+
+    public void setSecureCluster(boolean isSecureCluster) {
+        this.isSecureCluster = isSecureCluster;
     }
 
     public List<String> getRunScriptNotesList() {

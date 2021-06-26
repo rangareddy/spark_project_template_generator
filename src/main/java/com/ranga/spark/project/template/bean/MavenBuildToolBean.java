@@ -1,11 +1,13 @@
 package com.ranga.spark.project.template.bean;
 
 import com.ranga.spark.project.template.builder.DependencyBuilder;
+
 import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
 
 public class MavenBuildToolBean extends BuildToolBean {
 
     private static final String pomFile = "pom.xml";
+
     public MavenBuildToolBean(String dependencies, String propertyVersions) {
         super(dependencies, propertyVersions);
     }

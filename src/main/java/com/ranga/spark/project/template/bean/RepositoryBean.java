@@ -3,9 +3,9 @@ package com.ranga.spark.project.template.bean;
 import java.io.Serializable;
 
 public class RepositoryBean implements Serializable {
-    private String id;
-    private String name;
-    private String url;
+    private final String id;
+    private final String name;
+    private final String url;
 
     public RepositoryBean(String id, String name, String url) {
         this.id = id;

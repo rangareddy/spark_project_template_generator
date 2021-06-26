@@ -5,7 +5,10 @@ import com.ranga.spark.project.template.bean.SparkSubmitBean;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SparkSubmitBuildUtil {
 
@@ -14,26 +17,22 @@ public class SparkSubmitBuildUtil {
         sparkSubmitBean.setClassName(projectInfoBean.getFullClassName());
         sparkSubmitBean.setJarPath(projectInfoBean.getJarPath());
 
-        String filesInfo = "";
-        List<String> filesList = sparkSubmitBean.getFileList();
-        if(CollectionUtils.isNotEmpty(filesList)) {
-            filesInfo = String.join(",", sparkSubmitBean.getFileList());
-        }
+        String filesInfo = getFilesInfo(sparkSubmitBean);
         sparkSubmitBean.setFiles(filesInfo);
 
         List<String> argumentList = sparkSubmitBean.getArgumentList();
         String argumentsVar = "";
         StringBuilder arguments = new StringBuilder();
-        if(CollectionUtils.isNotEmpty(argumentList)) {
+        if (CollectionUtils.isNotEmpty(argumentList)) {
             String argumentsUsage = String.join(" ", argumentList).toUpperCase();
-            argumentsVar  = "if [ $# -lt "+argumentList.size()+" ]; then\n" +
-                    "    echo \"Usage   : $0 "+argumentsUsage+"\"\n" +
+            argumentsVar = "if [ $# -lt " + argumentList.size() + " ]; then\n" +
+                    "    echo \"Usage   : $0 " + argumentsUsage + "\"\n" +
                     "    echo \" \"\n" +
                     "    exit 1\n" +
                     "fi\n";
 
-            for(int i=0; i<argumentList.size(); i++) {
-                arguments.append("$").append(i+1).append(" ");
+            for (int i = 0; i < argumentList.size(); i++) {
+                arguments.append("$").append(i + 1).append(" ");
             }
         }
         projectInfoBean.setRunScriptArguments(argumentsVar);
@@ -44,7 +43,7 @@ public class SparkSubmitBuildUtil {
 
         String secArgumentsVar = "";
         StringBuilder secArguments = new StringBuilder();
-        if(CollectionUtils.isNotEmpty(totalArguments)) {
+        if (CollectionUtils.isNotEmpty(totalArguments)) {
             String secArgumentsUsage = String.join(" ", totalArguments).toUpperCase();
             secArgumentsVar = "if [ $# -lt " + totalArguments.size() + " ]; then\n" +
                     "    echo \"Usage   : $0 " + secArgumentsUsage + "\"\n" +
@@ -52,8 +51,8 @@ public class SparkSubmitBuildUtil {
                     "    exit 1\n" +
                     "fi\n";
 
-            for(int i=2; i<totalArguments.size(); i++) {
-                secArguments.append("$").append(i+1).append(" ");
+            for (int i = 2; i < totalArguments.size(); i++) {
+                secArguments.append("$").append(i + 1).append(" ");
             }
         }
 
@@ -72,18 +71,18 @@ public class SparkSubmitBuildUtil {
         optionsMap.putAll(sparkSubmitBean.getOtherConfMap());
 
         StringBuilder stringBuilder = new StringBuilder("spark-submit \\\n");
-        for(Map.Entry<String, String> optionsEntry : optionsMap.entrySet()) {
+        for (Map.Entry<String, String> optionsEntry : optionsMap.entrySet()) {
             String optionKey = optionsEntry.getKey();
             String optionValue = optionsEntry.getValue();
             stringBuilder.append("\t--conf ").append(optionKey).append("=").append(optionValue).append(" \\\n");
         }
 
         stringBuilder.append("SECURITY_INFO FILES_INFO");
-        stringBuilder.append("\t--class ").append(sparkSubmitBean.getClassName()).append(" \\\n");;
+        stringBuilder.append("\t--class ").append(sparkSubmitBean.getClassName()).append(" \\\n");
         stringBuilder.append("\t").append(sparkSubmitBean.getJarPath()).append(" ").append("ARGUMENTS");
         String filesInfoStr = "";
-        if(StringUtils.isNotEmpty(filesInfo)) {
-            filesInfoStr = "\t--files " + filesInfo +" \\\n";
+        if (StringUtils.isNotEmpty(filesInfo)) {
+            filesInfoStr = "\t--files " + filesInfo + " \\\n";
         }
 
         String sparkSubmitCommand = getSubmitCommand(stringBuilder, "", filesInfoStr, arguments.toString());
@@ -92,6 +91,15 @@ public class SparkSubmitBuildUtil {
         String securityInfo = "\t--principal $PRINCIPAL \\\n\t--keytab $KEYTAB \\\n";
         String secureSubmitCommand = getSubmitCommand(stringBuilder, securityInfo, filesInfoStr, secArguments.toString());
         projectInfoBean.setSparkSubmitSecureCommand(secureSubmitCommand);
+    }
+
+    private static String getFilesInfo(SparkSubmitBean sparkSubmitBean) {
+        String filesInfo = "";
+        List<String> filesList = sparkSubmitBean.getFileList();
+        if (CollectionUtils.isNotEmpty(filesList)) {
+            filesInfo = String.join(",", sparkSubmitBean.getFileList());
+        }
+        return filesInfo;
     }
 
     private static String getSubmitCommand(StringBuilder command, String securityInfo, String filesInfo, String argumentsInfo) {

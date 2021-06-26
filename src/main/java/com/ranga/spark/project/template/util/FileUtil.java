@@ -6,11 +6,11 @@ public class FileUtil {
     public static void createDir(File dirFile) {
         if (dirFile.exists()) {
             boolean isDeleted = deleteProject(dirFile);
-            if(isDeleted)
+            if (isDeleted)
                 System.out.println(dirFile + " deleted successfully");
         }
         boolean isCreated = dirFile.mkdirs();
-        if(isCreated)
+        if (isCreated)
             System.out.println(dirFile + " created successfully");
     }
 
