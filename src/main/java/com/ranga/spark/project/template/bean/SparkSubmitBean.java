@@ -1,9 +1,7 @@
 package com.ranga.spark.project.template.bean;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SparkSubmitBean implements Serializable {
 
@@ -12,13 +10,14 @@ public class SparkSubmitBean implements Serializable {
     private String deployMode = "client";
     private String driverMemory = "1g";
     private String executorMemory = "1g";
-    private String numExecutors = "1";
+    private String numExecutors = "2";
     private String executorCores = "3";
-    private String driverCores = "2";
+    private String driverCores = "1";
     private String className;
     private String jarPath;
     private List<String> fileList = Collections.emptyList();
     private List<String> argumentList = Collections.emptyList();
+    private Map<String, String> otherConfMap = new LinkedHashMap<>();
     private List<String> secureArgumentList = Arrays.asList("--principal", "--keytab");
     private String files;
     private String driverClassPath;
@@ -37,32 +36,16 @@ public class SparkSubmitBean implements Serializable {
         return master;
     }
 
-    public void setMaster(String master) {
-        this.master = master;
-    }
-
     public String getDeployMode() {
         return deployMode;
-    }
-
-    public void setDeployMode(String deployMode) {
-        this.deployMode = deployMode;
     }
 
     public String getDriverMemory() {
         return driverMemory;
     }
 
-    public void setDriverMemory(String driverMemory) {
-        this.driverMemory = driverMemory;
-    }
-
     public String getExecutorMemory() {
         return executorMemory;
-    }
-
-    public void setExecutorMemory(String executorMemory) {
-        this.executorMemory = executorMemory;
     }
 
     public String getNumExecutors() {
@@ -161,6 +144,14 @@ public class SparkSubmitBean implements Serializable {
         this.secureArgumentList = secureArgumentList;
     }
 
+    public Map<String, String> getOtherConfMap() {
+        return otherConfMap;
+    }
+
+    public void setOtherConfMap(Map<String, String> otherConfMap) {
+        this.otherConfMap = otherConfMap;
+    }
+
     @Override
     public String toString() {
         return "SparkSubmitBean{" +
@@ -176,6 +167,7 @@ public class SparkSubmitBean implements Serializable {
                 ", jarPath='" + jarPath + '\'' +
                 ", fileList=" + fileList +
                 ", argumentList=" + argumentList +
+                ", otherConfMap=" + otherConfMap +
                 ", secureArgumentList=" + secureArgumentList +
                 ", files='" + files + '\'' +
                 ", driverClassPath='" + driverClassPath + '\'' +

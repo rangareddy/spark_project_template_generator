@@ -5,10 +5,10 @@ import com.ranga.spark.project.template.bean.SparkSubmitBean;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SparkSubmitBuildUtil {
+
     public static void buildSparkSubmit(SparkSubmitBean sparkSubmitBean, ProjectInfoBean projectInfoBean) {
         sparkSubmitBean.setName(projectInfoBean.getSourceProjectName());
         sparkSubmitBean.setClassName(projectInfoBean.getFullClassName());
@@ -56,30 +56,40 @@ public class SparkSubmitBuildUtil {
                 secArguments.append("$").append(i+1).append(" ");
             }
         }
+
         projectInfoBean.setRunScriptSecArguments(secArgumentsVar);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("spark-submit").append(" \\\n");
-        stringBuilder.append("  --name ").append(sparkSubmitBean.getName()).append(" \\\n");
-        stringBuilder.append("  --master ").append(sparkSubmitBean.getMaster()).append(" \\\n");
-        stringBuilder.append("  --deploy-mode ").append(sparkSubmitBean.getDeployMode()).append(" \\\n");
-        stringBuilder.append("  --driver-memory ").append(sparkSubmitBean.getDriverMemory()).append(" \\\n");
-        stringBuilder.append("  --executor-memory ").append(sparkSubmitBean.getExecutorMemory()).append(" \\\n");
-        stringBuilder.append("  --num-executors ").append(sparkSubmitBean.getNumExecutors()).append(" \\\n");
-        stringBuilder.append("  --driver-cores ").append(sparkSubmitBean.getDriverCores()).append(" \\\n");
-        stringBuilder.append("  --executor-cores ").append(sparkSubmitBean.getExecutorCores()).append(" \\\n");
+        Map<String, String> optionsMap = new LinkedHashMap<>();
+        optionsMap.put("spark.app.name", sparkSubmitBean.getName());
+        optionsMap.put("spark.master", sparkSubmitBean.getMaster());
+        optionsMap.put("spark.submit.deployMode", sparkSubmitBean.getDeployMode());
+        optionsMap.put("spark.driver.memory", sparkSubmitBean.getDriverMemory());
+        optionsMap.put("spark.executor.memory", sparkSubmitBean.getExecutorMemory());
+        optionsMap.put("spark.driver.cores", sparkSubmitBean.getDriverCores());
+        optionsMap.put("spark.executor.cores", sparkSubmitBean.getExecutorCores());
+        optionsMap.put("spark.executor.instances", sparkSubmitBean.getNumExecutors());
+
+        optionsMap.putAll(sparkSubmitBean.getOtherConfMap());
+
+        StringBuilder stringBuilder = new StringBuilder("spark-submit \\\n");
+        for(Map.Entry<String, String> optionsEntry : optionsMap.entrySet()) {
+            String optionKey = optionsEntry.getKey();
+            String optionValue = optionsEntry.getValue();
+            stringBuilder.append("\t--conf ").append(optionKey).append("=").append(optionValue).append(" \\\n");
+        }
+
         stringBuilder.append("SECURITY_INFO FILES_INFO");
-        stringBuilder.append("  --class ").append(sparkSubmitBean.getClassName()).append(" \\\n");;
-        stringBuilder.append("  ").append(sparkSubmitBean.getJarPath()).append(" ").append("ARGUMENTS");
+        stringBuilder.append("\t--class ").append(sparkSubmitBean.getClassName()).append(" \\\n");;
+        stringBuilder.append("\t").append(sparkSubmitBean.getJarPath()).append(" ").append("ARGUMENTS");
         String filesInfoStr = "";
         if(StringUtils.isNotEmpty(filesInfo)) {
-            filesInfoStr = " --files " + filesInfo +" \\\n";
+            filesInfoStr = "\t--files " + filesInfo +" \\\n";
         }
 
         String sparkSubmitCommand = getSubmitCommand(stringBuilder, "", filesInfoStr, arguments.toString());
         projectInfoBean.setSparkSubmitCommand(sparkSubmitCommand);
 
-        String securityInfo = "  --principal $PRINCIPAL \\\n  --keytab $KEYTAB \\\n";
+        String securityInfo = "\t--principal $PRINCIPAL \\\n\t--keytab $KEYTAB \\\n";
         String secureSubmitCommand = getSubmitCommand(stringBuilder, securityInfo, filesInfoStr, secArguments.toString());
         projectInfoBean.setSparkSubmitSecureCommand(secureSubmitCommand);
     }
