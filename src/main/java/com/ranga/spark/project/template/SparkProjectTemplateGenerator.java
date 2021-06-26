@@ -47,8 +47,6 @@ public class SparkProjectTemplateGenerator {
             String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className + "Test.scala";
             GenerateTemplateUtil.generateTemplate(scalaTestFilePath, projectInfoBean, "scala_app_class_test.ftl", true);
         }
-        // run script
-        GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath().replace("run_", "run_sec_"), projectInfoBean, "run_sec_script.ftl");
 
         // Java App Generator
         if (projectInfoBean.isJavaTemplate()) {
@@ -84,8 +82,11 @@ public class SparkProjectTemplateGenerator {
         }
 
         // run script
-        GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");
-
+        if(projectInfoBean.isSecureCluster()) {
+            GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath().replace("run_", "run_sec_"), projectInfoBean, "run_sec_script.ftl");
+        } else {
+            GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");
+        }
         // README.md
         GenerateTemplateUtil.generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
 

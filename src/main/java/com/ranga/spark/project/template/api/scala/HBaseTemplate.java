@@ -7,6 +7,20 @@ public class HBaseTemplate extends ScalaBaseTemplate {
     }
 
     @Override
+    public String setupInstructions() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("## Launch HBase Shell and create an Employee table\n\n")
+          .append("### Launch the hbase shell using following command.\n")
+          .append("```sh\nhbase shell\n```\n\n")
+          .append("### Create the an Employee table\n```sql\n")
+          .append( "create 'employees', 'e'\n")
+          .append("```");
+
+        return sb.toString();
+    }
+
+    @Override
     public String importTemplate() {
         return "import org.apache.spark.sql.SparkSession\n" +
                 "import org.apache.spark.SparkConf\n" +

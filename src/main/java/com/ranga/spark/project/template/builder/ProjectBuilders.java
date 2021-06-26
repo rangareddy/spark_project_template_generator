@@ -33,6 +33,12 @@ public class ProjectBuilders implements Serializable {
         if (projectDetails == null || projectDetails.isEmpty()) {
             throw new RuntimeException("Project details are not specified in configuration file.");
         }
+
+        String secureCluster = projectConfig.getSecureCluster();
+        boolean isSecureCluster = false;
+        if(StringUtils.isNotEmpty(secureCluster)) {
+            isSecureCluster = new Boolean(secureCluster);
+        }
         List<ProjectInfoBean> projectInfoBeanList = new ArrayList<>(projectDetails.size());
         String scalaVersion = projectConfig.getScalaVersion();
         String scalaBinaryVersion = getScalaBinaryVersion(projectConfig.getScalaBinaryVersion(), scalaVersion);
@@ -88,6 +94,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setReadMePath(readMePath);
             projectInfoBean.setDeployScriptPath(deployScriptPath);
             projectInfoBean.setRepoName(repoName);
+            projectInfoBean.setSecureCluster(isSecureCluster);
             buildTemplates(projectInfoBean);
             projectInfoBeanList.add(projectInfoBean);
         }
@@ -137,14 +144,19 @@ public class ProjectBuilders implements Serializable {
         SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
 
         List<String> argumentList = new ArrayList<>();
-        List<String> secureArgumentList = new ArrayList<>();
-        secureArgumentList.add("<PRINCIPAL>");
-        secureArgumentList.add("<KEYTAB>");
-        sparkSubmitBean.setSecureArgumentList(secureArgumentList);
+        if(projectInfoBean.isSecureCluster()) {
+            List<String> secureArgumentList = new ArrayList<>();
+            secureArgumentList.add("<PRINCIPAL>");
+            secureArgumentList.add("<KEYTAB>");
+            sparkSubmitBean.setSecureArgumentList(secureArgumentList);
+        }
+
+        String setupInstructions = "";
         switch (templateType) {
             case HBASE:
                 template = new HBaseTemplate(className);
                 othersTemplatesDependency = projectConfig.getHbaseTemplate();
+                setupInstructions = template.setupInstructions();
                 break;
             case HIVE:
                 template = new HiveTemplate(className);
@@ -163,6 +175,7 @@ public class ProjectBuilders implements Serializable {
         sparkSubmitBean.setArgumentList(argumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
+        projectInfoBean.setSetUpInstructions(setupInstructions);
 
         if (javaTemplate != null) {
             projectInfoBean.setJavaTemplate(true);

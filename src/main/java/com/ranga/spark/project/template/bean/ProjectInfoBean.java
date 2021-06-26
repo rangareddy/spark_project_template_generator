@@ -44,6 +44,7 @@ public class ProjectInfoBean implements Serializable {
     private String sparkSubmitSecureCommand;
     private String runScriptArguments;
     private String runScriptSecArguments;
+    private boolean isSecureCluster;
 
     public ProjectInfoBean() {
 
@@ -337,6 +338,14 @@ public class ProjectInfoBean implements Serializable {
         this.runScriptSecArguments = runScriptSecArguments;
     }
 
+    public void setSecureCluster(boolean isSecureCluster) {
+        this.isSecureCluster = isSecureCluster;
+    }
+
+    public boolean isSecureCluster() {
+        return isSecureCluster;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
@@ -376,6 +385,7 @@ public class ProjectInfoBean implements Serializable {
                 ", sparkSubmitSecureCommand='" + sparkSubmitSecureCommand + '\'' +
                 ", runScriptArguments='" + runScriptArguments + '\'' +
                 ", runScriptSecArguments='" + runScriptSecArguments + '\'' +
+                ", isSecureCluster=" + isSecureCluster +
                 '}';
     }
 }

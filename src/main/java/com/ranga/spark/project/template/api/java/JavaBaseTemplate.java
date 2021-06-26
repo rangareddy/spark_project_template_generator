@@ -21,6 +21,11 @@ public abstract class JavaBaseTemplate implements BaseTemplate {
     }
 
     @Override
+    public String setupInstructions() {
+        return "";
+    }
+
+    @Override
     public String importTemplate() {
         return "import org.apache.spark.SparkConf;\n" +
                 "import org.apache.spark.sql.*;\n" +
