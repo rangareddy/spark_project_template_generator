@@ -10,11 +10,12 @@ scalaVersion: "2.11.12"
 scalaBinaryVersion: "2.11"
 javaVersion: "1.8"
 sparkVersion: "2.4.0.7.1.6.0-297"
-sparkScope: "provided"
+sparkScope: "compile"
 hwcVersion: "1.0.0.7.1.6.0-297"
-hwcScope: "provided"
+hwcScope: "compile"
 hbaseSparkVersion: "1.0.0.7.1.6.0-297"
-hbaseSparkScope: "provided"
+hbaseSparkScope: "compile"
+secureCluster: "true"
 defaultTemplate:
   - groupId: 'org.apache.spark'
     artifactId: 'spark-core_${scalaBinaryVersion}'

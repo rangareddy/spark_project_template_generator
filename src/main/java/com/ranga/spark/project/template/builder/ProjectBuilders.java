@@ -23,8 +23,10 @@ import java.util.*;
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
 
 public class ProjectBuilders implements Serializable {
+
     private static ProjectConfig projectConfig;
     private static Map<String, String> appRuntimeValuesMap;
+
     public static List<ProjectInfoBean> buildProjects(ProjectConfig config) {
         projectConfig = config;
         List<ProjectDetailBean> projectDetails = projectConfig.getProjectDetails();
@@ -104,11 +106,11 @@ public class ProjectBuilders implements Serializable {
         StringBuilder repoSB = new StringBuilder();
         repoSB.append("\n");
         for(RepositoryBean repositoryBean : repositories) {
-            repoSB.append("\t\t<repository>");
-            repoSB.append("\t\t\t<id>").append(repositoryBean.getId()).append("</id>");
-            repoSB.append("\t\t\t<name>").append(repositoryBean.getName()).append("</name>");
-            repoSB.append("\t\t\t<url>").append(repositoryBean.getUrl()).append("</url>");
-            repoSB.append("\t\t</repository>");
+            repoSB.append("\t\t<repository>\n");
+            repoSB.append("\t\t\t<id>").append(repositoryBean.getId()).append("</id>\n");
+            repoSB.append("\t\t\t<name>").append(repositoryBean.getName()).append("</name>\n");
+            repoSB.append("\t\t\t<url>").append(repositoryBean.getUrl()).append("</url>\n");
+            repoSB.append("\t\t</repository>\n");
             repoSB.append("\n");
         }
         return repoSB.toString();

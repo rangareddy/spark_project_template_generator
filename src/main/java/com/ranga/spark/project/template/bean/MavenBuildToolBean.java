@@ -14,7 +14,7 @@ public class MavenBuildToolBean extends BuildToolBean {
         StringBuilder propertyVersions = new StringBuilder();
         StringBuilder dependencies = new StringBuilder();
         propertyVersions.append("\n");
-        String tabDelim = "\t\t";
+        String tabDelim = "\t";
         for (String property : dependencyBuilder.getPropertyVersions()) {
             String[] split = property.split(VERSION_DELIMITER);
             String propertyName = split[1];

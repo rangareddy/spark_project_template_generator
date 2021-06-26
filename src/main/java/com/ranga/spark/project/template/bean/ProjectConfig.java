@@ -23,7 +23,7 @@ public class ProjectConfig implements Serializable {
     private String hbaseSparkVersion = "";
     private String hbaseSparkScope = "";
     private String sbtVersion = "1.4.7";
-
+    private String secureCluster = "false";
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
@@ -195,6 +195,14 @@ public class ProjectConfig implements Serializable {
 
     public void setJarVersion(String jarVersion) {
         this.jarVersion = jarVersion;
+    }
+
+    public String getSecureCluster() {
+        return secureCluster;
+    }
+
+    public void setSecureCluster(String secureCluster) {
+        this.secureCluster = secureCluster;
     }
 
     @Override
