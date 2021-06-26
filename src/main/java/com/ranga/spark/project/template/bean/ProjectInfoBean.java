@@ -3,6 +3,7 @@ package com.ranga.spark.project.template.bean;
 import com.ranga.spark.project.template.util.TemplateType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -44,6 +45,7 @@ public class ProjectInfoBean implements Serializable {
     private String sparkSubmitSecureCommand;
     private String runScriptArguments;
     private String runScriptSecArguments;
+    private List<String> runScriptNotesList = new ArrayList<>();
     private boolean isSecureCluster;
 
     public ProjectInfoBean() {
@@ -344,6 +346,14 @@ public class ProjectInfoBean implements Serializable {
 
     public boolean isSecureCluster() {
         return isSecureCluster;
+    }
+
+    public List<String> getRunScriptNotesList() {
+        return runScriptNotesList;
+    }
+
+    public void setRunScriptNotesList(List<String> runScriptNotesList) {
+        this.runScriptNotesList = runScriptNotesList;
     }
 
     @Override

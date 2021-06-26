@@ -37,7 +37,7 @@ public class ProjectBuilders implements Serializable {
         String secureCluster = projectConfig.getSecureCluster();
         boolean isSecureCluster = false;
         if(StringUtils.isNotEmpty(secureCluster)) {
-            isSecureCluster = new Boolean(secureCluster);
+            isSecureCluster = Boolean.parseBoolean(secureCluster);
         }
         List<ProjectInfoBean> projectInfoBeanList = new ArrayList<>(projectDetails.size());
         String scalaVersion = projectConfig.getScalaVersion();
@@ -153,6 +153,7 @@ public class ProjectBuilders implements Serializable {
 
         String setupInstructions = "";
         Map<String,String> othersConfMap = new LinkedHashMap<>();
+        List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
         switch (templateType) {
             case HBASE:
                 template = new HBaseTemplate(className);
@@ -165,6 +166,9 @@ public class ProjectBuilders implements Serializable {
                 break;
             case HWC:
 
+                runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
+                runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
+
                 othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://<hiveserver2_host>:10000");
                 othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://<metastore_uri>:9083");
                 othersConfMap.put("spark.sql.hive.hwc.execution.mode", "spark");
@@ -176,6 +180,7 @@ public class ProjectBuilders implements Serializable {
                 othersConfMap.put("spark.sql.extensions", "com.hortonworks.spark.sql.rule.Extensions");
 
                 if(projectInfoBean.isSecureCluster()) {
+                    runScriptNotesList.add("Update `hive.server2.authentication.kerberos.principal` in `spark.sql.hive.hiveserver2.jdbc.url.principal`");
                     othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "true");
                     othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "<hive.server2.authentication.kerberos.principal>");
                 } else {
@@ -192,6 +197,7 @@ public class ProjectBuilders implements Serializable {
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
+        projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setArgumentList(argumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
