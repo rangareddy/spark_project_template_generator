@@ -54,8 +54,8 @@ public class TemplateUtil implements Serializable {
         List<String> argumentList = new ArrayList<>();
         if (projectInfoBean.isSecureCluster()) {
             List<String> secureArgumentList = new ArrayList<>();
-            secureArgumentList.add("<PRINCIPAL>");
-            secureArgumentList.add("<KEYTAB>");
+            secureArgumentList.add("PRINCIPAL");
+            secureArgumentList.add("KEYTAB");
             sparkSubmitBean.setSecureArgumentList(secureArgumentList);
         }
 
@@ -77,8 +77,11 @@ public class TemplateUtil implements Serializable {
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
-                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://<hiveserver2_host>:10000");
-                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://<metastore_uri>:9083");
+                argumentList.add("HIVE_SERVER2_HOST");
+                argumentList.add("METASTORE_URI");
+
+                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://${HIVE_SERVER2_HOST}:10000");
+                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://${METASTORE_URI}:9083");
                 othersConfMap.put("spark.sql.hive.hwc.execution.mode", "spark");
                 othersConfMap.put("spark.datasource.hive.warehouse.load.staging.dir", "/tmp");
                 othersConfMap.put("spark.datasource.hive.warehouse.read.via.llap", "false");
@@ -88,9 +91,10 @@ public class TemplateUtil implements Serializable {
                 othersConfMap.put("spark.sql.extensions", "com.hortonworks.spark.sql.rule.Extensions");
 
                 if (projectInfoBean.isSecureCluster()) {
+                    argumentList.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
                     runScriptNotesList.add("Update `hive.server2.authentication.kerberos.principal` in `spark.sql.hive.hiveserver2.jdbc.url.principal`");
                     othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "true");
-                    othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "<hive.server2.authentication.kerberos.principal>");
+                    othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "${HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL}");
                 } else {
                     othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "false");
                     othersConfMap.put("spark.datasource.hive.warehouse.user.name", "hive");

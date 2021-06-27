@@ -42,7 +42,6 @@ public class ProjectInfoBean implements Serializable {
     private MavenBuildToolBean mavenBuildToolBean;
     private SbtBuildToolBean sbtBuildToolBean;
     private String sparkSubmitCommand;
-    private String sparkSubmitSecureCommand;
     private String runScriptArguments;
     private String runScriptSecArguments;
     private List<String> runScriptNotesList = new ArrayList<>();
@@ -316,14 +315,6 @@ public class ProjectInfoBean implements Serializable {
         this.sparkSubmitCommand = sparkSubmitCommand;
     }
 
-    public String getSparkSubmitSecureCommand() {
-        return sparkSubmitSecureCommand;
-    }
-
-    public void setSparkSubmitSecureCommand(String sparkSubmitSecureCommand) {
-        this.sparkSubmitSecureCommand = sparkSubmitSecureCommand;
-    }
-
     public String getRunScriptArguments() {
         return runScriptArguments;
     }
@@ -392,7 +383,6 @@ public class ProjectInfoBean implements Serializable {
                 ", mavenBuildToolBean=" + mavenBuildToolBean +
                 ", sbtBuildToolBean=" + sbtBuildToolBean +
                 ", sparkSubmitCommand='" + sparkSubmitCommand + '\'' +
-                ", sparkSubmitSecureCommand='" + sparkSubmitSecureCommand + '\'' +
                 ", runScriptArguments='" + runScriptArguments + '\'' +
                 ", runScriptSecArguments='" + runScriptSecArguments + '\'' +
                 ", isSecureCluster=" + isSecureCluster +

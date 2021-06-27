@@ -21,7 +21,7 @@ hwcVersion: "1.0.0.7.1.6.0-297"
 hwcScope: "compile"
 hbaseSparkVersion: "1.0.0.7.1.6.0-297"
 hbaseSparkScope: "compile"
-secureCluster: "true"
+secureCluster: "false"
 defaultTemplate:
   - groupId: 'org.apache.spark'
     artifactId: 'spark-core_${scalaBinaryVersion}'
