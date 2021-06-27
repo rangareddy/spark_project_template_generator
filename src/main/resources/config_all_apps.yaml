@@ -7,6 +7,8 @@ projectDetails:
     templateName: "hbase"
   - projectName: "SparkHwc"
     templateName: "hwc"
+  - projectName: "SparkFileFormats"
+    templateName: "fileFormats"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.ranga"
 baseDeployJarPath: "/apps/spark/"
@@ -54,3 +56,8 @@ hwcTemplate:
     artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
     version: '${hwcVersion}'
     scope: '${hwcScope}'
+fileFormatsTemplate:
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-avro_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'

@@ -19,7 +19,6 @@ public class HWCTemplate extends ScalaBaseTemplate {
     @Override
     public String sparkSessionBuildTemplate() {
         return "\n" +
-                "    val appName = \"" + className + " Example\"\n" +
                 "        // Creating the SparkConf object\n" +
                 "        val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
                 "    \n" +

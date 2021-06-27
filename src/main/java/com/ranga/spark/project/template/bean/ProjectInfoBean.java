@@ -12,6 +12,7 @@ public class ProjectInfoBean implements Serializable {
     private String projectName;
     private String projectDirectory;
     private String sourceProjectName;
+    private String name;
     private String projectVersion;
     private String scalaVersion;
     private String scalaBinaryVersion;
@@ -347,12 +348,21 @@ public class ProjectInfoBean implements Serializable {
         this.runScriptNotesList = runScriptNotesList;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
                 "projectName='" + projectName + '\'' +
                 ", projectDirectory='" + projectDirectory + '\'' +
                 ", sourceProjectName='" + sourceProjectName + '\'' +
+                ", name='" + name + '\'' +
                 ", projectVersion='" + projectVersion + '\'' +
                 ", scalaVersion='" + scalaVersion + '\'' +
                 ", scalaBinaryVersion='" + scalaBinaryVersion + '\'' +
@@ -385,6 +395,7 @@ public class ProjectInfoBean implements Serializable {
                 ", sparkSubmitCommand='" + sparkSubmitCommand + '\'' +
                 ", runScriptArguments='" + runScriptArguments + '\'' +
                 ", runScriptSecArguments='" + runScriptSecArguments + '\'' +
+                ", runScriptNotesList=" + runScriptNotesList +
                 ", isSecureCluster=" + isSecureCluster +
                 '}';
     }

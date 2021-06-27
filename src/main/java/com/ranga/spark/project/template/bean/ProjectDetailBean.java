@@ -24,18 +24,6 @@ public class ProjectDetailBean implements Serializable {
         this.projectName = projectName;
     }
 
-    public String getSourceProjectName() {
-        String projectNameExtension = projectExtension.toLowerCase();
-        StringBuilder sourceProjectSB = new StringBuilder(projectName);
-        if (projectNameExtension != null && !projectName.toLowerCase().endsWith(projectNameExtension)) {
-            sourceProjectSB.append(Character.toUpperCase(projectNameExtension.charAt(0)));
-            if (projectNameExtension.length() > 1) {
-                sourceProjectSB.append(projectNameExtension.substring(1));
-            }
-        }
-        return sourceProjectSB.toString();
-    }
-
     public String getTemplateName() {
         return templateName;
     }

@@ -28,10 +28,11 @@ public class ProjectConfig implements Serializable {
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
     private List<DependencyBean> hwcTemplate;
+    private List<DependencyBean> fileFormatsTemplate;
 
     // IIB
     {
-        hiveTemplate = hbaseTemplate = hwcTemplate = Collections.emptyList();
+        hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate =  Collections.emptyList();
     }
 
     public String getScalaVersion() {
@@ -205,6 +206,14 @@ public class ProjectConfig implements Serializable {
         this.secureCluster = secureCluster;
     }
 
+    public List<DependencyBean> getFileFormatsTemplate() {
+        return fileFormatsTemplate;
+    }
+
+    public void setFileFormatsTemplate(List<DependencyBean> fileFormatsTemplate) {
+        this.fileFormatsTemplate = fileFormatsTemplate;
+    }
+
     @Override
     public String toString() {
         return "ProjectConfig{" +
@@ -223,11 +232,13 @@ public class ProjectConfig implements Serializable {
                 ", hwcScope='" + hwcScope + '\'' +
                 ", hbaseSparkVersion='" + hbaseSparkVersion + '\'' +
                 ", hbaseSparkScope='" + hbaseSparkScope + '\'' +
+                ", sbtVersion='" + sbtVersion + '\'' +
+                ", secureCluster='" + secureCluster + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
                 ", hbaseTemplate=" + hbaseTemplate +
                 ", hwcTemplate=" + hwcTemplate +
-                ", sbtVersion='" + sbtVersion + '\'' +
+                ", fileFormatsTemplate=" + fileFormatsTemplate +
                 '}';
     }
 }

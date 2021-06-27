@@ -8,6 +8,7 @@ ${projectBuilder.javaCodeTemplate.classTemplate} {
 
     public static void main(String[] args) {
 
+        String appName = "${projectBuilder.name}";
         ${projectBuilder.javaCodeTemplate.sparkSessionBuildTemplate}
 
         ${projectBuilder.javaCodeTemplate.codeTemplate}

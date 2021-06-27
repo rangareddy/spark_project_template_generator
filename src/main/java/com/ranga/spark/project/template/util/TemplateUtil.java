@@ -3,10 +3,7 @@ package com.ranga.spark.project.template.util;
 import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
-import com.ranga.spark.project.template.api.scala.DefaultTemplate;
-import com.ranga.spark.project.template.api.scala.HBaseTemplate;
-import com.ranga.spark.project.template.api.scala.HWCTemplate;
-import com.ranga.spark.project.template.api.scala.HiveTemplate;
+import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.bean.*;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -104,6 +101,10 @@ public class TemplateUtil implements Serializable {
                 template = new HWCTemplate(className);
                 javaTemplate = new HWCJavaTemplate(javaClassName);
                 othersTemplatesDependency = projectConfig.getHwcTemplate();
+                break;
+            case FILEFORMATS:
+                template = new FileFormatsTemplate(className);
+                othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
             default:
                 template = new DefaultTemplate(className);

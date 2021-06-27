@@ -7,7 +7,7 @@
     <groupId>${projectBuilder.packageName}</groupId>
     <artifactId>${projectBuilder.projectName}</artifactId>
     <version>${projectBuilder.jarVersion}</version>
-    <name>${projectBuilder.projectName} Application</name>
+    <name>${projectBuilder.name}</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -34,8 +34,7 @@ public abstract class ScalaBaseTemplate implements BaseTemplate {
 
     @Override
     public String sparkSessionBuildTemplate() {
-        return "val appName = \" " + className + " Example\"\n" +
-                "\n" +
+        return "\n" +
                 "        // Creating the SparkConf object\n" +
                 "        val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
                 "    \n" +

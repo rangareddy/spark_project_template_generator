@@ -7,5 +7,6 @@ public enum TemplateType {
     KAFKA,
     PHOENIX,
     KUDU,
-    HWC
+    HWC,
+    FILEFORMATS
 }

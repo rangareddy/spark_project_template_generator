@@ -10,7 +10,7 @@ class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
     @transient var spark: SparkSession = _
 
     override def beforeAll(): Unit = {
-        val appName = "${projectBuilder.className}Test"
+        val appName = "${projectBuilder.name}Test"
         val sparkConf = new SparkConf().setAppName(appName).setIfMissing("spark.master", "local[2]")
         spark = SparkSession.builder().config(sparkConf).getOrCreate()
     }

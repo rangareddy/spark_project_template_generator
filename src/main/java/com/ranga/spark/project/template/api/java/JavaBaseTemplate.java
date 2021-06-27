@@ -36,8 +36,7 @@ public abstract class JavaBaseTemplate implements BaseTemplate {
 
     @Override
     public String sparkSessionBuildTemplate() {
-        return "String appName = \" " + className + " Example\";\n" +
-                "\n" +
+        return "\n" +
                 "        // Creating the SparkConf object\n" +
                 "        SparkConf sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\");\n" +
                 "\n" +

@@ -21,8 +21,14 @@ public class AppUtil implements Serializable {
         return projectDetails;
     }
 
-    public static String getProjectName(ProjectDetailBean projectDetailBean) {
-        String appNameStr = projectDetailBean.getSourceProjectName();
+    public static String getProjectName(String name, String extension) {
+        String titleName = getTitleCase(name);
+        String titleExtension = getTitleCase(extension);
+        return StringUtils.isNotEmpty(titleExtension) ? titleName + " " + titleExtension : titleName;
+    }
+
+    public static String getProjectName(String sourceProjectName) {
+        String appNameStr = sourceProjectName;
         String[] camelCaseWords = appNameStr.split("(?=[A-Z])");
         return String.join("-", camelCaseWords).toLowerCase();
     }
@@ -33,6 +39,39 @@ public class AppUtil implements Serializable {
             scalaBinaryVersion = tempScalaBinaryVersion;
         }
         return scalaBinaryVersion;
+    }
+
+    public static String getTitleCase(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return str;
+        }
+
+        StringBuilder converted = new StringBuilder();
+        boolean convertNext = true;
+        int currentIndex = -1;
+        for (char ch : str.toCharArray()) {
+            currentIndex++;
+            if (Character.isSpaceChar(ch)) {
+                convertNext = true;
+            } else if (convertNext) {
+                ch = Character.toTitleCase(ch);
+                convertNext = false;
+            } else {
+                if(Character.isUpperCase(ch)) {
+                    char prevChar = str.charAt(currentIndex -1);
+                    if(Character.isLowerCase(prevChar) && Character.isUpperCase(ch)) {
+                        converted.append(" ");
+                    }
+                    if(Character.isUpperCase(prevChar)) {
+                        ch = Character.toLowerCase(ch);
+                    }
+                } else {
+                    ch = Character.toLowerCase(ch);
+                }
+            }
+            converted.append(ch);
+        }
+        return converted.toString();
     }
 
     public static String getRepositoryNames(ProjectConfig projectConfig) {
@@ -54,11 +93,11 @@ public class AppUtil implements Serializable {
             repoSB.append("\t\t").append("</repository>\n");
             repoSB.append("\n");
         }
-        return repoSB.toString();
+        return repoSB.toString().trim();
     }
 
     public static boolean checkClouderaRepo(String sparkVersion) {
-        return sparkVersion.split(DOT_DELIMITER).length > 2;
+        return sparkVersion.split("\\.").length > 2;
     }
 
     public static Map<String, String> getAppRuntimeValueMap(Object obj) {
@@ -129,5 +168,9 @@ public class AppUtil implements Serializable {
                 throw new RuntimeException(buildTool + " not yet implemented");
             }
         }
+    }
+
+    public static String getSourceProjectName(String name) {
+        return name.replaceAll(" ","");
     }
 }

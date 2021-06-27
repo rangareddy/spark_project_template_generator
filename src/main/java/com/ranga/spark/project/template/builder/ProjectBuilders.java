@@ -34,8 +34,12 @@ public class ProjectBuilders implements Serializable {
 
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
-            String sourceProjectName = projectDetail.getSourceProjectName();
-            String projectName = AppUtil.getProjectName(projectDetail);
+            String name = AppUtil.getProjectName(projectDetail.getProjectName(), projectDetail.getProjectExtension());
+            if(StringUtils.isEmpty(name)) {
+                throw new RuntimeException("Project name can't be empty");
+            }
+            String sourceProjectName = AppUtil.getSourceProjectName(name);
+            String projectName = AppUtil.getProjectName(sourceProjectName);
             String projectVersion = AppUtil.getUpdatedValue(projectDetail.getProjectVersion(), projectConfig.getJarVersion());
             String projectDir = baseProjectDir + File.separator + projectName;
             String packageName = AppUtil.getPackageName(projectName, projectConfig.getBasePackageName(), projectDetail);
@@ -56,6 +60,7 @@ public class ProjectBuilders implements Serializable {
 
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
+            projectInfoBean.setName(name);
             projectInfoBean.setSourceProjectName(sourceProjectName);
             projectInfoBean.setProjectVersion(projectVersion);
             projectInfoBean.setScalaVersion(scalaVersion);
