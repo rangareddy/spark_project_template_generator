@@ -2,6 +2,7 @@ package com.ranga.spark.project.template.util;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
+import com.ranga.spark.project.template.api.java.FileFormatsJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.bean.*;
@@ -70,7 +71,6 @@ public class TemplateUtil implements Serializable {
                 othersTemplatesDependency = projectConfig.getHiveTemplate();
                 break;
             case HWC:
-
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
@@ -104,6 +104,7 @@ public class TemplateUtil implements Serializable {
                 break;
             case FILEFORMATS:
                 template = new FileFormatsTemplate(className);
+                javaTemplate = new FileFormatsJavaTemplate(javaClassName);
                 othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
             default:

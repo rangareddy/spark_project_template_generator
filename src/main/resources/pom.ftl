@@ -35,7 +35,6 @@
 
     <!-- Repositories -->
     <repositories>
-
         ${projectBuilder.repoName}
     </repositories>
 
@@ -53,9 +52,7 @@
             <artifactId>scala-compiler</artifactId>
             <version>${r"${scala.version}"}</version>
         </dependency>
-
         ${projectBuilder.mavenBuildToolBean.dependencies}
-
         <!-- Scala Test dependencies -->
         <dependency>
             <groupId>org.scalatest</groupId>

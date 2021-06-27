@@ -13,7 +13,7 @@ ${projectBuilder.javaCodeTemplate.classTemplate} {
 
         ${projectBuilder.javaCodeTemplate.codeTemplate}
 
-        logger.info("${projectBuilder.projectName} application processing finished");
+        logger.info("<${projectBuilder.name}> successfully finished");
 
         ${projectBuilder.javaCodeTemplate.sparkSessionCloseTemplate}
     }
