@@ -4,9 +4,9 @@ public enum TemplateType {
     DEFAULT,
     HBASE,
     HIVE,
-    KAFKA,
-    PHOENIX,
-    KUDU,
+   // KAFKA,
+   // PHOENIX,
+   // KUDU,
     HWC,
     FILEFORMATS
 }
