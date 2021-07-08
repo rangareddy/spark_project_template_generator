@@ -5,6 +5,12 @@ import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import ${projectBuilder.className}.{getEmployeeCount, getEmployeeDS}
 
+/**
+ * @author ${projectBuilder.author}
+ * Version: 1.0
+ * Created : ${projectBuilder.createdDate}
+ */
+
 class ${projectBuilder.className}Test extends FunSuite with BeforeAndAfterAll {
 
     @transient var spark: SparkSession = _

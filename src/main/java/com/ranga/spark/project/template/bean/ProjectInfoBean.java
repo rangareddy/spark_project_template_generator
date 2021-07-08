@@ -47,6 +47,9 @@ public class ProjectInfoBean implements Serializable {
     private String runScriptSecArguments;
     private List<String> runScriptNotesList = new ArrayList<>();
     private boolean isSecureCluster;
+    private boolean isSSLCluster;
+    private String author;
+    private String createdDate;
 
     public ProjectInfoBean() {
 
@@ -356,6 +359,26 @@ public class ProjectInfoBean implements Serializable {
         this.name = name;
     }
 
+    public boolean isSSLCluster() {
+        return isSSLCluster;
+    }
+
+    public void setSSLCluster(boolean SSLCluster) {
+        isSSLCluster = SSLCluster;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
@@ -397,6 +420,14 @@ public class ProjectInfoBean implements Serializable {
                 ", runScriptSecArguments='" + runScriptSecArguments + '\'' +
                 ", runScriptNotesList=" + runScriptNotesList +
                 ", isSecureCluster=" + isSecureCluster +
+                ", isSSLCluster=" + isSSLCluster +
+                ", author='" + author + '\'' +
+                ", createdDate='" + createdDate + '\'' +
                 '}';
     }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
 }

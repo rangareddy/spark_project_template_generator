@@ -2,6 +2,12 @@ package ${projectBuilder.packageName};
 
 import java.io.Serializable;
 
+/**
+ * @author ${projectBuilder.author}
+ * Version: 1.0
+ * Created : ${projectBuilder.createdDate}
+ */
+
 public class EmployeeBean implements Serializable {
 
     private Long id;

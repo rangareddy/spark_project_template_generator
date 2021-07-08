@@ -25,6 +25,7 @@ public class ProjectConfig implements Serializable {
     private String sbtVersion = "1.4.7";
     private String secureCluster = "false";
     private String sslCluster = "false";
+    private String author = "Ranga Reddy";
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
@@ -229,6 +230,14 @@ public class ProjectConfig implements Serializable {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     @Override
     public String toString() {
         return "ProjectConfig{" +
@@ -250,6 +259,7 @@ public class ProjectConfig implements Serializable {
                 ", sbtVersion='" + sbtVersion + '\'' +
                 ", secureCluster='" + secureCluster + '\'' +
                 ", sslCluster='" + sslCluster + '\'' +
+                ", author='" + author + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
                 ", hbaseTemplate=" + hbaseTemplate +

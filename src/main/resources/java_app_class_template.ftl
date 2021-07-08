@@ -2,6 +2,12 @@ package ${projectBuilder.packageName};
 
 ${projectBuilder.javaCodeTemplate.importTemplate}
 
+/**
+ * @author ${projectBuilder.author}
+ * Version: 1.0
+ * Created : ${projectBuilder.createdDate}
+ */
+
 ${projectBuilder.javaCodeTemplate.classTemplate} {
 
     private static final Logger logger = Logger.getLogger(${projectBuilder.javaClassName}.class.getName());

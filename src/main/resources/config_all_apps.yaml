@@ -12,7 +12,7 @@ projectDetails:
   - projectName: "SparkKafka"
     templateName: "kafka"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
-basePackageName: "com.ranga"
+basePackageName: "com.cloudera"
 baseDeployJarPath: "/apps/spark/"
 buildTools: "maven"
 jarVersion: "1.0.0-SNAPSHOT"
@@ -27,6 +27,7 @@ hbaseSparkVersion: "1.0.0.7.1.6.0-297"
 hbaseSparkScope: "compile"
 secureCluster: "false"
 sslCluster: "false"
+author: "Ranga Reddy"
 defaultTemplate:
   - groupId: 'org.apache.spark'
     artifactId: 'spark-core_${scalaBinaryVersion}'

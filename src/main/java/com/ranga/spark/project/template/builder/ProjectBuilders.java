@@ -10,9 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.ranga.spark.project.template.util.AppConstants.DOT_DELIMITER;
 import static com.ranga.spark.project.template.util.AppConstants.README_FILE;
@@ -23,7 +22,9 @@ public class ProjectBuilders implements Serializable {
         List<ProjectDetailBean> projectDetails = AppUtil.getProjectDetails(projectConfig);
 
         String secureCluster = projectConfig.getSecureCluster();
+        String sslCluster = projectConfig.getSslCluster();
         boolean isSecureCluster = StringUtils.isNotEmpty(secureCluster) && Boolean.parseBoolean(secureCluster);
+        boolean isSSLCluster = StringUtils.isNotEmpty(sslCluster) && Boolean.parseBoolean(sslCluster);
         List<ProjectInfoBean> projectInfoBeanList = new ArrayList<>(projectDetails.size());
         String scalaVersion = projectConfig.getScalaVersion();
         String scalaBinaryVersion = AppUtil.getScalaBinaryVersion(projectConfig.getScalaBinaryVersion(), scalaVersion);
@@ -31,7 +32,8 @@ public class ProjectBuilders implements Serializable {
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
         Map<String, String> projectConfigMap = AppUtil.getAppRuntimeValueMap(projectConfig);
-
+        Date today = Calendar.getInstance().getTime();
+        String createdDate = new SimpleDateFormat("MM/dd/yyyy").format(today);
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
             String name = AppUtil.getProjectName(projectDetail.getProjectName(), projectDetail.getProjectExtension());
@@ -85,6 +87,9 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setDeployScriptPath(deployScriptPath);
             projectInfoBean.setRepoName(repoName);
             projectInfoBean.setSecureCluster(isSecureCluster);
+            projectInfoBean.setSSLCluster(isSSLCluster);
+            projectInfoBean.setAuthor(projectConfig.getAuthor());
+            projectInfoBean.setCreatedDate(createdDate);
             TemplateUtil.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
             projectInfoBeanList.add(projectInfoBean);
         }
