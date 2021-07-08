@@ -107,6 +107,10 @@ public class TemplateUtil implements Serializable {
                 javaTemplate = new FileFormatsJavaTemplate(javaClassName);
                 othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
+            case KAFKA:
+                template = new KafkaTemplate(className);
+                othersTemplatesDependency = projectConfig.getKafkaTemplate();
+                break;
             default:
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);

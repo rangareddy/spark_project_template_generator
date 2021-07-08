@@ -2,8 +2,6 @@ package ${projectBuilder.packageName}
 
 ${projectBuilder.scalaCodeTemplate.importTemplate}
 
-case class Employee(id:Long, name: String, age: Integer, salary: Float)
-
 ${projectBuilder.scalaCodeTemplate.classTemplate} {
 
     @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)

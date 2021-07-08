@@ -24,15 +24,17 @@ public class ProjectConfig implements Serializable {
     private String hbaseSparkScope = "";
     private String sbtVersion = "1.4.7";
     private String secureCluster = "false";
+    private String sslCluster = "false";
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
     private List<DependencyBean> hwcTemplate;
     private List<DependencyBean> fileFormatsTemplate;
+    private List<DependencyBean> kafkaTemplate;
 
     // IIB
     {
-        hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate =  Collections.emptyList();
+        hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate = kafkaTemplate = Collections.emptyList();
     }
 
     public String getScalaVersion() {
@@ -171,13 +173,6 @@ public class ProjectConfig implements Serializable {
         this.sbtVersion = sbtVersion;
     }
 
-    public String getBaseDeployJarPath() {
-        if (!baseDeployJarPath.endsWith("/")) {
-            baseDeployJarPath = baseDeployJarPath + "/";
-        }
-        return baseDeployJarPath;
-    }
-
     public void setBaseDeployJarPath(String baseDeployJarPath) {
         this.baseDeployJarPath = baseDeployJarPath;
     }
@@ -214,6 +209,26 @@ public class ProjectConfig implements Serializable {
         this.fileFormatsTemplate = fileFormatsTemplate;
     }
 
+    public String getBaseDeployJarPath() {
+        return baseDeployJarPath;
+    }
+
+    public String getSslCluster() {
+        return sslCluster;
+    }
+
+    public void setSslCluster(String sslCluster) {
+        this.sslCluster = sslCluster;
+    }
+
+    public List<DependencyBean> getKafkaTemplate() {
+        return kafkaTemplate;
+    }
+
+    public void setKafkaTemplate(List<DependencyBean> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     @Override
     public String toString() {
         return "ProjectConfig{" +
@@ -234,11 +249,13 @@ public class ProjectConfig implements Serializable {
                 ", hbaseSparkScope='" + hbaseSparkScope + '\'' +
                 ", sbtVersion='" + sbtVersion + '\'' +
                 ", secureCluster='" + secureCluster + '\'' +
+                ", sslCluster='" + sslCluster + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
                 ", hbaseTemplate=" + hbaseTemplate +
                 ", hwcTemplate=" + hwcTemplate +
                 ", fileFormatsTemplate=" + fileFormatsTemplate +
+                ", kafkaTemplate=" + kafkaTemplate +
                 '}';
     }
 }

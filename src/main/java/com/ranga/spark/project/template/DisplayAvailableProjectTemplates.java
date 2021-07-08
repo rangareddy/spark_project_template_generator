@@ -2,7 +2,7 @@ package com.ranga.spark.project.template;
 
 import com.ranga.spark.project.template.util.TemplateType;
 
-public class DisplayAvailableTemplates {
+public class DisplayAvailableProjectTemplates {
     public static void main(String[] args) {
         System.out.println("Currently available templates");
         TemplateType[] templateTypes = TemplateType.values();

@@ -4,7 +4,7 @@ public enum TemplateType {
     DEFAULT,
     HBASE,
     HIVE,
-   // KAFKA,
+    KAFKA,
    // PHOENIX,
    // KUDU,
     HWC,

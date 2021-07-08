@@ -9,6 +9,8 @@ projectDetails:
     templateName: "hwc"
   - projectName: "SparkFileFormats"
     templateName: "fileFormats"
+  - projectName: "SparkKafka"
+    templateName: "kafka"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.ranga"
 baseDeployJarPath: "/apps/spark/"
@@ -24,6 +26,7 @@ hwcScope: "compile"
 hbaseSparkVersion: "1.0.0.7.1.6.0-297"
 hbaseSparkScope: "compile"
 secureCluster: "false"
+sslCluster: "false"
 defaultTemplate:
   - groupId: 'org.apache.spark'
     artifactId: 'spark-core_${scalaBinaryVersion}'
@@ -59,5 +62,14 @@ hwcTemplate:
 fileFormatsTemplate:
   - groupId: 'org.apache.spark'
     artifactId: 'spark-avro_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'
+kafkaTemplate:
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-streaming_${scalaBinaryVersion}'
+    version: '${sparkVersion}'
+    scope: '${sparkScope}'
+  - groupId: 'org.apache.spark'
+    artifactId: 'spark-sql-kafka-0-10_${scalaBinaryVersion}'
     version: '${sparkVersion}'
     scope: '${sparkScope}'
