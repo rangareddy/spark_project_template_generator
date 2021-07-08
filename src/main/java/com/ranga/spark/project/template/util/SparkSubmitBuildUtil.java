@@ -13,6 +13,7 @@ import java.util.Map;
 public class SparkSubmitBuildUtil {
 
     public static void buildSparkSubmit(SparkSubmitBean sparkSubmitBean, ProjectInfoBean projectInfoBean) {
+
         sparkSubmitBean.setName(projectInfoBean.getSourceProjectName());
         sparkSubmitBean.setClassName(projectInfoBean.getFullClassName());
         sparkSubmitBean.setJarPath(projectInfoBean.getJarPath());
@@ -20,37 +21,28 @@ public class SparkSubmitBuildUtil {
         String filesInfo = getFilesInfo(sparkSubmitBean);
         sparkSubmitBean.setFiles(filesInfo);
 
-        List<String> argumentList = sparkSubmitBean.getArgumentList();
-        StringBuilder argumentsSB = new StringBuilder();
-        int startIndex = 0;
-        List<String> totalArguments = new ArrayList<>();
+        List<String> usageArgumentList = sparkSubmitBean.getUsageArgumentList();
+        List<String> totalArguments = new ArrayList<>(usageArgumentList);
         if(projectInfoBean.isSecureCluster()) {
-            List<String> secureArgumentList = sparkSubmitBean.getSecureArgumentList();
-            totalArguments.addAll(secureArgumentList);
-            startIndex= secureArgumentList.size();
+            totalArguments.addAll(sparkSubmitBean.getSecureArgumentList());
         }
-        totalArguments.addAll(argumentList);
-        String argumentsVar = "";
-        StringBuilder varArgsSB = new StringBuilder();
+
         if(CollectionUtils.isNotEmpty(totalArguments)) {
             StringBuilder argumentsUsage = new StringBuilder();
+            StringBuilder varArgsSB = new StringBuilder();
             for(int i=0; i< totalArguments.size(); i++) {
                 String argument = totalArguments.get(i).toUpperCase();
                 argumentsUsage.append("<").append(argument).append("> ");
-                varArgsSB.append(argument).append("=$").append((i+1)).append("\n");
+                varArgsSB.append(argument).append("=$").append(i + 1).append("\n");
             }
-            argumentsVar = "if [ $# -lt " + totalArguments.size() + " ]; then\n" +
+            String usageArgumentsStr = "if [ $# -lt " + totalArguments.size() + " ]; then\n" +
                     "    echo \"Usage   : $0 " + argumentsUsage.toString().trim() + "\"\n" +
                     "    echo \" \"\n" +
                     "    exit 1\n" +
                     "fi\n";
+            usageArgumentsStr = usageArgumentsStr + "\n"+ varArgsSB;
+            projectInfoBean.setRunScriptArguments(usageArgumentsStr);
         }
-
-        for (int i = startIndex; i < argumentList.size(); i++) {
-            argumentsSB.append("$").append(i + 1).append(" ");
-        }
-        argumentsVar = argumentsVar + "\n"+ varArgsSB;
-        projectInfoBean.setRunScriptArguments(argumentsVar);
 
         Map<String, String> optionsMap = new LinkedHashMap<>();
         optionsMap.put("spark.app.name", sparkSubmitBean.getName());
@@ -74,13 +66,21 @@ public class SparkSubmitBuildUtil {
         stringBuilder.append("SECURITY_INFO FILES_INFO");
         stringBuilder.append("\t--class ").append(sparkSubmitBean.getClassName()).append(" \\\n");
         stringBuilder.append("\t").append(sparkSubmitBean.getJarPath()).append(" ").append("ARGUMENTS");
-        String filesInfoStr = "";
-        if (StringUtils.isNotEmpty(filesInfo)) {
-            filesInfoStr = "\t--files " + filesInfo + " \\\n";
-        }
+        String filesInfoStr = StringUtils.isNotEmpty(filesInfo) ? "\t--files " + filesInfo + " \\\n" : "";
 
-        String securityInfo = projectInfoBean.isSecureCluster() ? "\t--principal $PRINCIPAL \\\n\t--keytab $KEYTAB \\\n" : "";
-        String sparkSubmitCommand = getSubmitCommand(stringBuilder, securityInfo, filesInfoStr, argumentsSB.toString());
+        StringBuilder usageSB = new StringBuilder();
+        List<String> appArgumentList = sparkSubmitBean.getAppArgumentList();
+        if(CollectionUtils.isNotEmpty(appArgumentList)) {
+            int size = appArgumentList.size();
+            for(int i=0; i<size; i++) {
+                usageSB.append("${").append(appArgumentList.get(i)).append("}");
+                if(i != size - 1) {
+                    usageSB.append(",");
+                }
+            }
+        }
+        String securityInfo = projectInfoBean.isSecureCluster() ? "\t--principal ${PRINCIPAL} \\\n\t--keytab ${KEYTAB} \\\n" : "";
+        String sparkSubmitCommand = getSubmitCommand(stringBuilder, securityInfo, filesInfoStr, usageSB.toString());
         projectInfoBean.setSparkSubmitCommand(sparkSubmitCommand);
     }
 

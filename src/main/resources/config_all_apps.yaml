@@ -25,8 +25,8 @@ hwcVersion: "1.0.0.7.1.6.0-297"
 hwcScope: "compile"
 hbaseSparkVersion: "1.0.0.7.1.6.0-297"
 hbaseSparkScope: "compile"
-secureCluster: "false"
-sslCluster: "false"
+secureCluster: "true"
+sslCluster: "true"
 author: "Ranga Reddy"
 defaultTemplate:
   - groupId: 'org.apache.spark'

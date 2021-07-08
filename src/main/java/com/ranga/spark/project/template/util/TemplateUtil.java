@@ -49,14 +49,8 @@ public class TemplateUtil implements Serializable {
         List<DependencyBean> othersTemplatesDependency = Collections.emptyList();
         SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
 
-        List<String> argumentList = new ArrayList<>();
-        if (projectInfoBean.isSecureCluster()) {
-            List<String> secureArgumentList = new ArrayList<>();
-            secureArgumentList.add("PRINCIPAL");
-            secureArgumentList.add("KEYTAB");
-            sparkSubmitBean.setSecureArgumentList(secureArgumentList);
-        }
-
+        List<String> usageArguments = new ArrayList<>();
+        List<String> appArgumentList = new ArrayList<>();
         String setupInstructions = "";
         Map<String, String> othersConfMap = new LinkedHashMap<>();
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
@@ -74,11 +68,17 @@ public class TemplateUtil implements Serializable {
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
-                argumentList.add("HIVE_SERVER2_HOST");
-                argumentList.add("METASTORE_URI");
+                usageArguments.add("HIVE_SERVER2_JDBC_URL");
+                usageArguments.add("HIVE_METASTORE_URI");
 
-                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "jdbc:hive2://${HIVE_SERVER2_HOST}:10000");
-                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://${METASTORE_URI}:9083");
+                if(projectInfoBean.isSecureCluster() && projectInfoBean.isSSLCluster()) {
+                    usageArguments.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
+                } else if(projectInfoBean.isSecureCluster()) {
+                    usageArguments.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
+                } else if(projectInfoBean.isSSLCluster()) {
+
+                }
+
                 othersConfMap.put("spark.sql.hive.hwc.execution.mode", "spark");
                 othersConfMap.put("spark.datasource.hive.warehouse.load.staging.dir", "/tmp");
                 othersConfMap.put("spark.datasource.hive.warehouse.read.via.llap", "false");
@@ -86,11 +86,12 @@ public class TemplateUtil implements Serializable {
                 othersConfMap.put("spark.datasource.hive.warehouse.read.mode", "DIRECT_READER_V1");
                 othersConfMap.put("spark.kryo.registrator", "com.qubole.spark.hiveacid.util.HiveAcidKyroRegistrator");
                 othersConfMap.put("spark.sql.extensions", "com.hortonworks.spark.sql.rule.Extensions");
+                othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url", "${HIVE_SERVER2_JDBC_URL}");
+                othersConfMap.put("spark.hadoop.hive.metastore.uris", "thrift://${HIVE_METASTORE_URI}:9083");
 
                 if (projectInfoBean.isSecureCluster()) {
-                    argumentList.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
                     runScriptNotesList.add("Update `hive.server2.authentication.kerberos.principal` in `spark.sql.hive.hiveserver2.jdbc.url.principal`");
-                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "true");
+                    othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "false");
                     othersConfMap.put("spark.sql.hive.hiveserver2.jdbc.url.principal", "${HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL}");
                 } else {
                     othersConfMap.put("spark.security.credentials.hiveserver2.enabled", "false");
@@ -108,16 +109,36 @@ public class TemplateUtil implements Serializable {
                 othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
             case KAFKA:
-                template = new KafkaTemplate(className);
+
+                String jaasFilePath = projectInfoBean.getJarDeployPath()+"/kafka_client_jaas.conf";
+                othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath +"\"");
+                othersConfMap.put("spark.executor.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath+"\"");
+
+                List<String> fileList = new ArrayList<>();
+                fileList.add(jaasFilePath);
+                List<String> kafkaList = Arrays.asList("KAFKA_BOOTSTRAP_SERVERS", "KAFKA_TOPIC_NAMES");
+                appArgumentList.addAll(kafkaList);
+                usageArguments.addAll(kafkaList);
+
+                if (projectInfoBean.isSSLCluster()) {
+                    List<String> sslTruststoreList = Arrays.asList("SSL_TRUSTSTORE_LOCATION", "SSL_TRUSTSTORE_PASSWORD");
+                    usageArguments.addAll(sslTruststoreList);
+                    appArgumentList.addAll(sslTruststoreList);
+                    fileList.add("${SSL_TRUSTSTORE_LOCATION}");
+                }
+                sparkSubmitBean.setFileList(fileList);
+                template = new KafkaTemplate(projectInfoBean);
                 othersTemplatesDependency = projectConfig.getKafkaTemplate();
                 break;
             default:
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
+
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         sparkSubmitBean.setOtherConfMap(othersConfMap);
-        sparkSubmitBean.setArgumentList(argumentList);
+        sparkSubmitBean.setUsageArgumentList(usageArguments);
+        sparkSubmitBean.setAppArgumentList(appArgumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
         projectInfoBean.setSetUpInstructions(setupInstructions);

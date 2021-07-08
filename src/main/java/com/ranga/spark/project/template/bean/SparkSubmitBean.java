@@ -3,6 +3,7 @@ package com.ranga.spark.project.template.bean;
 import java.io.Serializable;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class SparkSubmitBean implements Serializable {
 
     private String name;
@@ -10,15 +11,16 @@ public class SparkSubmitBean implements Serializable {
     private final String deployMode = "client";
     private final String driverMemory = "1g";
     private final String executorMemory = "1g";
-    private String numExecutors = "2";
-    private String executorCores = "3";
-    private String driverCores = "1";
+    private final String numExecutors = "2";
+    private final String executorCores = "3";
+    private final String driverCores = "1";
     private String className;
     private String jarPath;
     private List<String> fileList = Collections.emptyList();
-    private List<String> argumentList = Collections.emptyList();
+    private List<String> usageArgumentList = Collections.emptyList();
+    private List<String> appArgumentList = Collections.emptyList();
+    private final List<String> secureArgumentList = Arrays.asList("principal", "keytab");
     private Map<String, String> otherConfMap = new LinkedHashMap<>();
-    private List<String> secureArgumentList = Arrays.asList("--principal", "--keytab");
     private String files;
     private String driverClassPath;
     private String executorClassPath;
@@ -50,10 +52,6 @@ public class SparkSubmitBean implements Serializable {
 
     public String getNumExecutors() {
         return numExecutors;
-    }
-
-    public void setNumExecutors(String numExecutors) {
-        this.numExecutors = numExecutors;
     }
 
     public String getClassName() {
@@ -116,32 +114,28 @@ public class SparkSubmitBean implements Serializable {
         return executorCores;
     }
 
-    public void setExecutorCores(String executorCores) {
-        this.executorCores = executorCores;
-    }
-
     public String getDriverCores() {
         return driverCores;
     }
 
-    public void setDriverCores(String driverCores) {
-        this.driverCores = driverCores;
+    public List<String> getUsageArgumentList() {
+        return usageArgumentList;
     }
 
-    public List<String> getArgumentList() {
-        return argumentList;
+    public void setUsageArgumentList(List<String> usageArgumentList) {
+        this.usageArgumentList = usageArgumentList;
     }
 
-    public void setArgumentList(List<String> argumentList) {
-        this.argumentList = argumentList;
+    public List<String> getAppArgumentList() {
+        return appArgumentList;
+    }
+
+    public void setAppArgumentList(List<String> appArgumentList) {
+        this.appArgumentList = appArgumentList;
     }
 
     public List<String> getSecureArgumentList() {
         return secureArgumentList;
-    }
-
-    public void setSecureArgumentList(List<String> secureArgumentList) {
-        this.secureArgumentList = secureArgumentList;
     }
 
     public Map<String, String> getOtherConfMap() {
@@ -166,7 +160,8 @@ public class SparkSubmitBean implements Serializable {
                 ", className='" + className + '\'' +
                 ", jarPath='" + jarPath + '\'' +
                 ", fileList=" + fileList +
-                ", argumentList=" + argumentList +
+                ", usageArgumentList=" + usageArgumentList +
+                ", appArgumentList=" + appArgumentList +
                 ", otherConfMap=" + otherConfMap +
                 ", secureArgumentList=" + secureArgumentList +
                 ", files='" + files + '\'' +
