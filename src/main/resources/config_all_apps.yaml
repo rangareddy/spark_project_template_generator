@@ -11,6 +11,8 @@ projectDetails:
     templateName: "fileFormats"
   - projectName: "SparkKafka"
     templateName: "kafka"
+  - projectName: "SparkPhoenix"
+    templateName: "phoenix"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.cloudera"
 baseDeployJarPath: "/apps/spark/"
@@ -25,6 +27,8 @@ hwcVersion: "1.0.0.7.1.6.0-297"
 hwcScope: "compile"
 hbaseSparkVersion: "1.0.0.7.1.6.0-297"
 hbaseSparkScope: "compile"
+phoenixVersion: "6.0.0.7.1.6.0-297"
+phoenixScope: "compile"
 secureCluster: "true"
 sslCluster: "true"
 author: "Ranga Reddy"
@@ -74,3 +78,8 @@ kafkaTemplate:
     artifactId: 'spark-sql-kafka-0-10_${scalaBinaryVersion}'
     version: '${sparkVersion}'
     scope: '${sparkScope}'
+phoenixTemplate:
+  - groupId: 'org.apache.phoenix'
+    artifactId: 'phoenix5-spark'
+    version: '${phoenixVersion}'
+    scope: '${phoenixScope}'

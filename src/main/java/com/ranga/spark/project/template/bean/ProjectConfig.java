@@ -26,16 +26,19 @@ public class ProjectConfig implements Serializable {
     private String secureCluster = "false";
     private String sslCluster = "false";
     private String author = "Ranga Reddy";
+    private String phoenixVersion = "6.0.0.7.1.6.0-297";
+    private String phoenixScope = "6.0.0.7.1.6.0-297";
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
     private List<DependencyBean> hwcTemplate;
     private List<DependencyBean> fileFormatsTemplate;
     private List<DependencyBean> kafkaTemplate;
+    private List<DependencyBean> phoenixTemplate;
 
     // IIB
     {
-        hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate = kafkaTemplate = Collections.emptyList();
+        hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate = kafkaTemplate = phoenixTemplate = Collections.emptyList();
     }
 
     public String getScalaVersion() {
@@ -238,6 +241,30 @@ public class ProjectConfig implements Serializable {
         this.author = author;
     }
 
+    public List<DependencyBean> getPhoenixTemplate() {
+        return phoenixTemplate;
+    }
+
+    public void setPhoenixTemplate(List<DependencyBean> phoenixTemplate) {
+        this.phoenixTemplate = phoenixTemplate;
+    }
+
+    public String getPhoenixVersion() {
+        return phoenixVersion;
+    }
+
+    public void setPhoenixVersion(String phoenixVersion) {
+        this.phoenixVersion = phoenixVersion;
+    }
+
+    public String getPhoenixScope() {
+        return phoenixScope;
+    }
+
+    public void setPhoenixScope(String phoenixScope) {
+        this.phoenixScope = phoenixScope;
+    }
+
     @Override
     public String toString() {
         return "ProjectConfig{" +
@@ -260,12 +287,15 @@ public class ProjectConfig implements Serializable {
                 ", secureCluster='" + secureCluster + '\'' +
                 ", sslCluster='" + sslCluster + '\'' +
                 ", author='" + author + '\'' +
+                ", phoenixVersion='" + phoenixVersion + '\'' +
+                ", phoenixScope='" + phoenixScope + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
                 ", hbaseTemplate=" + hbaseTemplate +
                 ", hwcTemplate=" + hwcTemplate +
                 ", fileFormatsTemplate=" + fileFormatsTemplate +
                 ", kafkaTemplate=" + kafkaTemplate +
+                ", phoenixTemplate=" + phoenixTemplate +
                 '}';
     }
 }

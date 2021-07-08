@@ -38,12 +38,15 @@ public class SparkProjectTemplateGenerator {
         String testScalaPath = testPackagePath + File.separator + "scala";
         String resourcesMain = packagePath + File.separator + "resources";
 
+        boolean isCreateBean = (projectInfoBean.getTemplateType() != TemplateType.KAFKA
+                || projectInfoBean.getTemplateType() != TemplateType.PHOENIX);
+
         // Scala App Generator
         String scalaFilePath = scalaMain + File.separator + packageName + File.separator + className + ".scala";
         GenerateTemplateUtil.generateTemplate(scalaFilePath, projectInfoBean, "scala_app_class_template.ftl", true);
 
         // Scala Employee Generator
-        if(projectInfoBean.getTemplateType() != TemplateType.KAFKA) {
+        if(!isCreateBean) {
             String scalaEmployeeFilePath = scalaMain + File.separator + packageName + File.separator + "Employee.scala";
             GenerateTemplateUtil.generateTemplate(scalaEmployeeFilePath, projectInfoBean, "scala_employee_class_template.ftl", true);
         }
@@ -60,7 +63,7 @@ public class SparkProjectTemplateGenerator {
             GenerateTemplateUtil.generateTemplate(javaFilePath, projectInfoBean, "java_app_class_template.ftl", true);
 
             // Java Employee Generator
-            if(projectInfoBean.getTemplateType() != TemplateType.KAFKA) {
+            if(!isCreateBean) {
                 String employeeFilePath = javaMain + File.separator + packageName + File.separator + "EmployeeBean.java";
                 GenerateTemplateUtil.generateTemplate(employeeFilePath, projectInfoBean, "java_employee_class_template.ftl");
             }

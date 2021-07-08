@@ -110,7 +110,6 @@ public class TemplateUtil implements Serializable {
                 othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
             case KAFKA:
-
                 String jaasFilePath = projectInfoBean.getJarDeployPath()+"/kafka_client_jaas.conf";
                 othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath +"\"");
                 othersConfMap.put("spark.executor.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath+"\"");
@@ -131,10 +130,15 @@ public class TemplateUtil implements Serializable {
                 template = new KafkaTemplate(projectInfoBean);
                 othersTemplatesDependency = projectConfig.getKafkaTemplate();
                 break;
+            case PHOENIX:
+                template = new PhoenixTemplate(className);
+                othersTemplatesDependency = projectConfig.getPhoenixTemplate();
+                List<String> phoenixUsageList = Arrays.asList("PHOENIX_SERVER_URL", "TABLE_NAME");
+                usageArguments.addAll(phoenixUsageList);
+                break;
             default:
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
-                usageArguments.add("Hello Ranga");
         }
 
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);

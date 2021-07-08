@@ -53,4 +53,7 @@ pyspark_hwc-1.0.0.7.1.7.0-516.zip
 
 ls /opt/cloudera/parcels/CDH/lib/hbase_connectors/lib/*spark*
 /opt/cloudera/parcels/CDH/lib/hbase_connectors/lib/hbase-spark-1.0.0.7.1.7.0-516.jar
+
+ls /opt/cloudera/parcels/CDH/lib/phoenix_connectors
+
  */
