@@ -50,6 +50,7 @@ public class ProjectInfoBean implements Serializable {
     private boolean isSSLCluster;
     private String author;
     private String createdDate;
+    private String mainMethodArguments = "";
 
     public ProjectInfoBean() {
 
@@ -379,6 +380,14 @@ public class ProjectInfoBean implements Serializable {
         return createdDate;
     }
 
+    public String getMainMethodArguments() {
+        return mainMethodArguments;
+    }
+
+    public void setMainMethodArguments(String mainMethodArguments) {
+        this.mainMethodArguments = mainMethodArguments;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
@@ -423,6 +432,7 @@ public class ProjectInfoBean implements Serializable {
                 ", isSSLCluster=" + isSSLCluster +
                 ", author='" + author + '\'' +
                 ", createdDate='" + createdDate + '\'' +
+                ", mainMethodArguments='" + mainMethodArguments + '\'' +
                 '}';
     }
 

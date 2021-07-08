@@ -6,6 +6,7 @@ import com.ranga.spark.project.template.api.java.FileFormatsJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.bean.*;
+import com.ranga.spark.project.template.builder.SparkSubmitBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -133,6 +134,7 @@ public class TemplateUtil implements Serializable {
             default:
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
+                usageArguments.add("Hello Ranga");
         }
 
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);
@@ -154,6 +156,6 @@ public class TemplateUtil implements Serializable {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }
         AppUtil.buildDependencies(projectConfig.getBuildTools(), dependencyBeanSet, projectInfoBean, projectConfigMap);
-        SparkSubmitBuildUtil.buildSparkSubmit(sparkSubmitBean, projectInfoBean);
+        SparkSubmitBuilder.buildSparkSubmit(sparkSubmitBean, projectInfoBean);
     }
 }

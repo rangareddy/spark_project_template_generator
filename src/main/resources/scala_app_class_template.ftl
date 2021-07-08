@@ -13,6 +13,7 @@ ${projectBuilder.scalaCodeTemplate.classTemplate} {
     @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)
 
     def main(args: Array[String]): Unit = {
+        ${projectBuilder.mainMethodArguments}
 
         val appName = "${projectBuilder.name}"
         ${projectBuilder.scalaCodeTemplate.sparkSessionBuildTemplate}

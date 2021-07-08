@@ -13,6 +13,7 @@ ${projectBuilder.javaCodeTemplate.classTemplate} {
     private static final Logger logger = Logger.getLogger(${projectBuilder.javaClassName}.class.getName());
 
     public static void main(String[] args) {
+${projectBuilder.mainMethodArguments}
 
         String appName = "${projectBuilder.name}";
         ${projectBuilder.javaCodeTemplate.sparkSessionBuildTemplate}

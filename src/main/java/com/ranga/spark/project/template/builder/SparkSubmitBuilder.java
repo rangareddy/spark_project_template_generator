@@ -1,4 +1,4 @@
-package com.ranga.spark.project.template.util;
+package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import com.ranga.spark.project.template.bean.SparkSubmitBean;
@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SparkSubmitBuildUtil {
+public class SparkSubmitBuilder {
 
     public static void buildSparkSubmit(SparkSubmitBean sparkSubmitBean, ProjectInfoBean projectInfoBean) {
 
@@ -25,6 +25,21 @@ public class SparkSubmitBuildUtil {
         List<String> totalArguments = new ArrayList<>(usageArgumentList);
         if(projectInfoBean.isSecureCluster()) {
             totalArguments.addAll(sparkSubmitBean.getSecureArgumentList());
+        }
+
+        // Building Scala/Java main method arguments
+        if(CollectionUtils.isNotEmpty(usageArgumentList)) {
+            StringBuilder mainMethodArguments = new StringBuilder();
+            mainMethodArguments.append("\n\t\tif(args.length > ").append(usageArgumentList.size()).append(" ) {\n");
+            mainMethodArguments.append("\t\t\t\tSystem.out.println(\"");
+            mainMethodArguments.append("Usage : "+projectInfoBean.getClassName());
+            for(int i=0; i< usageArgumentList.size(); i++) {
+                mainMethodArguments.append(" <").append(usageArgumentList.get(i)).append(">");
+            }
+            mainMethodArguments.append("\");\n");
+            mainMethodArguments.append("\t\t\t\tSystem.exit(0);\n");
+            mainMethodArguments.append("\t\t}");
+            projectInfoBean.setMainMethodArguments(mainMethodArguments.toString());
         }
 
         if(CollectionUtils.isNotEmpty(totalArguments)) {
