@@ -33,10 +33,11 @@ $ scp target/${projectBuilder.jarName} username@mynode.host.com:${projectBuilder
 $ scp ${projectBuilder.runScriptName} username@mynode.host.com:${projectBuilder.jarDeployPath}
 ```
 
-## Login to spark gateway node (for example mynode.host.com) and run the application using `${projectBuilder.runScriptName}` script.
+## Login to spark gateway node (for example mynode.host.com) and run the application using `${projectBuilder.runScriptName}` shell script.
 
 **Note(s):**
 * Before running the application, check do you have proper permissions to run the application.
+* Check is there any parameters needs to pass in `${projectBuilder.runScriptName}` shell script.
 <#list projectBuilder.runScriptNotesList as runScriptNote>
 * ${runScriptNote}
 </#list>

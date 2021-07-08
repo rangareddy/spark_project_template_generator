@@ -4,7 +4,9 @@ import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import org.apache.commons.lang3.StringUtils;
 
 public class KafkaTemplate extends ScalaBaseTemplate {
-    private ProjectInfoBean projectInfoBean;
+
+    private final ProjectInfoBean projectInfoBean;
+
     public KafkaTemplate(ProjectInfoBean projectInfoBean) {
         super(projectInfoBean.getClassName());
         this.projectInfoBean = projectInfoBean;
@@ -13,7 +15,34 @@ public class KafkaTemplate extends ScalaBaseTemplate {
     @Override
     public String setupInstructions() {
         StringBuilder sb = new StringBuilder();
-        sb.append("");
+
+        sb.append("## Creating a Kafka topic\n");
+        sb.append("```sh\n");
+        sb.append("$KAFAK_HOME/bin/kafka-topics.sh --create --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --replication-factor 3 --partitions 5 --topic <TOPIC_NAME>\n");
+        sb.append("```\n\n");
+
+        sb.append("## Describe a Kafka topic\n");
+        sb.append("```sh\n");
+        sb.append("$KAFAK_HOME/bin/kafka-topics.sh --describe --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --topic <TOPIC_NAME>\n");
+        sb.append("```\n\n");
+
+        sb.append("## Producing messages to Kafka topic\n");
+       /* sb.append("cat ./client.properties\n");
+          sb.append("```sh\n");
+          sb.append("group.id=spark-console\n");
+          sb.append("security.protocol=SASL_SSL\n");
+          sb.append("```\n");*/
+        sb.append("```sh\n");
+        sb.append("$KAFAK_HOME/bin/kafka-console-producer.sh --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --topic <TOPIC_NAME>\n");
+        //sb.append("$KAFAK_HOME/bin/kafka-console-producer.sh --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --topic <TOPIC_NAME> --producer.config ./client.properties\n");
+        sb.append("```\n\n");
+
+        sb.append("## Consuming messages from Kafka topic\n");
+        sb.append("```sh\n");
+        sb.append("$KAFAK_HOME/bin/kafka-console-consumer.sh --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --topic <TOPIC_NAME> --from-beginning\n");
+        //sb.append("$KAFAK_HOME/bin/kafka-console-producer.sh --bootstrap-server <BOOTSTRAP_SERVER_HOST>:<PORT> --topic <TOPIC_NAME> --producer.config ./client.properties\n");
+        sb.append("```");
+
         return sb.toString();
     }
 

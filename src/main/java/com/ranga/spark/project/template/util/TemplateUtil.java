@@ -7,6 +7,7 @@ import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.bean.*;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -58,7 +59,6 @@ public class TemplateUtil implements Serializable {
             case HBASE:
                 template = new HBaseTemplate(className);
                 othersTemplatesDependency = projectConfig.getHbaseTemplate();
-                setupInstructions = template.setupInstructions();
                 break;
             case HIVE:
                 template = new HiveTemplate(className);
@@ -141,7 +141,7 @@ public class TemplateUtil implements Serializable {
         sparkSubmitBean.setAppArgumentList(appArgumentList);
         CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
-        projectInfoBean.setSetUpInstructions(setupInstructions);
+        projectInfoBean.setSetUpInstructions(StringUtils.isNotEmpty(template.setupInstructions()) ? template.setupInstructions() : "");
 
         if (javaTemplate != null) {
             projectInfoBean.setJavaTemplate(true);
