@@ -28,8 +28,7 @@ public class AppUtil implements Serializable {
     }
 
     public static String getProjectName(String sourceProjectName) {
-        String appNameStr = sourceProjectName;
-        String[] camelCaseWords = appNameStr.split("(?=[A-Z])");
+        String[] camelCaseWords = sourceProjectName.split("(?=[A-Z])");
         return String.join("-", camelCaseWords).toLowerCase();
     }
 
@@ -74,8 +73,8 @@ public class AppUtil implements Serializable {
         return converted.toString();
     }
 
-    public static String getRepositoryNames(ProjectConfig projectConfig) {
-        boolean isClouderaRepo = AppUtil.checkClouderaRepo(projectConfig.getSparkVersion());
+    public static String getRepositoryNames(String sparkVersion) {
+        boolean isClouderaRepo = AppUtil.checkClouderaRepo(sparkVersion);
         List<RepositoryBean> repositories = new ArrayList<>(isClouderaRepo ? 3 : 1);
         repositories.add(new RepositoryBean("central", "Maven Central", "https://repo1.maven.org/maven2"));
         if (isClouderaRepo) {
@@ -100,10 +99,11 @@ public class AppUtil implements Serializable {
         return sparkVersion.split("\\.").length > 2;
     }
 
-    public static Map<String, String> getAppRuntimeValueMap(Object obj) {
+    public static Map<String, String> getAppRuntimeValueMap(ProjectConfig projectConfig) {
+        Map<String, String> runtimeValues = new LinkedHashMap<>();
         try {
+            Object obj = projectConfig;
             Field[] fields = obj.getClass().getDeclaredFields();
-            Map<String, String> runtimeValues = new LinkedHashMap<>(fields.length);
             for (Field field : fields) {
                 field.setAccessible(true);
                 Object value = field.get(obj);
@@ -112,10 +112,27 @@ public class AppUtil implements Serializable {
                     runtimeValues.put(key, value.toString());
                 }
             }
-            return runtimeValues;
         } catch (Exception ex) {
             throw new RuntimeException("Exception occurred while getting runtime values from object", ex);
         }
+        List<ComponentDetailBean> componentDetails = projectConfig.getComponentVersions();
+        if(CollectionUtils.isNotEmpty(componentDetails)) {
+            for(ComponentDetailBean componentDetailBean: componentDetails) {
+                String componentName = componentDetailBean.getComponent();
+                String version = componentDetailBean.getVersion();
+                String scope = componentDetailBean.getScope();
+                runtimeValues.put(componentName+"Version", version);
+                if(StringUtils.isNotEmpty(scope) || StringUtils.isNotEmpty(projectConfig.getScope())) {
+                    runtimeValues.put(componentName + "Scope", StringUtils.isNotEmpty(scope) ? scope : projectConfig.getScope());
+                }
+            }
+        } else {
+            throw new RuntimeException("componentVersions is not present in configuration file.");
+        }
+        if(!runtimeValues.containsKey("sparkVersion")) {
+            throw new RuntimeException("spark component details are mandatory. Please specify using componentVersions in configuration file.");
+        }
+        return runtimeValues;
     }
 
     public static String getUpdatedValue(String value, String defaultValue) {
@@ -141,8 +158,9 @@ public class AppUtil implements Serializable {
         return basePackage.endsWith(DOT_DELIMITER) ? (basePackage + projectPackage) : (basePackage + DOT_DELIMITER + projectPackage);
     }
 
-    public static void buildDependencies(String buildToolStr, Set<DependencyBean> dependencyBeanSet,
+    public static void buildDependencies(ProjectConfig projectConfig, Set<DependencyBean> dependencyBeanSet,
                                          ProjectInfoBean projectInfoBean, Map<String, String> projectConfigMap) {
+
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, projectConfigMap);
         Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
         List<String> PrerequisitesList = new ArrayList<>(propertyVersions.size());
@@ -157,7 +175,7 @@ public class AppUtil implements Serializable {
         }
         projectInfoBean.setPrerequisitesList(PrerequisitesList);
 
-        for (String buildTool : buildToolStr.split(COMMA_DELIMITER)) {
+        for (String buildTool : projectConfig.getBuildTools().split(COMMA_DELIMITER)) {
             if (MAVEN_BUILD_TOOL.equals(buildTool)) {
                 MavenBuildToolBean mavenBuildToolBean = MavenBuildToolBean.build(dependencyBuilder);
                 projectInfoBean.setMavenBuildToolBean(mavenBuildToolBean);

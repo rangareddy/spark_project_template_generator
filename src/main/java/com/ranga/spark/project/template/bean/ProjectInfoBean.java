@@ -36,6 +36,7 @@ public class ProjectInfoBean implements Serializable {
     private String delimiter;
     private String prerequisites;
     private String javaVersion;
+    private String sparkVersion;
     private List<String> prerequisitesList;
     private String setUpInstructions = "";
     private CodeTemplateBean scalaCodeTemplate;
@@ -51,6 +52,8 @@ public class ProjectInfoBean implements Serializable {
     private String author;
     private String createdDate;
     private String mainMethodArguments = "";
+    private boolean isCreateScalaBeanClass;
+    private boolean isCreateJavaBeanClass;
 
     public ProjectInfoBean() {
 
@@ -388,6 +391,51 @@ public class ProjectInfoBean implements Serializable {
         this.mainMethodArguments = mainMethodArguments;
     }
 
+    public boolean getIsCreateScalaBeanClass() {
+        return isCreateScalaBeanClass;
+    }
+
+    public void setIsCreateScalaBeanClass(boolean isCreateScalaBeanClass) {
+        this.isCreateScalaBeanClass = isCreateScalaBeanClass;
+    }
+
+    public boolean getIsCreateJavaBeanClass() {
+        return isCreateJavaBeanClass;
+    }
+
+    public void setIsCreateJavaBeanClass(boolean isCreateJavaBeanClass) {
+        this.isCreateJavaBeanClass = isCreateJavaBeanClass;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+
+    public String getSparkVersion() {
+        return sparkVersion;
+    }
+
+    public void setSparkVersion(String sparkVersion) {
+        this.sparkVersion = sparkVersion;
+    }
+
+    public boolean isCreateScalaBeanClass() {
+        return isCreateScalaBeanClass;
+    }
+
+    public void setCreateScalaBeanClass(boolean createScalaBeanClass) {
+        isCreateScalaBeanClass = createScalaBeanClass;
+    }
+
+    public boolean isCreateJavaBeanClass() {
+        return isCreateJavaBeanClass;
+    }
+
+    public void setCreateJavaBeanClass(boolean createJavaBeanClass) {
+        isCreateJavaBeanClass = createJavaBeanClass;
+    }
+
     @Override
     public String toString() {
         return "ProjectInfoBean{" +
@@ -433,11 +481,8 @@ public class ProjectInfoBean implements Serializable {
                 ", author='" + author + '\'' +
                 ", createdDate='" + createdDate + '\'' +
                 ", mainMethodArguments='" + mainMethodArguments + '\'' +
+                ", isCreateScalaBeanClass='" + isCreateScalaBeanClass + '\'' +
+                ", isCreateJavaBeanClass='" + isCreateJavaBeanClass + '\'' +
                 '}';
     }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
 }

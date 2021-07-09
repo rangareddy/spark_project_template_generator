@@ -1,4 +1,4 @@
-package com.ranga.spark.project.template.util;
+package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
@@ -6,14 +6,15 @@ import com.ranga.spark.project.template.api.java.FileFormatsJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.bean.*;
-import com.ranga.spark.project.template.builder.SparkSubmitBuilder;
+import com.ranga.spark.project.template.util.AppUtil;
+import com.ranga.spark.project.template.util.TemplateType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class TemplateUtil implements Serializable {
+public class TemplateBuilder implements Serializable {
 
     public static CodeTemplateBean getCodeTemplateBean(BaseTemplate template) {
         CodeTemplateBean codeTemplateBean = new CodeTemplateBean();
@@ -41,7 +42,8 @@ public class TemplateUtil implements Serializable {
         return templateType;
     }
 
-    public static void buildTemplates(ProjectConfig projectConfig, ProjectInfoBean projectInfoBean, Map<String, String> projectConfigMap) {
+    public static void buildTemplates(ProjectConfig projectConfig, ProjectInfoBean projectInfoBean,
+                                      Map<String, String> projectConfigMap) {
         TemplateType templateType = projectInfoBean.getTemplateType();
         BaseTemplate template;
         BaseTemplate javaTemplate = null;
@@ -56,16 +58,20 @@ public class TemplateUtil implements Serializable {
         String setupInstructions = "";
         Map<String, String> othersConfMap = new LinkedHashMap<>();
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
+        boolean isJavaBeanClass = false, isScalaBeanClass = false;
         switch (templateType) {
             case HBASE:
+                isJavaBeanClass = isScalaBeanClass = true;
                 template = new HBaseTemplate(className);
                 othersTemplatesDependency = projectConfig.getHbaseTemplate();
                 break;
             case HIVE:
+                isJavaBeanClass = isScalaBeanClass = true;
                 template = new HiveTemplate(className);
                 othersTemplatesDependency = projectConfig.getHiveTemplate();
                 break;
             case HWC:
+                isJavaBeanClass = isScalaBeanClass = true;
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
@@ -105,6 +111,7 @@ public class TemplateUtil implements Serializable {
                 othersTemplatesDependency = projectConfig.getHwcTemplate();
                 break;
             case FILEFORMATS:
+                isJavaBeanClass = isScalaBeanClass = true;
                 template = new FileFormatsTemplate(className);
                 javaTemplate = new FileFormatsJavaTemplate(javaClassName);
                 othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
@@ -137,21 +144,25 @@ public class TemplateUtil implements Serializable {
                 usageArguments.addAll(phoenixUsageList);
                 break;
             default:
+                isJavaBeanClass = isScalaBeanClass = true;
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
+
+        projectInfoBean.setIsCreateJavaBeanClass(isJavaBeanClass);
+        projectInfoBean.setIsCreateScalaBeanClass(isScalaBeanClass);
 
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setUsageArgumentList(usageArguments);
         sparkSubmitBean.setAppArgumentList(appArgumentList);
-        CodeTemplateBean codeTemplateBean = TemplateUtil.getCodeTemplateBean(template);
+        CodeTemplateBean codeTemplateBean = TemplateBuilder.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
         projectInfoBean.setSetUpInstructions(StringUtils.isNotEmpty(template.setupInstructions()) ? template.setupInstructions() : "");
 
         if (javaTemplate != null) {
             projectInfoBean.setJavaTemplate(true);
-            codeTemplateBean = TemplateUtil.getCodeTemplateBean(javaTemplate);
+            codeTemplateBean = TemplateBuilder.getCodeTemplateBean(javaTemplate);
             projectInfoBean.setJavaCodeTemplate(codeTemplateBean);
         }
 
@@ -159,7 +170,7 @@ public class TemplateUtil implements Serializable {
         if (CollectionUtils.isNotEmpty(othersTemplatesDependency)) {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }
-        AppUtil.buildDependencies(projectConfig.getBuildTools(), dependencyBeanSet, projectInfoBean, projectConfigMap);
+        AppUtil.buildDependencies(projectConfig, dependencyBeanSet, projectInfoBean, projectConfigMap);
         SparkSubmitBuilder.buildSparkSubmit(sparkSubmitBean, projectInfoBean);
     }
 }

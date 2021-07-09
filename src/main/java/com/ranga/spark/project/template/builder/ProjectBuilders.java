@@ -5,7 +5,6 @@ import com.ranga.spark.project.template.bean.ProjectDetailBean;
 import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import com.ranga.spark.project.template.util.AppUtil;
 import com.ranga.spark.project.template.util.TemplateType;
-import com.ranga.spark.project.template.util.TemplateUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -35,7 +34,7 @@ public class ProjectBuilders implements Serializable {
         Date today = Calendar.getInstance().getTime();
         String createdDate = new SimpleDateFormat("MM/dd/yyyy").format(today);
         for (ProjectDetailBean projectDetail : projectDetails) {
-            TemplateType templateType = TemplateUtil.getTemplateType(projectDetail.getTemplateName());
+            TemplateType templateType = TemplateBuilder.getTemplateType(projectDetail.getTemplateName());
             String name = AppUtil.getProjectName(projectDetail.getProjectName(), projectDetail.getProjectExtension());
             if(StringUtils.isEmpty(name)) {
                 throw new RuntimeException("Project name can't be empty");
@@ -58,7 +57,6 @@ public class ProjectBuilders implements Serializable {
             String runScriptPath = projectDir + File.separator + runScriptName;
             String readMePath = projectDir + File.separator + README_FILE;
             String deployScriptPath = jarDeployPath + File.separator + runScriptName;
-            String repoName = AppUtil.getRepositoryNames(projectConfig);
 
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
@@ -85,12 +83,13 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setRunScriptPath(runScriptPath);
             projectInfoBean.setReadMePath(readMePath);
             projectInfoBean.setDeployScriptPath(deployScriptPath);
-            projectInfoBean.setRepoName(repoName);
             projectInfoBean.setSecureCluster(isSecureCluster);
             projectInfoBean.setSSLCluster(isSSLCluster);
             projectInfoBean.setAuthor(projectConfig.getAuthor());
             projectInfoBean.setCreatedDate(createdDate);
-            TemplateUtil.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
+            TemplateBuilder.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
+            String repoName = AppUtil.getRepositoryNames(projectConfigMap.get("sparkVersion"));
+            projectInfoBean.setRepoName(repoName);
             projectInfoBeanList.add(projectInfoBean);
         }
         return projectInfoBeanList;

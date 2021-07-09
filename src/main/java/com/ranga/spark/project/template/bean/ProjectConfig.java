@@ -16,18 +16,10 @@ public class ProjectConfig implements Serializable {
     private String scalaVersion = "2.12.10";
     private String scalaBinaryVersion = "2.12";
     private String javaVersion = "1.8";
-    private String sparkVersion = "3.1.1";
-    private String sparkScope = "compile";
-    private String hwcVersion = "2.4.0.7.1.6.0-297";
-    private String hwcScope = "compile";
-    private String hbaseSparkVersion = "";
-    private String hbaseSparkScope = "";
     private String sbtVersion = "1.4.7";
     private String secureCluster = "false";
     private String sslCluster = "false";
     private String author = "Ranga Reddy";
-    private String phoenixVersion = "6.0.0.7.1.6.0-297";
-    private String phoenixScope = "6.0.0.7.1.6.0-297";
     private List<DependencyBean> defaultTemplate;
     private List<DependencyBean> hiveTemplate;
     private List<DependencyBean> hbaseTemplate;
@@ -35,10 +27,28 @@ public class ProjectConfig implements Serializable {
     private List<DependencyBean> fileFormatsTemplate;
     private List<DependencyBean> kafkaTemplate;
     private List<DependencyBean> phoenixTemplate;
+    private List<ComponentDetailBean> componentVersions;
+    private String scope = "compile";
 
     // IIB
     {
         hiveTemplate = hbaseTemplate = hwcTemplate = fileFormatsTemplate = kafkaTemplate = phoenixTemplate = Collections.emptyList();
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public List<ComponentDetailBean> getComponentVersions() {
+        return componentVersions;
+    }
+
+    public void setComponentVersions(List<ComponentDetailBean> componentVersions) {
+        this.componentVersions = componentVersions;
     }
 
     public String getScalaVersion() {
@@ -63,54 +73,6 @@ public class ProjectConfig implements Serializable {
 
     public void setJavaVersion(String javaVersion) {
         this.javaVersion = javaVersion;
-    }
-
-    public String getSparkVersion() {
-        return sparkVersion;
-    }
-
-    public void setSparkVersion(String sparkVersion) {
-        this.sparkVersion = sparkVersion;
-    }
-
-    public String getSparkScope() {
-        return sparkScope;
-    }
-
-    public void setSparkScope(String sparkScope) {
-        this.sparkScope = sparkScope;
-    }
-
-    public String getHwcVersion() {
-        return hwcVersion;
-    }
-
-    public void setHwcVersion(String hwcVersion) {
-        this.hwcVersion = hwcVersion;
-    }
-
-    public String getHwcScope() {
-        return hwcScope;
-    }
-
-    public void setHwcScope(String hwcScope) {
-        this.hwcScope = hwcScope;
-    }
-
-    public String getHbaseSparkVersion() {
-        return hbaseSparkVersion;
-    }
-
-    public void setHbaseSparkVersion(String hbaseSparkVersion) {
-        this.hbaseSparkVersion = hbaseSparkVersion;
-    }
-
-    public String getHbaseSparkScope() {
-        return hbaseSparkScope;
-    }
-
-    public void setHbaseSparkScope(String hbaseSparkScope) {
-        this.hbaseSparkScope = hbaseSparkScope;
     }
 
     public List<DependencyBean> getDefaultTemplate() {
@@ -249,22 +211,6 @@ public class ProjectConfig implements Serializable {
         this.phoenixTemplate = phoenixTemplate;
     }
 
-    public String getPhoenixVersion() {
-        return phoenixVersion;
-    }
-
-    public void setPhoenixVersion(String phoenixVersion) {
-        this.phoenixVersion = phoenixVersion;
-    }
-
-    public String getPhoenixScope() {
-        return phoenixScope;
-    }
-
-    public void setPhoenixScope(String phoenixScope) {
-        this.phoenixScope = phoenixScope;
-    }
-
     @Override
     public String toString() {
         return "ProjectConfig{" +
@@ -277,18 +223,10 @@ public class ProjectConfig implements Serializable {
                 ", scalaVersion='" + scalaVersion + '\'' +
                 ", scalaBinaryVersion='" + scalaBinaryVersion + '\'' +
                 ", javaVersion='" + javaVersion + '\'' +
-                ", sparkVersion='" + sparkVersion + '\'' +
-                ", sparkScope='" + sparkScope + '\'' +
-                ", hwcVersion='" + hwcVersion + '\'' +
-                ", hwcScope='" + hwcScope + '\'' +
-                ", hbaseSparkVersion='" + hbaseSparkVersion + '\'' +
-                ", hbaseSparkScope='" + hbaseSparkScope + '\'' +
                 ", sbtVersion='" + sbtVersion + '\'' +
                 ", secureCluster='" + secureCluster + '\'' +
                 ", sslCluster='" + sslCluster + '\'' +
                 ", author='" + author + '\'' +
-                ", phoenixVersion='" + phoenixVersion + '\'' +
-                ", phoenixScope='" + phoenixScope + '\'' +
                 ", defaultTemplate=" + defaultTemplate +
                 ", hiveTemplate=" + hiveTemplate +
                 ", hbaseTemplate=" + hbaseTemplate +
@@ -296,6 +234,8 @@ public class ProjectConfig implements Serializable {
                 ", fileFormatsTemplate=" + fileFormatsTemplate +
                 ", kafkaTemplate=" + kafkaTemplate +
                 ", phoenixTemplate=" + phoenixTemplate +
+                ", componentVersions=" + componentVersions +
+                ", scope='" + scope + '\'' +
                 '}';
     }
 }
