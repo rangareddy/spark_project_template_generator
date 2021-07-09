@@ -45,33 +45,27 @@ public class TemplateBuilder implements Serializable {
     public static void buildTemplates(ProjectConfig projectConfig, ProjectInfoBean projectInfoBean,
                                       Map<String, String> projectConfigMap) {
         TemplateType templateType = projectInfoBean.getTemplateType();
-        BaseTemplate template;
-        BaseTemplate javaTemplate = null;
+        BaseTemplate template, javaTemplate = null;
         String className = projectInfoBean.getClassName();
         String javaClassName = projectInfoBean.getJavaClassName();
-        List<DependencyBean> defaultTemplateDependency = projectConfig.getDefaultTemplate();
-        List<DependencyBean> othersTemplatesDependency = Collections.emptyList();
+        String templateName = templateType.name().toLowerCase(), setupInstructions = "";
+        Map<String, List<LinkedHashMap>> templates = projectConfig.getTemplates();
+        List<LinkedHashMap> defaultTemplateDependency = templates.getOrDefault("defaultTemplate", new ArrayList<>());
         SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
-
         List<String> usageArguments = new ArrayList<>();
         List<String> appArgumentList = new ArrayList<>();
-        String setupInstructions = "";
         Map<String, String> othersConfMap = new LinkedHashMap<>();
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
-        boolean isJavaBeanClass = false, isScalaBeanClass = false;
+        boolean isJavaBeanClass = true, isScalaBeanClass = true;
+        List<LinkedHashMap> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName+"Template");
         switch (templateType) {
             case HBASE:
-                isJavaBeanClass = isScalaBeanClass = true;
                 template = new HBaseTemplate(className);
-                othersTemplatesDependency = projectConfig.getHbaseTemplate();
                 break;
             case HIVE:
-                isJavaBeanClass = isScalaBeanClass = true;
                 template = new HiveTemplate(className);
-                othersTemplatesDependency = projectConfig.getHiveTemplate();
                 break;
             case HWC:
-                isJavaBeanClass = isScalaBeanClass = true;
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
@@ -108,15 +102,13 @@ public class TemplateBuilder implements Serializable {
 
                 template = new HWCTemplate(className);
                 javaTemplate = new HWCJavaTemplate(javaClassName);
-                othersTemplatesDependency = projectConfig.getHwcTemplate();
                 break;
             case FILEFORMATS:
-                isJavaBeanClass = isScalaBeanClass = true;
                 template = new FileFormatsTemplate(className);
                 javaTemplate = new FileFormatsJavaTemplate(javaClassName);
-                othersTemplatesDependency = projectConfig.getFileFormatsTemplate();
                 break;
             case KAFKA:
+                isJavaBeanClass = isScalaBeanClass = false;
                 String jaasFilePath = projectInfoBean.getJarDeployPath()+"/kafka_client_jaas.conf";
                 othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath +"\"");
                 othersConfMap.put("spark.executor.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath+"\"");
@@ -135,13 +127,15 @@ public class TemplateBuilder implements Serializable {
                 }
                 sparkSubmitBean.setFileList(fileList);
                 template = new KafkaTemplate(projectInfoBean);
-                othersTemplatesDependency = projectConfig.getKafkaTemplate();
                 break;
             case PHOENIX:
+                isJavaBeanClass = isScalaBeanClass = false;
                 template = new PhoenixTemplate(className);
-                othersTemplatesDependency = projectConfig.getPhoenixTemplate();
                 List<String> phoenixUsageList = Arrays.asList("PHOENIX_SERVER_URL", "TABLE_NAME");
                 usageArguments.addAll(phoenixUsageList);
+                break;
+            case KUDU:
+                template = new KuduTemplate(className);
                 break;
             default:
                 isJavaBeanClass = isScalaBeanClass = true;
@@ -149,13 +143,13 @@ public class TemplateBuilder implements Serializable {
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
 
-        projectInfoBean.setIsCreateJavaBeanClass(isJavaBeanClass);
-        projectInfoBean.setIsCreateScalaBeanClass(isScalaBeanClass);
-
-        projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setUsageArgumentList(usageArguments);
         sparkSubmitBean.setAppArgumentList(appArgumentList);
+
+        projectInfoBean.setIsCreateJavaBeanClass(isJavaBeanClass);
+        projectInfoBean.setIsCreateScalaBeanClass(isScalaBeanClass);
+        projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         CodeTemplateBean codeTemplateBean = TemplateBuilder.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
         projectInfoBean.setSetUpInstructions(StringUtils.isNotEmpty(template.setupInstructions()) ? template.setupInstructions() : "");
@@ -166,7 +160,7 @@ public class TemplateBuilder implements Serializable {
             projectInfoBean.setJavaCodeTemplate(codeTemplateBean);
         }
 
-        Set<DependencyBean> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
+        Set<LinkedHashMap> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
         if (CollectionUtils.isNotEmpty(othersTemplatesDependency)) {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }

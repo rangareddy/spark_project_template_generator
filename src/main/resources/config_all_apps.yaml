@@ -1,3 +1,15 @@
+baseProjectDir: "/Users/rangareddy.avula/project_templates"
+basePackageName: "com.ranga"
+baseDeployJarPath: "/apps/spark/"
+buildTools: "maven"
+jarVersion: "1.0.0-SNAPSHOT"
+scalaVersion: "2.11.12"
+scalaBinaryVersion: "2.11"
+javaVersion: "1.8"
+scope: "compile"
+secureCluster: "true"
+sslCluster: "true"
+author: "Ranga Reddy"
 projectDetails:
   - projectName: "HelloWorld"
     templateName: "default"
@@ -13,15 +25,6 @@ projectDetails:
     templateName: "kafka"
   - projectName: "SparkPhoenix"
     templateName: "phoenix"
-baseProjectDir: "/Users/rangareddy.avula/project_templates"
-basePackageName: "com.ranga"
-baseDeployJarPath: "/apps/spark/"
-buildTools: "maven"
-jarVersion: "1.0.0-SNAPSHOT"
-scalaVersion: "2.11.12"
-scalaBinaryVersion: "2.11"
-javaVersion: "1.8"
-scope: "compile"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
@@ -32,57 +35,61 @@ componentVersions:
     version: "6.0.0.7.1.6.0-297"
   - component: "hbaseSpark"
     version: "1.0.0.7.1.6.0-297"
-secureCluster: "true"
-sslCluster: "true"
-author: "Ranga Reddy"
-defaultTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-core_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-sql_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hiveTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-hive_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hbaseTemplate:
-  - groupId: 'org.apache.hbase.connectors.spark'
-    artifactId: 'hbase-spark'
-    version: '${hbaseSparkVersion}'
-    scope: '${hbaseSparkScope}'
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-streaming_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hwcTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-hive_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-  - groupId: 'com.hortonworks.hive'
-    artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
-    version: '${hwcVersion}'
-    scope: '${hwcScope}'
-fileFormatsTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-avro_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-kafkaTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-streaming_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-sql-kafka-0-10_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-phoenixTemplate:
-  - groupId: 'org.apache.phoenix'
-    artifactId: 'phoenix5-spark'
-    version: '${phoenixVersion}'
-    scope: '${phoenixScope}'
+  - component: "kudu"
+    version: "1.9.0-cdh6.2.0"
+templates:
+  defaultTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-core_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hiveTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-hive_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hbaseTemplate:
+    - groupId: 'org.apache.hbase.connectors.spark'
+      artifactId: 'hbase-spark'
+      version: '${hbaseSparkVersion}'
+      scope: '${hbaseSparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-streaming_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hwcTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-hive_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'com.hortonworks.hive'
+      artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
+      version: '${hwcVersion}'
+      scope: '${hwcScope}'
+  fileFormatsTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-avro_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  kafkaTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-streaming_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql-kafka-0-10_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  phoenixTemplate:
+    - groupId: 'org.apache.phoenix'
+      artifactId: 'phoenix5-spark'
+      version: '${phoenixVersion}'
+      scope: '${phoenixScope}'
+  kuduTemplate:
+    - groupId: 'org.apache.kudu'
+      artifactId: 'kudu-spark_${scalaBinaryVersion}'
+      version: '${kuduVersion}'

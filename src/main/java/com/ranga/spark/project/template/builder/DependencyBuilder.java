@@ -17,14 +17,14 @@ public class DependencyBuilder implements Serializable {
         this.propertyVersions = versions;
     }
 
-    public static DependencyBuilder build(Set<DependencyBean> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
+    public static DependencyBuilder build(Set<LinkedHashMap> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
         List<DependencyBean> dependencyBeanList = new ArrayList<>(dependencyBeanSet.size());
         Set<String> versions = new LinkedHashSet<>();
-        for (DependencyBean dependencyBean : dependencyBeanSet) {
-            String groupId = getUpdateDependency(dependencyBean.getGroupId(), versions, appRuntimeValueMap);
-            String artifactId = getUpdateDependency(dependencyBean.getArtifactId(), versions, appRuntimeValueMap);
-            String version = getUpdateDependency(dependencyBean.getVersion(), versions, appRuntimeValueMap);
-            String scope = getUpdateDependency(dependencyBean.getScope(), versions, appRuntimeValueMap);
+        for (LinkedHashMap<String,String> map : dependencyBeanSet) {
+            String groupId = getUpdateDependency(map.get("groupId"), versions, appRuntimeValueMap);
+            String artifactId = getUpdateDependency(map.get("artifactId"), versions, appRuntimeValueMap);
+            String version = getUpdateDependency(map.get("version"), versions, appRuntimeValueMap);
+            String scope = getUpdateDependency(map.get("scope"), versions, appRuntimeValueMap);
             DependencyBean updatedDependencyBean = new DependencyBean(groupId, artifactId, version, scope);
             dependencyBeanList.add(updatedDependencyBean);
         }

@@ -158,7 +158,7 @@ public class AppUtil implements Serializable {
         return basePackage.endsWith(DOT_DELIMITER) ? (basePackage + projectPackage) : (basePackage + DOT_DELIMITER + projectPackage);
     }
 
-    public static void buildDependencies(ProjectConfig projectConfig, Set<DependencyBean> dependencyBeanSet,
+    public static void buildDependencies(ProjectConfig projectConfig, Set<LinkedHashMap> dependencyBeanSet,
                                          ProjectInfoBean projectInfoBean, Map<String, String> projectConfigMap) {
 
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, projectConfigMap);
