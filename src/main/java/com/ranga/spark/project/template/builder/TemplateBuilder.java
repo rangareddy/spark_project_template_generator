@@ -136,6 +136,9 @@ public class TemplateBuilder implements Serializable {
                 break;
             case KUDU:
                 template = new KuduTemplate(className);
+                List<String> kuduUsageList = Arrays.asList("KUDU_MASTER");
+                usageArguments.addAll(kuduUsageList);
+                appArgumentList.addAll(kuduUsageList);
                 break;
             default:
                 isJavaBeanClass = isScalaBeanClass = true;
