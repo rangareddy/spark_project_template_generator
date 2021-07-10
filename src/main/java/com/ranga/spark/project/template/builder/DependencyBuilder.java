@@ -1,6 +1,7 @@
 package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.bean.DependencyBean;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -50,17 +51,18 @@ public class DependencyBuilder implements Serializable {
     }
 
     private static String getUpdateDependency(String propertyName, Set<String> versions, Map<String, String> runtimeValueMap) {
+        if(StringUtils.isEmpty(propertyName) || !propertyName.contains("${")) {
+            return propertyName;
+        }
         String updatedDependency = propertyName;
-        if (propertyName.contains("${")) {
-            Set<String> keySet = runtimeValueMap.keySet();
-            for (String key : keySet) {
-                if (propertyName.contains(key)) {
-                    String versionValue = runtimeValueMap.get(key);
-                    String versionKey = getVersionKey(key);
-                    versions.add(key + VERSION_DELIMITER + versionKey + VERSION_DELIMITER + versionValue);
-                    updatedDependency = propertyName.replace(key, versionKey);
-                    break;
-                }
+        Set<String> keySet = runtimeValueMap.keySet();
+        for (String key : keySet) {
+            if (propertyName.contains(key)) {
+                String versionValue = runtimeValueMap.get(key);
+                String versionKey = getVersionKey(key);
+                versions.add(key + VERSION_DELIMITER + versionKey + VERSION_DELIMITER + versionValue);
+                updatedDependency = propertyName.replace(key, versionKey);
+                break;
             }
         }
         return updatedDependency;

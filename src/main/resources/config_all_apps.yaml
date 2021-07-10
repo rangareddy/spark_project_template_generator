@@ -25,6 +25,8 @@ projectDetails:
     templateName: "kafka"
   - projectName: "SparkPhoenix"
     templateName: "phoenix"
+  - projectName: "SparkKudu"
+    templateName: "kudu"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
@@ -36,7 +38,7 @@ componentVersions:
   - component: "hbaseSpark"
     version: "1.0.0.7.1.6.0-297"
   - component: "kudu"
-    version: "1.9.0-cdh6.2.0"
+    version: "1.13.0.7.1.6.23-1"
 templates:
   defaultTemplate:
     - groupId: 'org.apache.spark'
@@ -91,5 +93,5 @@ templates:
       scope: '${phoenixScope}'
   kuduTemplate:
     - groupId: 'org.apache.kudu'
-      artifactId: 'kudu-spark_${scalaBinaryVersion}'
+      artifactId: 'kudu-spark2_${scalaBinaryVersion}'
       version: '${kuduVersion}'
