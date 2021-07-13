@@ -1,7 +1,6 @@
 package com.ranga.spark.project.template.bean;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public class ProjectConfig implements Serializable {
     private String sslCluster = "false";
     private String author = "Ranga Reddy";
     private List<ProjectDetailBean> projectDetails;
-    private Map<String, List<LinkedHashMap>> templates;
+    private Map<String, List<Map>> templates;
     private List<ComponentDetailBean> componentVersions;
     private String scope = "compile";
 
@@ -132,11 +131,11 @@ public class ProjectConfig implements Serializable {
         this.author = author;
     }
 
-    public Map<String, List<LinkedHashMap>> getTemplates() {
+    public Map<String, List<Map>> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(Map<String, List<LinkedHashMap>> templates) {
+    public void setTemplates(Map<String, List<Map>> templates) {
         this.templates = templates;
     }
 

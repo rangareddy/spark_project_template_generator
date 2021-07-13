@@ -2,9 +2,10 @@ package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
-import com.ranga.spark.project.template.api.java.FileFormatsJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
+import com.ranga.spark.project.template.api.java.fileformats.*;
 import com.ranga.spark.project.template.api.scala.*;
+import com.ranga.spark.project.template.api.scala.fileformats.*;
 import com.ranga.spark.project.template.bean.*;
 import com.ranga.spark.project.template.util.AppUtil;
 import com.ranga.spark.project.template.util.TemplateType;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.*;
 
+@SuppressWarnings({"unused", "raw"})
 public class TemplateBuilder implements Serializable {
 
     public static CodeTemplateBean getCodeTemplateBean(BaseTemplate template) {
@@ -48,16 +50,16 @@ public class TemplateBuilder implements Serializable {
         BaseTemplate template, javaTemplate = null;
         String className = projectInfoBean.getClassName();
         String javaClassName = projectInfoBean.getJavaClassName();
-        String templateName = templateType.name().toLowerCase(), setupInstructions = "";
-        Map<String, List<LinkedHashMap>> templates = projectConfig.getTemplates();
-        List<LinkedHashMap> defaultTemplateDependency = templates.getOrDefault("defaultTemplate", new ArrayList<>());
+        String templateName = templateType.name().toLowerCase();
+        Map<String, List<Map>> templates = projectConfig.getTemplates();
+        List<Map> defaultTemplateDependency = templates.getOrDefault("defaultTemplate", new ArrayList<>());
         SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
         List<String> usageArguments = new ArrayList<>();
         List<String> appArgumentList = new ArrayList<>();
         Map<String, String> othersConfMap = new LinkedHashMap<>();
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
         boolean isJavaBeanClass = true, isScalaBeanClass = true;
-        List<LinkedHashMap> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName+"Template");
+        List<Map> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName+"Template");
         String templateImg = "";
         switch (templateType) {
             case HBASE:
@@ -107,10 +109,20 @@ public class TemplateBuilder implements Serializable {
                 template = new HWCTemplate(className);
                 javaTemplate = new HWCJavaTemplate(javaClassName);
                 break;
-            case FILEFORMATS:
-                templateImg = "";
-                template = new FileFormatsTemplate(className);
-                javaTemplate = new FileFormatsJavaTemplate(javaClassName);
+            case ORC:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/file_formats/orc_logo.png?raw=true";
+                template = new OrcFileFormatTemplate(className);
+                javaTemplate = new OrcFileFormatsJavaTemplate(javaClassName);
+                break;
+            case PARQUET:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/file_formats/parquet_logo.png?raw=true";
+                template = new ParquetFileFormatTemplate(className);
+                javaTemplate = new ParquetFileFormatJavaTemplate(javaClassName);
+                break;
+            case AVRO:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/file_formats/avro_logo.png?raw=true";
+                template = new AvroFileFormatTemplate(className);
+                javaTemplate = new AvroFileFormatJavaTemplate(javaClassName);
                 break;
             case KAFKA:
                 templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/frameworks/kafka/kafka_logo.png?raw=true";
@@ -154,24 +166,7 @@ public class TemplateBuilder implements Serializable {
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
 
-        StringBuilder integrationImgSb = new StringBuilder();
-        boolean isTemplateImage = StringUtils.isNotEmpty(templateImg);
-        integrationImgSb.
-                append("    <div style='float:left;padding: 10px;'>\n").
-                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
-                append("    </div>\n");
-
-        if(isTemplateImage) {
-            integrationImgSb.
-                    append("    <div style='float:left;padding: 10px;'>\n").
-                    append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
-                    append("    </div>\n");
-            integrationImgSb.
-                    append("    <div style='float:left;padding: 10px;'>\n").
-                    append("        <img src=\""+templateImg+"\" height=\"200\" width=\"250\"/>\n").
-                    append("    </div>");
-        }
-        projectInfoBean.setIntegrationImg(integrationImgSb.toString());
+        projectInfoBean.setIntegrationImg(AppUtil.getIntegrationImage(templateImg));
 
         sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setUsageArgumentList(usageArguments);
@@ -190,7 +185,7 @@ public class TemplateBuilder implements Serializable {
             projectInfoBean.setJavaCodeTemplate(codeTemplateBean);
         }
 
-        Set<LinkedHashMap> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
+        Set<Map> dependencyBeanSet = new LinkedHashSet<>(defaultTemplateDependency);
         if (CollectionUtils.isNotEmpty(othersTemplatesDependency)) {
             dependencyBeanSet.addAll(othersTemplatesDependency);
         }

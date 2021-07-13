@@ -19,14 +19,18 @@ projectDetails:
     templateName: "hbase"
   - projectName: "SparkHwc"
     templateName: "hwc"
-  - projectName: "SparkFileFormats"
-    templateName: "fileFormats"
   - projectName: "SparkKafka"
     templateName: "kafka"
   - projectName: "SparkPhoenix"
     templateName: "phoenix"
   - projectName: "SparkKudu"
     templateName: "kudu"
+  - projectName: "SparkORC"
+    templateName: "orc"
+  - projectName: "SparkAvro"
+    templateName: "avro"
+  - projectName: "SparkParquet"
+    templateName: "parquet"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
@@ -72,7 +76,7 @@ templates:
       artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
       version: '${hwcVersion}'
       scope: '${hwcScope}'
-  fileFormatsTemplate:
+  avroTemplate:
     - groupId: 'org.apache.spark'
       artifactId: 'spark-avro_${scalaBinaryVersion}'
       version: '${sparkVersion}'

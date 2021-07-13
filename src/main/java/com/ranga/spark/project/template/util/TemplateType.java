@@ -8,5 +8,7 @@ public enum TemplateType {
     PHOENIX,
     KUDU,
     HWC,
-    FILEFORMATS
+    ORC,
+    AVRO,
+    PARQUET
 }

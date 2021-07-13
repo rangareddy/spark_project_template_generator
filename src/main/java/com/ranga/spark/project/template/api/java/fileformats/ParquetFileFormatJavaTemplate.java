@@ -1,8 +1,10 @@
-package com.ranga.spark.project.template.api.java;
+package com.ranga.spark.project.template.api.java.fileformats;
 
-public class FileFormatsJavaTemplate extends JavaBaseTemplate {
+import com.ranga.spark.project.template.api.java.JavaBaseTemplate;
 
-    public FileFormatsJavaTemplate(String className) {
+public class ParquetFileFormatJavaTemplate extends JavaBaseTemplate {
+
+    public ParquetFileFormatJavaTemplate(String className) {
         super(className);
     }
 
@@ -18,21 +20,7 @@ public class FileFormatsJavaTemplate extends JavaBaseTemplate {
                 "        saveData(employeeDF, \"parquet\", parquetFilePath);\n" +
                 "\n" +
                 "        Dataset<Row> parquetEmployeeDF = loadData(spark, \"parquet\", parquetFilePath);\n" +
-                "        display(parquetEmployeeDF);\n" +
-                "\n" +
-                "        // orc\n" +
-                "        String orcFilePath = \"/tmp/orc_data\";\n" +
-                "        saveData(employeeDF, \"orc\", orcFilePath);\n" +
-                "\n" +
-                "        Dataset<Row> orcEmployeeDF = loadData(spark, \"orc\", orcFilePath);\n" +
-                "        display(orcEmployeeDF);\n" +
-                "\n" +
-                "        // avro\n" +
-                "        String avroFilePath = \"/tmp/avro_data\";\n" +
-                "        saveData(employeeDF, \"avro\", avroFilePath);\n" +
-                "\n" +
-                "        Dataset<Row> avroEmployeeDF = loadData(spark, \"avro\", avroFilePath);\n" +
-                "        display(avroEmployeeDF);\n";
+                "        display(parquetEmployeeDF);\n";
     }
 
     @Override

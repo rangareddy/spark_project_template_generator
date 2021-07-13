@@ -18,10 +18,10 @@ public class DependencyBuilder implements Serializable {
         this.propertyVersions = versions;
     }
 
-    public static DependencyBuilder build(Set<LinkedHashMap> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
+    public static DependencyBuilder build(Set<Map> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
         List<DependencyBean> dependencyBeanList = new ArrayList<>(dependencyBeanSet.size());
         Set<String> versions = new LinkedHashSet<>();
-        for (LinkedHashMap<String,String> map : dependencyBeanSet) {
+        for (Map<String,String> map : dependencyBeanSet) {
             String groupId = getUpdateDependency(map.get("groupId"), versions, appRuntimeValueMap);
             String artifactId = getUpdateDependency(map.get("artifactId"), versions, appRuntimeValueMap);
             String version = getUpdateDependency(map.get("version"), versions, appRuntimeValueMap);

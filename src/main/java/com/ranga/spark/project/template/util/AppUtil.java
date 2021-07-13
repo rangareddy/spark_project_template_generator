@@ -158,7 +158,7 @@ public class AppUtil implements Serializable {
         return basePackage.endsWith(DOT_DELIMITER) ? (basePackage + projectPackage) : (basePackage + DOT_DELIMITER + projectPackage);
     }
 
-    public static void buildDependencies(ProjectConfig projectConfig, Set<LinkedHashMap> dependencyBeanSet,
+    public static void buildDependencies(ProjectConfig projectConfig, Set<Map> dependencyBeanSet,
                                          ProjectInfoBean projectInfoBean, Map<String, String> projectConfigMap) {
 
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, projectConfigMap);
@@ -190,5 +190,26 @@ public class AppUtil implements Serializable {
 
     public static String getSourceProjectName(String name) {
         return name.replaceAll(" ","");
+    }
+
+    public static String getIntegrationImage(String templateImg) {
+        StringBuilder integrationImgSb = new StringBuilder();
+        boolean isTemplateImage = StringUtils.isNotEmpty(templateImg);
+        integrationImgSb.
+                append("    <div style='float:left;padding: 10px;'>\n").
+                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                append("    </div>\n");
+
+        if(isTemplateImage) {
+            integrationImgSb.
+                    append("    <div style='float:left;padding: 10px;'>\n").
+                    append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                    append("    </div>\n");
+            integrationImgSb.
+                    append("    <div style='float:left;padding: 10px;'>\n").
+                    append("        <img src=\""+ templateImg +"\" height=\"200\" width=\"250\"/>\n").
+                    append("    </div>");
+        }
+        return integrationImgSb.toString();
     }
 }
