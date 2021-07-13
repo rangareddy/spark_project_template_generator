@@ -1,9 +1,14 @@
-# ${projectBuilder.sourceProjectName} Example
+# ${projectBuilder.sourceProjectName}
+
+<div>
+${projectBuilder.integrationImg}
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## Prerequisites
 
 <#list projectBuilder.prerequisitesList as prerequisite>
-  * ${prerequisite}
+* ${prerequisite}
 </#list>
 
 ${projectBuilder.setUpInstructions}

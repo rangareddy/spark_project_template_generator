@@ -58,14 +58,18 @@ public class TemplateBuilder implements Serializable {
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
         boolean isJavaBeanClass = true, isScalaBeanClass = true;
         List<LinkedHashMap> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName+"Template");
+        String templateImg = "";
         switch (templateType) {
             case HBASE:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/hbase/hbase_logo.png?raw=true";
                 template = new HBaseTemplate(className);
                 break;
             case HIVE:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/warehouse/hive/hive_logo.jpg?raw=true";
                 template = new HiveTemplate(className);
                 break;
             case HWC:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/warehouse/hive/hive_logo.jpg?raw=true";
                 runScriptNotesList.add("Update `hiveserver2_host` in `spark.sql.hive.hiveserver2.jdbc.url`");
                 runScriptNotesList.add("Update `metastore_uri` in `spark.hadoop.hive.metastore.uris`");
 
@@ -104,10 +108,12 @@ public class TemplateBuilder implements Serializable {
                 javaTemplate = new HWCJavaTemplate(javaClassName);
                 break;
             case FILEFORMATS:
+                templateImg = "";
                 template = new FileFormatsTemplate(className);
                 javaTemplate = new FileFormatsJavaTemplate(javaClassName);
                 break;
             case KAFKA:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/frameworks/kafka/kafka_logo.png?raw=true";
                 isJavaBeanClass = isScalaBeanClass = false;
                 String jaasFilePath = projectInfoBean.getJarDeployPath()+"/kafka_client_jaas.conf";
                 othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath +"\"");
@@ -129,12 +135,14 @@ public class TemplateBuilder implements Serializable {
                 template = new KafkaTemplate(projectInfoBean);
                 break;
             case PHOENIX:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/phoenix/phoenix_logo.png?raw=true";
                 isJavaBeanClass = isScalaBeanClass = false;
                 template = new PhoenixTemplate(className);
                 List<String> phoenixUsageList = Arrays.asList("PHOENIX_SERVER_URL", "TABLE_NAME");
                 usageArguments.addAll(phoenixUsageList);
                 break;
             case KUDU:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/kudu/kudu_logo.png?raw=true";
                 template = new KuduTemplate(className);
                 List<String> kuduUsageList = Arrays.asList("KUDU_MASTER");
                 usageArguments.addAll(kuduUsageList);
@@ -145,6 +153,25 @@ public class TemplateBuilder implements Serializable {
                 template = new DefaultTemplate(className);
                 javaTemplate = new DefaultJavaTemplate(javaClassName);
         }
+
+        StringBuilder integrationImgSb = new StringBuilder();
+        boolean isTemplateImage = StringUtils.isNotEmpty(templateImg);
+        integrationImgSb.
+                append("    <div style='float:left;padding: 10px;'>\n").
+                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                append("    </div>\n");
+
+        if(isTemplateImage) {
+            integrationImgSb.
+                    append("    <div style='float:left;padding: 10px;'>\n").
+                    append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                    append("    </div>\n");
+            integrationImgSb.
+                    append("    <div style='float:left;padding: 10px;'>\n").
+                    append("        <img src=\""+templateImg+"\" height=\"200\" width=\"250\"/>\n").
+                    append("    </div>");
+        }
+        projectInfoBean.setIntegrationImg(integrationImgSb.toString());
 
         sparkSubmitBean.setOtherConfMap(othersConfMap);
         sparkSubmitBean.setUsageArgumentList(usageArguments);

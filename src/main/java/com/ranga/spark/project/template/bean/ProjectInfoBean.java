@@ -54,6 +54,7 @@ public class ProjectInfoBean implements Serializable {
     private String mainMethodArguments = "";
     private boolean isCreateScalaBeanClass;
     private boolean isCreateJavaBeanClass;
+    private String integrationImg = "";
 
     public ProjectInfoBean() {
 
@@ -434,6 +435,14 @@ public class ProjectInfoBean implements Serializable {
 
     public void setCreateJavaBeanClass(boolean createJavaBeanClass) {
         isCreateJavaBeanClass = createJavaBeanClass;
+    }
+
+    public String getIntegrationImg() {
+        return integrationImg;
+    }
+
+    public void setIntegrationImg(String integrationImg) {
+        this.integrationImg = integrationImg;
     }
 
     @Override
