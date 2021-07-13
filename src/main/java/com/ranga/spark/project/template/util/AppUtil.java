@@ -196,20 +196,15 @@ public class AppUtil implements Serializable {
         StringBuilder integrationImgSb = new StringBuilder();
         boolean isTemplateImage = StringUtils.isNotEmpty(templateImg);
         integrationImgSb.
-                append("    <div style='float:left;padding: 10px;'>\n").
-                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
-                append("    </div>\n");
+                append("<div>\n").
+                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n");
 
         if(isTemplateImage) {
             integrationImgSb.
-                    append("    <div style='float:left;padding: 10px;'>\n").
-                    append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
-                    append("    </div>\n");
-            integrationImgSb.
-                    append("    <div style='float:left;padding: 10px;'>\n").
-                    append("        <img src=\""+ templateImg +"\" height=\"200\" width=\"250\"/>\n").
-                    append("    </div>");
+                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                append("        <img src=\""+ templateImg +"\" height=\"200\" width=\"250\"/>\n");
         }
+        integrationImgSb.append("</div>\n");
         return integrationImgSb.toString();
     }
 }

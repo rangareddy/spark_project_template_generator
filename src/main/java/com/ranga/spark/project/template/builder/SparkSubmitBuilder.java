@@ -29,16 +29,16 @@ public class SparkSubmitBuilder {
 
         // Building Scala/Java main method arguments
         if(CollectionUtils.isNotEmpty(usageArgumentList)) {
-            StringBuilder mainMethodArguments = new StringBuilder();
-            mainMethodArguments.append("\n\t\tif(args.length > ").append(usageArgumentList.size()).append(" ) {\n");
-            mainMethodArguments.append("\t\t\t\tSystem.out.println(\"");
+            StringBuilder mainMethodArguments = new StringBuilder("\n");
+            mainMethodArguments.append("        if(args.length > ").append(usageArgumentList.size()).append(" ) {\n");
+            mainMethodArguments.append("            System.err.println(\"");
             mainMethodArguments.append("Usage : "+projectInfoBean.getClassName());
             for(int i=0; i< usageArgumentList.size(); i++) {
                 mainMethodArguments.append(" <").append(usageArgumentList.get(i)).append(">");
             }
             mainMethodArguments.append("\");\n");
-            mainMethodArguments.append("\t\t\t\tSystem.exit(0);\n");
-            mainMethodArguments.append("\t\t}");
+            mainMethodArguments.append("            System.exit(0);\n");
+            mainMethodArguments.append("        }");
             projectInfoBean.setMainMethodArguments(mainMethodArguments.toString());
         }
 

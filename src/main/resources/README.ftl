@@ -1,9 +1,6 @@
-# ${projectBuilder.sourceProjectName}
+# ${projectBuilder.name}
 
-<div>
 ${projectBuilder.integrationImg}
-</div>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## Prerequisites
 

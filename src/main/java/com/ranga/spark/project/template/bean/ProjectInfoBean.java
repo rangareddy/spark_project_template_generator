@@ -50,6 +50,7 @@ public class ProjectInfoBean implements Serializable {
     private boolean isSecureCluster;
     private boolean isSSLCluster;
     private String author;
+    private String authorId;
     private String createdDate;
     private String mainMethodArguments = "";
     private boolean isCreateScalaBeanClass;
@@ -380,6 +381,14 @@ public class ProjectInfoBean implements Serializable {
         this.author = author;
     }
 
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
     public String getCreatedDate() {
         return createdDate;
     }
@@ -488,6 +497,7 @@ public class ProjectInfoBean implements Serializable {
                 ", isSecureCluster=" + isSecureCluster +
                 ", isSSLCluster=" + isSSLCluster +
                 ", author='" + author + '\'' +
+                ", authorId='" + authorId + '\'' +
                 ", createdDate='" + createdDate + '\'' +
                 ", mainMethodArguments='" + mainMethodArguments + '\'' +
                 ", isCreateScalaBeanClass='" + isCreateScalaBeanClass + '\'' +

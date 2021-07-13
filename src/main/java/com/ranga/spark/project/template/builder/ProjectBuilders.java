@@ -86,6 +86,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setSecureCluster(isSecureCluster);
             projectInfoBean.setSSLCluster(isSSLCluster);
             projectInfoBean.setAuthor(projectConfig.getAuthor());
+            projectInfoBean.setAuthorId(projectConfig.getAuthor().toLowerCase().replace(" ", ""));
             projectInfoBean.setCreatedDate(createdDate);
             TemplateBuilder.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
             String repoName = AppUtil.getRepositoryNames(projectConfigMap.get("sparkVersion"));

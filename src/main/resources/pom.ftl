@@ -27,9 +27,9 @@
     <!-- Developers -->
     <developers>
         <developer>
-            <id>rangareddy</id>
-            <name>Ranga Reddy</name>
-            <url>https://github.com/rangareddy</url>
+            <id>${projectBuilder.authorId}</id>
+            <name>${projectBuilder.author}</name>
+            <url>https://github.com/${projectBuilder.authorId}</url>
         </developer>
     </developers>
 
