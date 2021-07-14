@@ -5,6 +5,8 @@ import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
 import com.ranga.spark.project.template.api.java.fileformats.*;
 import com.ranga.spark.project.template.api.scala.*;
+import com.ranga.spark.project.template.api.scala.cloud.GcsTemplate;
+import com.ranga.spark.project.template.api.scala.cloud.S3Template;
 import com.ranga.spark.project.template.api.scala.fileformats.*;
 import com.ranga.spark.project.template.bean.*;
 import com.ranga.spark.project.template.util.AppUtil;
@@ -160,6 +162,27 @@ public class TemplateBuilder implements Serializable {
                 List<String> kuduUsageList = Arrays.asList("KUDU_MASTER");
                 usageArguments.addAll(kuduUsageList);
                 appArgumentList.addAll(kuduUsageList);
+                break;
+            case S3:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/cloud/aws/amazon_s3_logo.png?raw=true";
+                template = new S3Template(className);
+                List<String> s3UsageList = Arrays.asList("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "BUCKET_NAME");
+                usageArguments.addAll(s3UsageList);
+                appArgumentList.addAll(s3UsageList);
+                break;
+            case GCS:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/cloud/gcp/gcs_logo.png?raw=true";
+                template = new GcsTemplate(className);
+                List<String> gcsUsageList = Arrays.asList("PROJECT_ID", "BUCKET_NAME", "PRIVATE_KEY", "PRIVATE_KEY_ID", "CLIENT_EMAIL");
+                usageArguments.addAll(gcsUsageList);
+                appArgumentList.addAll(gcsUsageList);
+                break;
+            case CASSANDRA:
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/cloud/gcp/gcs_logo.png?raw=true";
+                template = new CassandraTemplate(className);
+                List<String> cassandraUsageList = Arrays.asList("CASSANDRA_HOST");
+                usageArguments.addAll(cassandraUsageList);
+                appArgumentList.addAll(cassandraUsageList);
                 break;
             default:
                 isJavaBeanClass = isScalaBeanClass = true;

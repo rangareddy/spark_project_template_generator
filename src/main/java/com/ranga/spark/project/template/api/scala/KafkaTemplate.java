@@ -55,7 +55,6 @@ public class KafkaTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-
         String securityProtocol = "";
         if(projectInfoBean.isSecureCluster() && projectInfoBean.isSSLCluster()) {
             securityProtocol = "SASL_SSL";

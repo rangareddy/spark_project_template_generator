@@ -10,5 +10,8 @@ public enum TemplateType {
     HWC,
     ORC,
     AVRO,
-    PARQUET
+    PARQUET,
+    S3,
+    GCS,
+    CASSANDRA
 }

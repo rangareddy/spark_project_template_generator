@@ -31,6 +31,12 @@ projectDetails:
     templateName: "avro"
   - projectName: "SparkParquet"
     templateName: "parquet"
+  - projectName: "SparkCassandra"
+    templateName: "cassandra"
+  - projectName: "SparkS3"
+    templateName: "s3"
+  - projectName: "SparkGcs"
+    templateName: "gcs"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
@@ -43,6 +49,14 @@ componentVersions:
     version: "1.0.0.7.1.6.0-297"
   - component: "kudu"
     version: "1.13.0.7.1.6.23-1"
+  - component: "aws-java-sdk-bundle"
+    version: "1.11.375"
+  - component: "hadoop-aws"
+    version: "3.1.1.7.1.6.0-297"
+  - component: "gcs-connector"
+    version: "2.1.2.7.1.6.0-297"
+  - component: "spark-cassandra-connector"
+    version: "3.0.0"
 templates:
   defaultTemplate:
     - groupId: 'org.apache.spark'
@@ -99,3 +113,22 @@ templates:
     - groupId: 'org.apache.kudu'
       artifactId: 'kudu-spark2_${scalaBinaryVersion}'
       version: '${kuduVersion}'
+  s3Template:
+    - groupId: 'com.amazonaws'
+      artifactId: 'aws-java-sdk-bundle'
+      version: '${aws-java-sdk-bundleVersion}'
+      scope: '${aws-java-sdk-bundleScope}'
+    - groupId: 'org.apache.hadoop'
+      artifactId: 'hadoop-aws'
+      version: '${hadoop-awsVersion}'
+      scope: '${hadoop-awsScope}'
+  gcsTemplate:
+    - groupId: 'com.google.cloud.bigdataoss'
+      artifactId: 'gcs-connector'
+      version: '${gcs-connectorVersion}'
+      scope: '${gcs-connectorScope}'
+  cassandraTemplate:
+    - groupId: 'com.datastax.spark'
+      artifactId: 'spark-cassandra-connector_${scalaBinaryVersion}'
+      version: '${spark-cassandra-connectorVersion}'
+      scope: '${spark-cassandra-connectorScope}'
