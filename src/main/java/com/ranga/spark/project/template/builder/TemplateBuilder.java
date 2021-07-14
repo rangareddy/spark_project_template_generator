@@ -178,7 +178,7 @@ public class TemplateBuilder implements Serializable {
                 appArgumentList.addAll(gcsUsageList);
                 break;
             case CASSANDRA:
-                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/cloud/gcp/gcs_logo.png?raw=true";
+                templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/cassandra/cassandra_logo.png?raw=true";
                 template = new CassandraTemplate(className);
                 List<String> cassandraUsageList = Arrays.asList("CASSANDRA_HOST");
                 usageArguments.addAll(cassandraUsageList);

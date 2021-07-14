@@ -142,11 +142,21 @@ public class AppUtil implements Serializable {
     public static String getPropertyName(String propName) {
         StringBuilder projectNameSB = new StringBuilder();
         projectNameSB.append(Character.toUpperCase(propName.charAt(0)));
+        boolean isPrevCharSpecial = false;
         for (int i = 1; i < propName.length(); i++) {
-            if (Character.isUpperCase(propName.charAt(i))) {
+            char ch = propName.charAt(i);
+            if (Character.isUpperCase(ch)) {
                 projectNameSB.append(" ");
             }
-            projectNameSB.append(propName.charAt(i));
+            if(ch == '-' || ch == '_') {
+                projectNameSB.append(" ");
+                isPrevCharSpecial = true;
+            } else if(isPrevCharSpecial) {
+                projectNameSB.append(Character.toUpperCase(ch));
+                isPrevCharSpecial = false;
+            } else {
+                projectNameSB.append(ch);
+            }
         }
         return projectNameSB.toString();
     }
@@ -163,17 +173,17 @@ public class AppUtil implements Serializable {
 
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, projectConfigMap);
         Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
-        List<String> PrerequisitesList = new ArrayList<>(propertyVersions.size());
+        List<String> prerequisitesList = new ArrayList<>(propertyVersions.size());
         for (String propVersion : propertyVersions) {
             String[] split = propVersion.split(AppConstants.VERSION_DELIMITER);
             String propName = split[0];
             String propValue = split[2];
             if (propName.toLowerCase().endsWith(VERSION) && !propName.contains(BINARY)) {
                 String propertyName = AppUtil.getPropertyName(propName);
-                PrerequisitesList.add(propertyName + " : " + propValue);
+                prerequisitesList.add(propertyName + " : " + propValue);
             }
         }
-        projectInfoBean.setPrerequisitesList(PrerequisitesList);
+        projectInfoBean.setPrerequisitesList(prerequisitesList);
 
         for (String buildTool : projectConfig.getBuildTools().split(COMMA_DELIMITER)) {
             if (MAVEN_BUILD_TOOL.equals(buildTool)) {

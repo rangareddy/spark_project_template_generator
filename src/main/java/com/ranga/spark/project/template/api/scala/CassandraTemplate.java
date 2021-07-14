@@ -96,8 +96,7 @@ public class CassandraTemplate extends ScalaBaseTemplate {
                 "        employeeDS.write.mode(SaveMode.Append).format(cassandraFormat).options(options).save()\n" +
                 "\n" +
                 "        val empDF = spark.read.format(cassandraFormat).options(options).load()\n" +
-                "        display(empDF)\n"
-                ;
+                "        display(empDF)";
     }
 
     @Override
