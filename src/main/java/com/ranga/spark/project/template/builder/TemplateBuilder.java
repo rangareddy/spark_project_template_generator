@@ -152,6 +152,7 @@ public class TemplateBuilder implements Serializable {
                 template = new PhoenixTemplate(className);
                 List<String> phoenixUsageList = Arrays.asList("PHOENIX_SERVER_URL", "TABLE_NAME");
                 usageArguments.addAll(phoenixUsageList);
+                appArgumentList.addAll(phoenixUsageList);
                 break;
             case KUDU:
                 templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/kudu/kudu_logo.png?raw=true";

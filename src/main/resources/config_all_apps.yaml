@@ -11,7 +11,7 @@ secureCluster: "true"
 sslCluster: "true"
 author: "Ranga Reddy"
 projectDetails:
-  - projectName: "HelloWorld"
+  - projectName: "SparkHelloWorld"
     templateName: "default"
   - projectName: "SparkHive"
     templateName: "hive"

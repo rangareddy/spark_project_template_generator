@@ -16,10 +16,10 @@ public class HWCJavaTemplate extends JavaBaseTemplate {
     public String codeTemplate() {
         return
                 "HiveWarehouseSession hive = HiveWarehouseSession.session(spark).build();\n" +
-                "        logger.info(\"HiveWarehouseSession created successfully\");\n" +
+                "        logger.info(\"HiveWarehouseSession created successfully\");\n\n" +
                 "        String database_name = \"hwc_db\";\n" +
                 "        String table_name = \"employee\";\n" +
-                "        String database_table_name = database_name +\".\"+table_name;\n" +
+                "        String database_table_name = database_name +\".\"+table_name;\n\n" +
                 "        // Create a Database\n" +
                 "        hive.createDatabase(database_name, true);\n" +
                 "\n" +

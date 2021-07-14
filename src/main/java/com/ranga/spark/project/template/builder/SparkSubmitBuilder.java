@@ -22,19 +22,27 @@ public class SparkSubmitBuilder {
         sparkSubmitBean.setFiles(filesInfo);
 
         List<String> usageArgumentList = sparkSubmitBean.getUsageArgumentList();
+        List<String> appArgumentList = sparkSubmitBean.getAppArgumentList();
         List<String> totalArguments = new ArrayList<>(usageArgumentList);
         if(projectInfoBean.isSecureCluster()) {
             totalArguments.addAll(sparkSubmitBean.getSecureArgumentList());
         }
 
+        StringBuilder usageSB = new StringBuilder();
         // Building Scala/Java main method arguments
-        if(CollectionUtils.isNotEmpty(usageArgumentList)) {
+        if(CollectionUtils.isNotEmpty(appArgumentList)) {
+            int size = appArgumentList.size();
             StringBuilder mainMethodArguments = new StringBuilder("\n");
-            mainMethodArguments.append("        if(args.length > ").append(usageArgumentList.size()).append(" ) {\n");
+            mainMethodArguments.append("        if(args.length > ").append(size).append(" ) {\n");
             mainMethodArguments.append("            System.err.println(\"");
             mainMethodArguments.append("Usage : "+projectInfoBean.getClassName());
-            for(int i=0; i< usageArgumentList.size(); i++) {
-                mainMethodArguments.append(" <").append(usageArgumentList.get(i)).append(">");
+            for(int i=0; i< size; i++) {
+                String argumentName = appArgumentList.get(i);
+                mainMethodArguments.append(" <").append(argumentName).append(">");
+                usageSB.append("${").append(argumentName).append("}");
+                if(i != size - 1) {
+                    usageSB.append(",");
+                }
             }
             mainMethodArguments.append("\");\n");
             mainMethodArguments.append("            System.exit(0);\n");
@@ -82,18 +90,6 @@ public class SparkSubmitBuilder {
         stringBuilder.append("\t--class ").append(sparkSubmitBean.getClassName()).append(" \\\n");
         stringBuilder.append("\t").append(sparkSubmitBean.getJarPath()).append(" ").append("ARGUMENTS");
         String filesInfoStr = StringUtils.isNotEmpty(filesInfo) ? "\t--files " + filesInfo + " \\\n" : "";
-
-        StringBuilder usageSB = new StringBuilder();
-        List<String> appArgumentList = sparkSubmitBean.getAppArgumentList();
-        if(CollectionUtils.isNotEmpty(appArgumentList)) {
-            int size = appArgumentList.size();
-            for(int i=0; i<size; i++) {
-                usageSB.append("${").append(appArgumentList.get(i)).append("}");
-                if(i != size - 1) {
-                    usageSB.append(",");
-                }
-            }
-        }
         String securityInfo = projectInfoBean.isSecureCluster() ? "\t--principal ${PRINCIPAL} \\\n\t--keytab ${KEYTAB} \\\n" : "";
         String sparkSubmitCommand = getSubmitCommand(stringBuilder, securityInfo, filesInfoStr, usageSB.toString());
         projectInfoBean.setSparkSubmitCommand(sparkSubmitCommand);
