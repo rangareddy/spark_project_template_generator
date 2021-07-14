@@ -1,6 +1,3 @@
-projectDetails:
-  - projectName: "SparkHelloWorld"
-    templateName: "default"
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.ranga"
 baseDeployJarPath: "/apps/spark/"
@@ -9,45 +6,21 @@ jarVersion: "1.0.0-SNAPSHOT"
 scalaVersion: "2.11.12"
 scalaBinaryVersion: "2.11"
 javaVersion: "1.8"
+author: "Ranga Reddy"
+projectDetails:
+  - projectName: "SparkHelloWorld"
+    templateName: "default"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
     scope: "provided"
-secureCluster: "true"
-defaultTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-core_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-sql_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hiveTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-hive_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hbaseTemplate:
-  - groupId: 'org.apache.hbase.connectors.spark'
-    artifactId: 'hbase-spark'
-    version: '${hbaseSparkVersion}'
-    scope: '${hbaseSparkScope}'
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-streaming_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-hwcTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-hive_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
-  - groupId: 'com.hortonworks.hive'
-    artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
-    version: '${hwcVersion}'
-    scope: '${hwcScope}'
-fileFormatsTemplate:
-  - groupId: 'org.apache.spark'
-    artifactId: 'spark-avro_${scalaBinaryVersion}'
-    version: '${sparkVersion}'
-    scope: '${sparkScope}'
+templates:
+  defaultTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-core_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'

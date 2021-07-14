@@ -207,4 +207,25 @@ public class AppUtil implements Serializable {
         integrationImgSb.append("</div>\n");
         return integrationImgSb.toString();
     }
+
+    public static List<Map> getDefaultTemplateDependency(Map<String, List<Map>> templates) {
+        List<Map> defaultTemplateDependencyList = templates.getOrDefault("defaultTemplate", new ArrayList<>());
+        if(CollectionUtils.isEmpty(defaultTemplateDependencyList) || defaultTemplateDependencyList.size() < 2) {
+            Map sparkCore = new LinkedHashMap();
+            sparkCore.put("groupId", "org.apache.spark");
+            sparkCore.put("artifactId", "spark-core_${scalaBinaryVersion}");
+            sparkCore.put("version", "${sparkVersion}");
+            sparkCore.put("scope", "${sparkScope}");
+
+            defaultTemplateDependencyList.add(sparkCore);
+
+            Map sparkSql = new LinkedHashMap();
+            sparkSql.put("groupId", "org.apache.spark");
+            sparkSql.put("artifactId", "spark-sql_${scalaBinaryVersion}");
+            sparkSql.put("version", "${sparkVersion}");
+            sparkSql.put("scope", "${sparkScope}");
+            defaultTemplateDependencyList.add(sparkSql);
+        }
+        return defaultTemplateDependencyList;
+    }
 }

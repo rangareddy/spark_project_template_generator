@@ -52,7 +52,7 @@ public class TemplateBuilder implements Serializable {
         String javaClassName = projectInfoBean.getJavaClassName();
         String templateName = templateType.name().toLowerCase();
         Map<String, List<Map>> templates = projectConfig.getTemplates();
-        List<Map> defaultTemplateDependency = templates.getOrDefault("defaultTemplate", new ArrayList<>());
+        List<Map> defaultTemplateDependency = AppUtil.getDefaultTemplateDependency(templates);
         SparkSubmitBean sparkSubmitBean = new SparkSubmitBean();
         List<String> usageArguments = new ArrayList<>();
         List<String> appArgumentList = new ArrayList<>();
