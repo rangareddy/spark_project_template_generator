@@ -196,8 +196,8 @@ public class TemplateBuilder implements Serializable {
         sparkSubmitBean.setUsageArgumentList(usageArguments);
         sparkSubmitBean.setAppArgumentList(appArgumentList);
 
-        projectInfoBean.setIsCreateJavaBeanClass(isJavaBeanClass);
-        projectInfoBean.setIsCreateScalaBeanClass(isScalaBeanClass);
+        projectInfoBean.setCreateJavaBeanClass(isJavaBeanClass);
+        projectInfoBean.setCreateScalaBeanClass(isScalaBeanClass);
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         CodeTemplateBean codeTemplateBean = TemplateBuilder.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);

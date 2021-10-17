@@ -41,6 +41,7 @@ public class ProjectBuilders implements Serializable {
             }
             String sourceProjectName = AppUtil.getSourceProjectName(name);
             String projectName = AppUtil.getProjectName(sourceProjectName);
+            String projectDescription = projectDetail.getDescription();
             String projectVersion = AppUtil.getUpdatedValue(projectDetail.getProjectVersion(), projectConfig.getJarVersion());
             String projectDir = baseProjectDir + File.separator + projectName;
             String packageName = AppUtil.getPackageName(projectName, projectConfig.getBasePackageName(), projectDetail);
@@ -61,6 +62,7 @@ public class ProjectBuilders implements Serializable {
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
             projectInfoBean.setName(name);
+            projectInfoBean.setProjectDescription(projectDescription);
             projectInfoBean.setSourceProjectName(sourceProjectName);
             projectInfoBean.setProjectVersion(projectVersion);
             projectInfoBean.setScalaVersion(scalaVersion);
@@ -87,6 +89,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setSSLCluster(isSSLCluster);
             projectInfoBean.setAuthor(projectConfig.getAuthor());
             projectInfoBean.setAuthorId(projectConfig.getAuthor().toLowerCase().replace(" ", ""));
+            projectInfoBean.setAuthorEmail(projectConfig.getAuthorEmail());
             projectInfoBean.setCreatedDate(createdDate);
             TemplateBuilder.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
             String repoName = AppUtil.getRepositoryNames(projectConfigMap.get("sparkVersion"));

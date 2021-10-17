@@ -43,7 +43,7 @@ public class SparkProjectTemplateGenerator {
         GenerateTemplateUtil.generateTemplate(scalaFilePath, projectInfoBean, "scala_app_class_template.ftl", true);
 
         // Scala Employee Generator
-        if(projectInfoBean.getIsCreateScalaBeanClass()) {
+        if(projectInfoBean.isCreateScalaBeanClass()) {
             String scalaEmployeeFilePath = scalaMain + File.separator + packageName + File.separator + "Employee.scala";
             GenerateTemplateUtil.generateTemplate(scalaEmployeeFilePath, projectInfoBean, "scala_employee_class_template.ftl", true);
         }
@@ -60,7 +60,7 @@ public class SparkProjectTemplateGenerator {
             GenerateTemplateUtil.generateTemplate(javaFilePath, projectInfoBean, "java_app_class_template.ftl", true);
 
             // Java Employee Generator
-            if(projectInfoBean.getIsCreateJavaBeanClass()) {
+            if(projectInfoBean.isCreateJavaBeanClass()) {
                 String employeeFilePath = javaMain + File.separator + packageName + File.separator + "EmployeeBean.java";
                 GenerateTemplateUtil.generateTemplate(employeeFilePath, projectInfoBean, "java_employee_class_template.ftl");
             }
@@ -83,7 +83,9 @@ public class SparkProjectTemplateGenerator {
         if (projectInfoBean.getSbtBuildToolBean() != null) {
             // build.sbt
             SbtBuildToolBean sbtBuildToolBean = projectInfoBean.getSbtBuildToolBean();
-            GenerateTemplateUtil.generateTemplate(sbtBuildToolBean.getBuildSbtName(), projectInfoBean, "build.sbt.ftl");
+            String buildSbtPath = projectDirectory + File.separator + sbtBuildToolBean.getBuildSbtName();
+            GenerateTemplateUtil.generateTemplate(buildSbtPath, projectInfoBean, "build.sbt.ftl");
+
             String projectDirPath = projectDirectory + File.separator + "project";
             String buildPropertiesPath = projectDirPath + File.separator + "build.properties";
             GenerateTemplateUtil.generateTemplate(buildPropertiesPath, projectInfoBean, "build.properties.ftl", true);

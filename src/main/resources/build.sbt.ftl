@@ -1,27 +1,24 @@
-name := "hello-world-sbt"
-organization := "com.ranga"
-organizationName := "Ranga"
-description   := "Spark Tutorial"
-version := "version"
+name := "${projectBuilder.projectName}"
+organization := "${projectBuilder.packageName}"
+description   := "${projectBuilder.projectDescription}"
+version := "${projectBuilder.jarVersion}"
 
 developers := List(
     Developer(
-        id    = "rangareddy",
-        name  = "Ranga Reddy",
-        email = "rangareddy.avula@gmail.com",
-        url   = url("https://github.com/rangareddy")
+        id    = "${projectBuilder.authorId}",
+        name  = "${projectBuilder.author}",
+        email = "${projectBuilder.authorEmail}",
+        url   = url("https://github.com/${projectBuilder.authorId}")
     )
 )
 
-scalaVersion := "2.11.12"
-
-lazy val sparkVersion = "2.4.0.7.1.6.0-297"
-lazy val scalaTestVersion = "3.0.8"
-lazy val javaVersion = "1.8"
+val scalaVersion = "2.11.12"
+val sparkVersion = "2.4.0.7.1.6.0-297"
+val sparkScope = "compile"
+val scalaTestVersion = "3.0.8"
+val javaVersion = "1.8"
 
 publishMavenStyle := true
-
-idePackagePrefix := Some("com.ranga.spark.hello.world")
 
 // Java and JavaC options
 javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion, "-Xlint")
@@ -32,16 +29,19 @@ resolvers += Resolver.mavenLocal
 
 resolvers ++= Seq(
   "scala-tools" at "https://oss.sonatype.org/content/groups/scala-tools",
-  "apache-snapshots" at "http://repository.apache.org/snapshots/"
+  "apache-snapshots" at "http://repository.apache.org/snapshots/",
+  "Maven2 repository" at "https://repo1.maven.org/maven2/",
+  "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/",
+  "cloudera-repo" at "https://repository.cloudera.com/artifactory/cloudera-repos/"
 )
 */
 
 // Spark Dependencies
 lazy val sparkDependencies = Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-streaming" % sparkVersion % "provided",
-  "org.apache.spark" %% "spark-hive" % sparkVersion % "provided",
+  "org.apache.spark" %% "spark-core" % sparkVersion % sparkScope,
+  "org.apache.spark" %% "spark-sql" % sparkVersion % sparkScope,
+  "org.apache.spark" %% "spark-streaming" % sparkVersion % sparkScope,
+  "org.apache.spark" %% "spark-hive" % sparkVersion % sparkScope
 )
 
 // Other Dependencies
@@ -57,15 +57,6 @@ lazy val testDependencies = Seq(
 
 libraryDependencies ++= sparkDependencies ++ testDependencies
 
-mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
-  {
-    case m if m.toLowerCase.endsWith("manifest.mf") => MergeStrategy.discard
-    case m if m.startsWith("META-INF") => MergeStrategy.discard
-    case PathList("javax", "servlet", xs @ _*) => MergeStrategy.first
-    case PathList("org", "apache", xs @ _*) => MergeStrategy.first
-    case PathList("org", "jboss", xs @ _*) => MergeStrategy.first
-    case "about.html"  => MergeStrategy.rename
-    case "reference.conf" => MergeStrategy.concat
-    case _ => MergeStrategy.first
-  }
+artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+  artifact.name + "-" + module.revision + "." + artifact.extension
 }
