@@ -17,7 +17,6 @@ import java.util.List;
 public class ProjectInfoBean implements Serializable {
 
     private String projectName;
-    private String organization;
     private String projectDescription;
     private String projectDirectory;
     private String sourceProjectName;

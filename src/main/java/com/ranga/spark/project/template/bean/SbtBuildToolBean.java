@@ -5,6 +5,7 @@ import com.ranga.spark.project.template.builder.DependencyBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
 
@@ -20,10 +21,15 @@ public class SbtBuildToolBean extends BuildToolBean {
     }
 
     public static SbtBuildToolBean build(DependencyBuilder dependencyBuilder) {
-        StringBuilder propertyVersions = new StringBuilder();
+        StringBuilder propertyVersionsSB = new StringBuilder();
         StringBuilder dependencies = new StringBuilder();
         Map<String, String> propertyMap = new LinkedHashMap<>();
-        for (String property : dependencyBuilder.getPropertyVersions()) {
+
+        Set<String> propertyVersionsSet = dependencyBuilder.getPropertyVersions();
+        int propertyVersionSize = propertyVersionsSet.size();
+        int count = 0;
+        for (String property : propertyVersionsSet) {
+            count++;
             String[] split = property.split(VERSION_DELIMITER);
             String propertyName = split[0];
             String propertyName1 = split[1];
@@ -41,9 +47,12 @@ public class SbtBuildToolBean extends BuildToolBean {
             } else {
                 propertyKey = "val " + propertyName + " = \"" + propertyValue + "\"";
             }
-            propertyVersions.append(propertyKey).append("\n");
-        }
+            propertyVersionsSB.append(propertyKey);
 
+            if(count != propertyVersionSize) {
+                propertyVersionsSB.append("\n");
+            }
+        }
 
         List<DependencyBean> dependencyBeanList = dependencyBuilder.getDependencyBeanList();
         int size = dependencyBeanList.size();
@@ -69,7 +78,7 @@ public class SbtBuildToolBean extends BuildToolBean {
                     append("\" % ").append(version).
                     append(scopeVal).append(dependencyDelimiter);
         }
-        return new SbtBuildToolBean(dependencies.toString(), propertyVersions.toString());
+        return new SbtBuildToolBean(dependencies.toString(), propertyVersionsSB.toString());
     }
 
     private static String getUpdatedProperty(String scope, Map<String, String> propertyMap) {

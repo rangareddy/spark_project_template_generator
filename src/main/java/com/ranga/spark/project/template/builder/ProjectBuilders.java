@@ -30,7 +30,6 @@ public class ProjectBuilders implements Serializable {
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
-        String organization = projectConfig.getBasePackageName();
         Map<String, String> projectConfigMap = AppUtil.getAppRuntimeValueMap(projectConfig);
         Date today = Calendar.getInstance().getTime();
         if("true".equals(System.getProperty("is_fixed_date"))) {
@@ -67,7 +66,6 @@ public class ProjectBuilders implements Serializable {
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
             projectInfoBean.setName(name);
-            projectInfoBean.setOrganization(organization);
             projectInfoBean.setProjectDescription(projectDescription);
             projectInfoBean.setSourceProjectName(sourceProjectName);
             projectInfoBean.setProjectVersion(projectVersion);

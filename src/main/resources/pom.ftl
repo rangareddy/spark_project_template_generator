@@ -20,8 +20,6 @@
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <scalatest-maven-plugin.version>2.0.0</scalatest-maven-plugin.version>
         ${projectBuilder.mavenBuildToolBean.propertyVersions}
-        <scalatest.version>3.0.8</scalatest.version>
-        <junit.version>4.13.1</junit.version>
     </properties>
 
     <!-- Developers -->
@@ -58,7 +56,7 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${scalatest.version}"}</version>
+            <version>${r"${scala.test.version}"}</version>
             <scope>test</scope>
         </dependency>
 
@@ -66,7 +64,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${r"${junit.version}"}</version>
+            <version>${r"${junit.test.version}"}</version>
             <scope>test</scope>
         </dependency>
 

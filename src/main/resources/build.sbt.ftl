@@ -1,5 +1,5 @@
 name := "${projectBuilder.projectName}"
-organization := "${projectBuilder.organization}"
+organization := "${projectBuilder.packageName}"
 description   := "${projectBuilder.projectDescription}"
 version := "${projectBuilder.jarVersion}"
 
