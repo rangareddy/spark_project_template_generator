@@ -3,12 +3,19 @@ package com.ranga.spark.project.template.builder;
 import com.ranga.spark.project.template.api.BaseTemplate;
 import com.ranga.spark.project.template.api.java.DefaultJavaTemplate;
 import com.ranga.spark.project.template.api.java.HWCJavaTemplate;
-import com.ranga.spark.project.template.api.java.fileformats.*;
+import com.ranga.spark.project.template.api.java.fileformats.AvroFileFormatJavaTemplate;
+import com.ranga.spark.project.template.api.java.fileformats.OrcFileFormatsJavaTemplate;
+import com.ranga.spark.project.template.api.java.fileformats.ParquetFileFormatJavaTemplate;
 import com.ranga.spark.project.template.api.scala.*;
 import com.ranga.spark.project.template.api.scala.cloud.GcsTemplate;
 import com.ranga.spark.project.template.api.scala.cloud.S3Template;
-import com.ranga.spark.project.template.api.scala.fileformats.*;
-import com.ranga.spark.project.template.bean.*;
+import com.ranga.spark.project.template.api.scala.fileformats.AvroFileFormatTemplate;
+import com.ranga.spark.project.template.api.scala.fileformats.OrcFileFormatTemplate;
+import com.ranga.spark.project.template.api.scala.fileformats.ParquetFileFormatTemplate;
+import com.ranga.spark.project.template.bean.CodeTemplateBean;
+import com.ranga.spark.project.template.bean.ProjectConfig;
+import com.ranga.spark.project.template.bean.ProjectInfoBean;
+import com.ranga.spark.project.template.bean.SparkSubmitBean;
 import com.ranga.spark.project.template.util.AppUtil;
 import com.ranga.spark.project.template.util.TemplateType;
 import org.apache.commons.collections4.CollectionUtils;
@@ -61,7 +68,7 @@ public class TemplateBuilder implements Serializable {
         Map<String, String> othersConfMap = new LinkedHashMap<>();
         List<String> runScriptNotesList = projectInfoBean.getRunScriptNotesList();
         boolean isJavaBeanClass = true, isScalaBeanClass = true;
-        List<Map> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName+"Template");
+        List<Map> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName + "Template");
         String templateImg = "";
         switch (templateType) {
             case HBASE:
@@ -80,11 +87,11 @@ public class TemplateBuilder implements Serializable {
                 usageArguments.add("HIVE_SERVER2_JDBC_URL");
                 usageArguments.add("HIVE_METASTORE_URI");
 
-                if(projectInfoBean.isSecureCluster() && projectInfoBean.isSSLCluster()) {
+                if (projectInfoBean.isSecureCluster() && projectInfoBean.isSSLCluster()) {
                     usageArguments.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
-                } else if(projectInfoBean.isSecureCluster()) {
+                } else if (projectInfoBean.isSecureCluster()) {
                     usageArguments.add("HIVE_SERVER2_AUTH_KERBEROS_PRINCIPAL");
-                } else if(projectInfoBean.isSSLCluster()) {
+                } else if (projectInfoBean.isSSLCluster()) {
 
                 }
 
@@ -129,9 +136,9 @@ public class TemplateBuilder implements Serializable {
             case KAFKA:
                 templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/frameworks/kafka/kafka_logo.png?raw=true";
                 isJavaBeanClass = isScalaBeanClass = false;
-                String jaasFilePath = projectInfoBean.getJarDeployPath()+"/kafka_client_jaas.conf";
-                othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath +"\"");
-                othersConfMap.put("spark.executor.extraJavaOptions", "\"-Djava.security.auth.login.config="+jaasFilePath+"\"");
+                String jaasFilePath = projectInfoBean.getJarDeployPath() + "/kafka_client_jaas.conf";
+                othersConfMap.put("spark.driver.extraJavaOptions", "\"-Djava.security.auth.login.config=" + jaasFilePath + "\"");
+                othersConfMap.put("spark.executor.extraJavaOptions", "\"-Djava.security.auth.login.config=" + jaasFilePath + "\"");
 
                 List<String> fileList = new ArrayList<>();
                 fileList.add(jaasFilePath);

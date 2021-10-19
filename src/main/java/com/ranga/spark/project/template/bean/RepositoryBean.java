@@ -13,8 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RepositoryBean implements Serializable {
 
-    private  String id;
-    private  String name;
+    private String id;
+    private String name;
     private String url;
 
 }

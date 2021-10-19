@@ -1,4 +1,4 @@
-logLevel := Level.Warn
+logLevel := Level.Info
 
 // sbt jetbrains
 addSbtPlugin("org.jetbrains" % "sbt-ide-settings" % "1.1.0")
@@ -11,6 +11,3 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.9")
 
 // scala style
 //addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
-
-// Scala options
-scalacOptions := Seq("-deprecation", "-unchecked", "-encoding", "utf8", "-Xlint", "-feature")

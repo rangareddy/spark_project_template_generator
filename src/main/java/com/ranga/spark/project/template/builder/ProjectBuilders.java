@@ -30,13 +30,18 @@ public class ProjectBuilders implements Serializable {
         String baseProjectDir = projectConfig.getBaseProjectDir();
         String baseDeployJarPath = projectConfig.getBaseDeployJarPath();
         String javaVersion = projectConfig.getJavaVersion();
+        String organization = projectConfig.getBasePackageName();
         Map<String, String> projectConfigMap = AppUtil.getAppRuntimeValueMap(projectConfig);
         Date today = Calendar.getInstance().getTime();
+        if("true".equals(System.getProperty("is_fixed_date"))) {
+            today = new Date(1634557885256L);
+        }
+
         String createdDate = new SimpleDateFormat("MM/dd/yyyy").format(today);
         for (ProjectDetailBean projectDetail : projectDetails) {
             TemplateType templateType = TemplateBuilder.getTemplateType(projectDetail.getTemplateName());
             String name = AppUtil.getProjectName(projectDetail.getProjectName(), projectDetail.getProjectExtension());
-            if(StringUtils.isEmpty(name)) {
+            if (StringUtils.isEmpty(name)) {
                 throw new RuntimeException("Project name can't be empty");
             }
             String sourceProjectName = AppUtil.getSourceProjectName(name);
@@ -62,6 +67,7 @@ public class ProjectBuilders implements Serializable {
             ProjectInfoBean projectInfoBean = new ProjectInfoBean();
             projectInfoBean.setProjectName(projectName);
             projectInfoBean.setName(name);
+            projectInfoBean.setOrganization(organization);
             projectInfoBean.setProjectDescription(projectDescription);
             projectInfoBean.setSourceProjectName(sourceProjectName);
             projectInfoBean.setProjectVersion(projectVersion);

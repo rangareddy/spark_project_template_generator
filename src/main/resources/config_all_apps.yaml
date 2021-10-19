@@ -1,7 +1,7 @@
 baseProjectDir: "/Users/rangareddy.avula/project_templates"
 basePackageName: "com.ranga"
 baseDeployJarPath: "/apps/spark/"
-buildTools: "maven"
+buildTools: "maven,sbt"
 jarVersion: "1.0.0-SNAPSHOT"
 scalaVersion: "2.11.12"
 scalaBinaryVersion: "2.11"
@@ -20,10 +20,10 @@ projectDetails:
     description: "Spark Hive Integration Project"
   - projectName: "SparkHbase"
     templateName: "hbase"
-    description: "Spark Hive Integration Project"
+    description: "Spark HBase Integration Project"
   - projectName: "SparkHwc"
     templateName: "hwc"
-    description: "Spark HiveWareHouse Connector Integration Project"
+    description: "Spark Hive Warehouse Connector Integration Project"
   - projectName: "SparkKafka"
     templateName: "kafka"
     description: "Spark Kafka Integration Project"
@@ -70,7 +70,7 @@ componentVersions:
   - component: "gcs-connector"
     version: "2.1.2.7.1.6.0-297"
   - component: "spark-cassandra-connector"
-    version: "3.0.0"
+    version: "2.5.2"
 templates:
   defaultTemplate:
     - groupId: 'org.apache.spark'

@@ -17,6 +17,7 @@ import java.util.List;
 public class ProjectInfoBean implements Serializable {
 
     private String projectName;
+    private String organization;
     private String projectDescription;
     private String projectDirectory;
     private String sourceProjectName;
@@ -53,7 +54,6 @@ public class ProjectInfoBean implements Serializable {
     private SbtBuildToolBean sbtBuildToolBean;
     private String sparkSubmitCommand;
     private String runScriptArguments = "";
-    private String runScriptSecArguments;
     private List<String> runScriptNotesList = new ArrayList<>();
     private boolean isSecureCluster;
     private boolean isSSLCluster;
@@ -65,20 +65,4 @@ public class ProjectInfoBean implements Serializable {
     private boolean isCreateJavaBeanClass;
     private String integrationImg = "";
     private String authorEmail;
-
-    public boolean isCreateScalaBeanClass() {
-        return isCreateScalaBeanClass;
-    }
-
-    public void setCreateScalaBeanClass(boolean createScalaBeanClass) {
-        isCreateScalaBeanClass = createScalaBeanClass;
-    }
-
-    public boolean isCreateJavaBeanClass() {
-        return isCreateJavaBeanClass;
-    }
-
-    public void setCreateJavaBeanClass(boolean createJavaBeanClass) {
-        isCreateJavaBeanClass = createJavaBeanClass;
-    }
 }

@@ -1,6 +1,10 @@
 package com.ranga.spark.project.template.builder;
 
 import com.ranga.spark.project.template.bean.DependencyBean;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -8,20 +12,32 @@ import java.util.*;
 
 import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
 
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class DependencyBuilder implements Serializable {
 
     private List<DependencyBean> dependencyBeanList;
     private Set<String> propertyVersions;
 
-    public DependencyBuilder(List<DependencyBean> dependencyBeanList, Set<String> versions) {
-        this.dependencyBeanList = dependencyBeanList;
-        this.propertyVersions = versions;
-    }
-
     public static DependencyBuilder build(Set<Map> dependencyBeanSet, Map<String, String> appRuntimeValueMap) {
         List<DependencyBean> dependencyBeanList = new ArrayList<>(dependencyBeanSet.size());
         Set<String> versions = new LinkedHashSet<>();
-        for (Map<String,String> map : dependencyBeanSet) {
+
+        String[] defaultKeys = {"scalaVersion", "javaVersion", "scalaTestVersion", "junitTestVersion"};
+        for (String defaultKey : defaultKeys) {
+            String versionValue = appRuntimeValueMap.get(defaultKey);
+            String versionKey = getVersionKey(defaultKey);
+            versions.add(defaultKey + VERSION_DELIMITER + versionKey + VERSION_DELIMITER + versionValue);
+            if ("scalaVersion".equals(defaultKey)) {
+                String binaryVersionKey = "scalaBinaryVersion";
+                versionValue = versionValue.substring(0, versionValue.lastIndexOf("."));
+                versionKey = getVersionKey(binaryVersionKey);
+                versions.add(binaryVersionKey + VERSION_DELIMITER + versionKey + VERSION_DELIMITER + versionValue);
+            }
+        }
+        for (Map<String, String> map : dependencyBeanSet) {
             String groupId = getUpdateDependency(map.get("groupId"), versions, appRuntimeValueMap);
             String artifactId = getUpdateDependency(map.get("artifactId"), versions, appRuntimeValueMap);
             String version = getUpdateDependency(map.get("version"), versions, appRuntimeValueMap);
@@ -29,9 +45,6 @@ public class DependencyBuilder implements Serializable {
             DependencyBean updatedDependencyBean = new DependencyBean(groupId, artifactId, version, scope);
             dependencyBeanList.add(updatedDependencyBean);
         }
-        String scalaVersionKey = "scalaVersion";
-        versions.add("javaVersion##java.version##1.8");
-        versions.add(scalaVersionKey + "##" + "scala.version" + "##" + appRuntimeValueMap.get(scalaVersionKey));
         return new DependencyBuilder(dependencyBeanList, versions);
     }
 
@@ -51,7 +64,7 @@ public class DependencyBuilder implements Serializable {
     }
 
     private static String getUpdateDependency(String propertyName, Set<String> versions, Map<String, String> runtimeValueMap) {
-        if(StringUtils.isEmpty(propertyName) || !propertyName.contains("${")) {
+        if (StringUtils.isEmpty(propertyName) || !propertyName.contains("${")) {
             return propertyName;
         }
         String updatedDependency = propertyName;
@@ -66,21 +79,5 @@ public class DependencyBuilder implements Serializable {
             }
         }
         return updatedDependency;
-    }
-
-    public List<DependencyBean> getDependencyBeanList() {
-        return dependencyBeanList;
-    }
-
-    public void setDependencyBeanList(List<DependencyBean> dependencyBeanList) {
-        this.dependencyBeanList = dependencyBeanList;
-    }
-
-    public Set<String> getPropertyVersions() {
-        return propertyVersions;
-    }
-
-    public void setPropertyVersions(Set<String> propertyVersions) {
-        this.propertyVersions = propertyVersions;
     }
 }

@@ -11,7 +11,6 @@ public class S3Template extends ScalaBaseTemplate {
     @Override
     public String setupInstructions() {
         StringBuilder sb = new StringBuilder();
-        sb.append("");
         return sb.toString();
     }
 
@@ -24,7 +23,7 @@ public class S3Template extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return  "\n" +
+        return "\n" +
                 "        val awsAccessKey = args(0)\n" +
                 "        val awsSecretKey = args(1)\n" +
                 "        val bucketName = args(2)\n" +
@@ -37,8 +36,8 @@ public class S3Template extends ScalaBaseTemplate {
                 "        conf.set(\"spark.speculation\", \"false\")\n" +
                 "        conf.set(\"spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version\", \"2\")\n" +
                 "        conf.set(\"spark.hadoop.mapreduce.fileoutputcommitter.cleanup-failures.ignored\", \"true\")\n" +
-                "        conf.set(\"fs.s3a.experimental.input.fadvise\", \"random\")\n"+
-                "\n"+
+                "        conf.set(\"fs.s3a.experimental.input.fadvise\", \"random\")\n" +
+                "\n" +
                 "        import spark.implicits._\n" +
                 "        val employeeDF = Seq(\n" +
                 "          Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +

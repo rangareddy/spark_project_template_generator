@@ -24,23 +24,23 @@ public class SparkSubmitBuilder {
         List<String> usageArgumentList = sparkSubmitBean.getUsageArgumentList();
         List<String> appArgumentList = sparkSubmitBean.getAppArgumentList();
         List<String> totalArguments = new ArrayList<>(usageArgumentList);
-        if(projectInfoBean.isSecureCluster()) {
+        if (projectInfoBean.isSecureCluster()) {
             totalArguments.addAll(sparkSubmitBean.getSecureArgumentList());
         }
 
         StringBuilder usageSB = new StringBuilder();
         // Building Scala/Java main method arguments
-        if(CollectionUtils.isNotEmpty(appArgumentList)) {
+        if (CollectionUtils.isNotEmpty(appArgumentList)) {
             int size = appArgumentList.size();
             StringBuilder mainMethodArguments = new StringBuilder("\n");
             mainMethodArguments.append("        if(args.length > ").append(size).append(" ) {\n");
             mainMethodArguments.append("            System.err.println(\"");
-            mainMethodArguments.append("Usage : "+projectInfoBean.getClassName());
-            for(int i=0; i< size; i++) {
+            mainMethodArguments.append("Usage : " + projectInfoBean.getClassName());
+            for (int i = 0; i < size; i++) {
                 String argumentName = appArgumentList.get(i);
                 mainMethodArguments.append(" <").append(argumentName).append(">");
                 usageSB.append("${").append(argumentName).append("}");
-                if(i != size - 1) {
+                if (i != size - 1) {
                     usageSB.append(",");
                 }
             }
@@ -50,10 +50,10 @@ public class SparkSubmitBuilder {
             projectInfoBean.setMainMethodArguments(mainMethodArguments.toString());
         }
 
-        if(CollectionUtils.isNotEmpty(totalArguments)) {
+        if (CollectionUtils.isNotEmpty(totalArguments)) {
             StringBuilder argumentsUsage = new StringBuilder();
             StringBuilder varArgsSB = new StringBuilder();
-            for(int i=0; i< totalArguments.size(); i++) {
+            for (int i = 0; i < totalArguments.size(); i++) {
                 String argument = totalArguments.get(i).toUpperCase();
                 argumentsUsage.append("<").append(argument).append("> ");
                 varArgsSB.append(argument).append("=$").append(i + 1).append("\n");
@@ -63,7 +63,7 @@ public class SparkSubmitBuilder {
                     "    echo \" \"\n" +
                     "    exit 1\n" +
                     "fi\n";
-            usageArgumentsStr = usageArgumentsStr + "\n"+ varArgsSB;
+            usageArgumentsStr = usageArgumentsStr + "\n" + varArgsSB;
             projectInfoBean.setRunScriptArguments(usageArgumentsStr);
         }
 

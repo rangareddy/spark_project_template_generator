@@ -10,7 +10,7 @@ public class GcsTemplate extends ScalaBaseTemplate {
 
     @Override
     public String setupInstructions() {
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         return sb.toString();
     }
 
@@ -23,7 +23,7 @@ public class GcsTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return  "\n"+
+        return "\n" +
                 "        val projectId = args(0)\n" +
                 "        val bucketName = args(1)\n" +
                 "        val privateKey = args(2)\n" +

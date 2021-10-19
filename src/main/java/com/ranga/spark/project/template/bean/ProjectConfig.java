@@ -23,7 +23,9 @@ public class ProjectConfig implements Serializable {
     private String scalaVersion = "2.12.10";
     private String scalaBinaryVersion = "2.12";
     private String javaVersion = "1.8";
-    private String sbtVersion = "1.4.7";
+    private String sbtVersion = "0.13.17";
+    private String scalaTestVersion = "3.0.8";
+    private String junitTestVersion = "4.13.1";
     private String secureCluster = "false";
     private String sslCluster = "false";
     private String author = "Ranga Reddy";

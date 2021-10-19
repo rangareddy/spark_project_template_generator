@@ -9,7 +9,6 @@ public class KuduTemplate extends ScalaBaseTemplate {
     @Override
     public String setupInstructions() {
         StringBuilder sb = new StringBuilder();
-        sb.append("");
         return sb.toString();
     }
 

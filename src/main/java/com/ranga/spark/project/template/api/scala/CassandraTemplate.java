@@ -8,24 +8,24 @@ public class CassandraTemplate extends ScalaBaseTemplate {
 
     @Override
     public String sparkSessionBuildTemplate() {
-        return "\n"+
-            "        // Creating the SparkConf object\n" +
-            "        val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
-            "\n" +
-            "        val cassandraHost = args(0)\n" +
-            "        val cassandraPort = if(args.length > 1) args(1) else \"9042\"\n" +
-            "\n" +
-            "        sparkConf.set(\"spark.cassandra.connection.host\", cassandraHost)\n" +
-            "        sparkConf.set(\"spark.cassandra.connection.port\", cassandraPort)\n" +
-            "\n" +
-            "        // Creating the SparkSession object\n" +
-            "        val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()\n" +
-            "        println(\"SparkSession created successfully\")";
+        return "\n" +
+                "        // Creating the SparkConf object\n" +
+                "        val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
+                "\n" +
+                "        val cassandraHost = args(0)\n" +
+                "        val cassandraPort = if(args.length > 1) args(1) else \"9042\"\n" +
+                "\n" +
+                "        sparkConf.set(\"spark.cassandra.connection.host\", cassandraHost)\n" +
+                "        sparkConf.set(\"spark.cassandra.connection.port\", cassandraPort)\n" +
+                "\n" +
+                "        // Creating the SparkSession object\n" +
+                "        val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()\n" +
+                "        println(\"SparkSession created successfully\")";
     }
 
     @Override
     public String setupInstructions() {
-        return  "## Cassandra schema\n" +
+        return "## Cassandra schema\n" +
                 "\n" +
                 "### Launch `cqlsh` shell\n" +
                 "```sh\n" +
@@ -68,14 +68,14 @@ public class CassandraTemplate extends ScalaBaseTemplate {
 
     @Override
     public String importTemplate() {
-        return "import org.apache.spark.sql.{SQLContext, SparkSession}\n" +
+        return "import org.apache.spark.sql.{Dataset, Row, SparkSession}\n" +
                 "import org.apache.spark.SparkConf\n" +
                 "import org.apache.log4j.Logger";
     }
 
     @Override
     public String codeTemplate() {
-        return  "\n"+
+        return "\n" +
                 "        val tableName = \"employees\"\n" +
                 "        val keyspace = \"ranga_keyspace\"\n" +
                 "        val cassandraFormat = \"org.apache.spark.sql.cassandra\"\n" +
@@ -93,7 +93,7 @@ public class CassandraTemplate extends ScalaBaseTemplate {
                 "          Employee(6L, \"Vasundra Reddy\", 57, 180000.5f)\n" +
                 "        ).toDS()\n" +
                 "\n" +
-                "        employeeDS.write.mode(SaveMode.Append).format(cassandraFormat).options(options).save()\n" +
+                "        employeeDS.write.mode(org.apache.spark.sql.SaveMode.Append).format(cassandraFormat).options(options).save()\n" +
                 "\n" +
                 "        val empDF = spark.read.format(cassandraFormat).options(options).load()\n" +
                 "        display(empDF)";
@@ -101,10 +101,10 @@ public class CassandraTemplate extends ScalaBaseTemplate {
 
     @Override
     public String methodsTemplate() {
-        return "\n"+
-                "    def display(dataFrame: DataFrame) = {\n" +
-                "      dataFrame.printSchema()\n" +
-                "      dataFrame.show(truncate=false)\n" +
+        return "\n" +
+                "    def display(df: Dataset[Row]) = {\n" +
+                "      df.printSchema()\n" +
+                "      df.show(truncate=false)\n" +
                 "    }";
     }
 }

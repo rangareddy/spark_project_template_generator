@@ -56,12 +56,12 @@ public class AppUtil implements Serializable {
                 ch = Character.toTitleCase(ch);
                 convertNext = false;
             } else {
-                if(Character.isUpperCase(ch)) {
-                    char prevChar = str.charAt(currentIndex -1);
-                    if(Character.isLowerCase(prevChar) && Character.isUpperCase(ch)) {
+                if (Character.isUpperCase(ch)) {
+                    char prevChar = str.charAt(currentIndex - 1);
+                    if (Character.isLowerCase(prevChar) && Character.isUpperCase(ch)) {
                         converted.append(" ");
                     }
-                    if(Character.isUpperCase(prevChar)) {
+                    if (Character.isUpperCase(prevChar)) {
                         ch = Character.toLowerCase(ch);
                     }
                 } else {
@@ -116,20 +116,20 @@ public class AppUtil implements Serializable {
             throw new RuntimeException("Exception occurred while getting runtime values from object", ex);
         }
         List<ComponentDetailBean> componentDetails = projectConfig.getComponentVersions();
-        if(CollectionUtils.isNotEmpty(componentDetails)) {
-            for(ComponentDetailBean componentDetailBean: componentDetails) {
+        if (CollectionUtils.isNotEmpty(componentDetails)) {
+            for (ComponentDetailBean componentDetailBean : componentDetails) {
                 String componentName = componentDetailBean.getComponent();
                 String version = componentDetailBean.getVersion();
                 String scope = componentDetailBean.getScope();
-                runtimeValues.put(componentName+"Version", version);
-                if(StringUtils.isNotEmpty(scope) || StringUtils.isNotEmpty(projectConfig.getScope())) {
+                runtimeValues.put(componentName + "Version", version);
+                if (StringUtils.isNotEmpty(scope) || StringUtils.isNotEmpty(projectConfig.getScope())) {
                     runtimeValues.put(componentName + "Scope", StringUtils.isNotEmpty(scope) ? scope : projectConfig.getScope());
                 }
             }
         } else {
             throw new RuntimeException("componentVersions is not present in configuration file.");
         }
-        if(!runtimeValues.containsKey("sparkVersion")) {
+        if (!runtimeValues.containsKey("sparkVersion")) {
             throw new RuntimeException("spark component details are mandatory. Please specify using componentVersions in configuration file.");
         }
         return runtimeValues;
@@ -148,10 +148,10 @@ public class AppUtil implements Serializable {
             if (Character.isUpperCase(ch)) {
                 projectNameSB.append(" ");
             }
-            if(ch == '-' || ch == '_') {
+            if (ch == '-' || ch == '_') {
                 projectNameSB.append(" ");
                 isPrevCharSpecial = true;
-            } else if(isPrevCharSpecial) {
+            } else if (isPrevCharSpecial) {
                 projectNameSB.append(Character.toUpperCase(ch));
                 isPrevCharSpecial = false;
             } else {
@@ -199,7 +199,7 @@ public class AppUtil implements Serializable {
     }
 
     public static String getSourceProjectName(String name) {
-        return name.replaceAll(" ","");
+        return name.replaceAll(" ", "");
     }
 
     public static String getIntegrationImage(String templateImg) {
@@ -209,10 +209,10 @@ public class AppUtil implements Serializable {
                 append("<div>\n").
                 append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/frameworks/spark/spark_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n");
 
-        if(isTemplateImage) {
+        if (isTemplateImage) {
             integrationImgSb.
-                append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
-                append("        <img src=\""+ templateImg +"\" height=\"200\" width=\"250\"/>\n");
+                    append("        <img src=\"https://github.com/rangareddy/ranga-logos/blob/main/others/plus_logo.png?raw=true\" height=\"200\" width=\"250\"/>\n").
+                    append("        <img src=\"" + templateImg + "\" height=\"200\" width=\"250\"/>\n");
         }
         integrationImgSb.append("</div>\n");
         return integrationImgSb.toString();
@@ -220,7 +220,7 @@ public class AppUtil implements Serializable {
 
     public static List<Map> getDefaultTemplateDependency(Map<String, List<Map>> templates) {
         List<Map> defaultTemplateDependencyList = templates.getOrDefault("defaultTemplate", new ArrayList<>());
-        if(CollectionUtils.isEmpty(defaultTemplateDependencyList) || defaultTemplateDependencyList.size() < 2) {
+        if (CollectionUtils.isEmpty(defaultTemplateDependencyList) || defaultTemplateDependencyList.size() < 2) {
             Map sparkCore = new LinkedHashMap();
             sparkCore.put("groupId", "org.apache.spark");
             sparkCore.put("artifactId", "spark-core_${scalaBinaryVersion}");
