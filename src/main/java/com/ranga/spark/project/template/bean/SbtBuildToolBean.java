@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.ranga.spark.project.template.util.AppConstants.TAB_DELIMITER;
 import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
 
 public class SbtBuildToolBean extends BuildToolBean {
@@ -73,7 +74,7 @@ public class SbtBuildToolBean extends BuildToolBean {
             }
 
             String dependencyDelimiter = (i == size - 1) ? "" : ",\n";
-            dependencies.append("\t\"").append(groupId).
+            dependencies.append(TAB_DELIMITER).append("\"").append(groupId).
                     append("\" % s\"").append(artifactId).
                     append("\" % ").append(version).
                     append(scopeVal).append(dependencyDelimiter);

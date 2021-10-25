@@ -11,5 +11,10 @@ public interface AppConstants {
     String COMMA_DELIMITER = ",";
     String VERSION = "version";
     String BINARY = "Binary";
+    String EMPTY_STRING = "";
     String DOT_DELIMITER = ".";
+    String TAB_DELIMITER = "    ";
+    String DOUBLE_TAB_DELIMITER = TAB_DELIMITER + TAB_DELIMITER;
+    String TRIPLE_TAB_DELIMITER = DOUBLE_TAB_DELIMITER + TAB_DELIMITER;
+    String NEW_LINE_DELIMITER = "\n";
 }

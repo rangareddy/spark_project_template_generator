@@ -96,8 +96,17 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setAuthorEmail(projectConfig.getAuthorEmail());
             projectInfoBean.setCreatedDate(createdDate);
             TemplateBuilder.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
-            String repoName = AppUtil.getRepositoryNames(projectConfigMap.get("sparkVersion"));
-            projectInfoBean.setRepoName(repoName);
+
+            if(projectInfoBean.getMavenBuildToolBean() != null) {
+                String mvnRepoName = AppUtil.getRepositoryNames(projectConfigMap.get("sparkVersion"));
+                projectInfoBean.setMvnRepoName(mvnRepoName);
+            }
+
+            if(projectInfoBean.getSbtBuildToolBean() != null) {
+                String sbtRepoName = AppUtil.getSbtRepositoryNames(projectConfigMap.get("sparkVersion"));
+                projectInfoBean.setSbtRepoName(sbtRepoName);
+            }
+
             projectInfoBeanList.add(projectInfoBean);
         }
         return projectInfoBeanList;

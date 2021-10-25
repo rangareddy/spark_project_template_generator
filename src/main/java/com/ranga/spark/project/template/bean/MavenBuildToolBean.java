@@ -3,7 +3,7 @@ package com.ranga.spark.project.template.bean;
 import com.ranga.spark.project.template.builder.DependencyBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.ranga.spark.project.template.util.AppConstants.VERSION_DELIMITER;
+import static com.ranga.spark.project.template.util.AppConstants.*;
 
 public class MavenBuildToolBean extends BuildToolBean {
 
@@ -17,15 +17,13 @@ public class MavenBuildToolBean extends BuildToolBean {
         StringBuilder propertyVersions = new StringBuilder();
         StringBuilder dependencies = new StringBuilder();
         propertyVersions.append("\n");
-        String tabDelim = "        ";
-        String doubleTabDelim = tabDelim + "    ";
 
         for (String property : dependencyBuilder.getPropertyVersions()) {
             String[] split = property.split(VERSION_DELIMITER);
             String propertyName = split[1];
             String propertyValue = split[2];
             String propertyKey = String.format("<%s>%s</%s>", propertyName, propertyValue, propertyName);
-            propertyVersions.append(tabDelim).append(propertyKey).append("\n");
+            propertyVersions.append(DOUBLE_TAB_DELIMITER).append(propertyKey).append("\n");
         }
 
         for (DependencyBean dependencyBean : dependencyBuilder.getDependencyBeanList()) {
@@ -35,14 +33,15 @@ public class MavenBuildToolBean extends BuildToolBean {
             String scope = dependencyBean.getScope();
 
             StringBuilder xmlString = new StringBuilder("\n");
-            xmlString.append(tabDelim).append("<dependency>\n");
-            xmlString.append(doubleTabDelim).append("<groupId>").append(groupId).append("</groupId>\n");
-            xmlString.append(doubleTabDelim).append("<artifactId>").append(artifactId).append("</artifactId>\n");
-            xmlString.append(doubleTabDelim).append("<version>").append(version).append("</version>\n");
+            xmlString.append(DOUBLE_TAB_DELIMITER).append("<dependency>\n");
+            xmlString.append(TRIPLE_TAB_DELIMITER).append("<groupId>").append(groupId).append("</groupId>\n");
+            xmlString.append(TRIPLE_TAB_DELIMITER).append("<artifactId>").append(artifactId).append("</artifactId>\n");
+            xmlString.append(TRIPLE_TAB_DELIMITER).append("<version>").append(version).append("</version>\n");
             if (StringUtils.isNotEmpty(scope)) {
-                xmlString.append(doubleTabDelim).append("<scope>").append(scope).append("</scope>\n");
+                xmlString.append(TRIPLE_TAB_DELIMITER).append("<scope>").append(scope).append("</scope>\n");
             }
-            xmlString.append(tabDelim).append("</dependency>");
+            xmlString.append(DOUBLE_TAB_DELIMITER).append("</dependency>");
+
             dependencies.append(xmlString).append("\n");
         }
         return new MavenBuildToolBean(dependencies.toString(), propertyVersions.toString());

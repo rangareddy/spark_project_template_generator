@@ -98,9 +98,7 @@ public class PhoenixTemplate extends ScalaBaseTemplate {
                 " \n" +
                 " > exit\n" +
                 "```\n"
-
         );
-
         return sb.toString();
     }
 

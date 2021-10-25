@@ -83,14 +83,14 @@ public class AppUtil implements Serializable {
         }
 
         StringBuilder repoSB = new StringBuilder();
-        repoSB.append("\n");
+        repoSB.append(NEW_LINE_DELIMITER);
         for (RepositoryBean repositoryBean : repositories) {
-            repoSB.append("\t\t").append("<repository>\n");
-            repoSB.append("\t\t\t").append("<id>").append(repositoryBean.getId()).append("</id>\n");
-            repoSB.append("\t\t\t").append("<name>").append(repositoryBean.getName()).append("</name>\n");
-            repoSB.append("\t\t\t").append("<url>").append(repositoryBean.getUrl()).append("</url>\n");
-            repoSB.append("\t\t").append("</repository>\n");
-            repoSB.append("\n");
+            repoSB.append(DOUBLE_TAB_DELIMITER).append("<repository>\n");
+            repoSB.append(TRIPLE_TAB_DELIMITER).append("<id>").append(repositoryBean.getId()).append("</id>\n");
+            repoSB.append(TRIPLE_TAB_DELIMITER).append("<name>").append(repositoryBean.getName()).append("</name>\n");
+            repoSB.append(TRIPLE_TAB_DELIMITER).append("<url>").append(repositoryBean.getUrl()).append("</url>\n");
+            repoSB.append(DOUBLE_TAB_DELIMITER).append("</repository>\n");
+            repoSB.append(NEW_LINE_DELIMITER);
         }
         return repoSB.toString().trim();
     }
@@ -173,25 +173,34 @@ public class AppUtil implements Serializable {
 
         DependencyBuilder dependencyBuilder = DependencyBuilder.build(dependencyBeanSet, projectConfigMap);
         Set<String> propertyVersions = dependencyBuilder.getPropertyVersions();
-        List<String> prerequisitesList = new ArrayList<>(propertyVersions.size());
-        for (String propVersion : propertyVersions) {
-            String[] split = propVersion.split(AppConstants.VERSION_DELIMITER);
-            String propName = split[0];
-            String propValue = split[2];
-            if (propName.toLowerCase().endsWith(VERSION) && !propName.contains(BINARY)) {
-                String propertyName = AppUtil.getPropertyName(propName);
-                prerequisitesList.add(propertyName + " : " + propValue);
+
+        StringBuilder prerequisitesSB = new StringBuilder("");
+        if(CollectionUtils.isNotEmpty(propertyVersions)) {
+            prerequisitesSB.append("## Prerequisites\n\n");
+            prerequisitesSB.append("|Component|Version|\n");
+            prerequisitesSB.append("|---------|-------|\n");
+            for (String propVersion : propertyVersions) {
+                String[] split = propVersion.split(AppConstants.VERSION_DELIMITER);
+                String propName = split[0];
+                String propValue = split[2];
+                if (propName.toLowerCase().endsWith(VERSION) && !propName.contains(BINARY) && !propName.contains("TestVersion")) {
+                    String propertyName = AppUtil.getPropertyName(propName);
+                    prerequisitesSB.append("|").append(propertyName.replace("Version", "").trim()).
+                            append("|").append(propValue).append("|\n");
+                }
             }
         }
-        projectInfoBean.setPrerequisitesList(prerequisitesList);
+        projectInfoBean.setPrerequisites(prerequisitesSB.toString());
 
         for (String buildTool : projectConfig.getBuildTools().split(COMMA_DELIMITER)) {
             if (MAVEN_BUILD_TOOL.equals(buildTool)) {
                 MavenBuildToolBean mavenBuildToolBean = MavenBuildToolBean.build(dependencyBuilder);
                 projectInfoBean.setMavenBuildToolBean(mavenBuildToolBean);
+                projectInfoBean.setIsMavenBuildTool(true);
             } else if (AppConstants.SBT_BUILD_TOOL.equals(buildTool)) {
                 SbtBuildToolBean sbtBuildToolBean = SbtBuildToolBean.build(dependencyBuilder);
                 projectInfoBean.setSbtBuildToolBean(sbtBuildToolBean);
+                projectInfoBean.setIsSbtBuildTool(true);
             } else {
                 throw new RuntimeException(buildTool + " not yet implemented");
             }
@@ -237,5 +246,26 @@ public class AppUtil implements Serializable {
             defaultTemplateDependencyList.add(sparkSql);
         }
         return defaultTemplateDependencyList;
+    }
+
+    public static String getSbtRepositoryNames(String sparkVersion) {
+        boolean isClouderaRepo = AppUtil.checkClouderaRepo(sparkVersion);
+        List<RepositoryBean> repositories = new ArrayList<>(isClouderaRepo ? 3 : 2);
+        repositories.add(new RepositoryBean("scala-tools", "Scala Tools", "https://oss.sonatype.org/content/groups/scala-tools"));
+        repositories.add(new RepositoryBean("central", "Maven Central", "https://repo1.maven.org/maven2"));
+        if (isClouderaRepo) {
+            repositories.add(new RepositoryBean("cloudera-repo", "Cloudera Public Repo", "https://repository.cloudera.com/artifactory/cloudera-repos/"));
+        }
+
+        StringBuilder repoSB = new StringBuilder();
+        for(int i=0; i<repositories.size(); i++) {
+            RepositoryBean repositoryBean = repositories.get(i);
+            repoSB.append("    \"").append(repositoryBean.getId()).append("\"")
+                    .append(" at \"").append(repositoryBean.getUrl()).append("\"");
+            if(i+1 != repositories.size()) {
+                repoSB.append(",\n");
+            }
+        }
+        return repoSB.toString();
     }
 }

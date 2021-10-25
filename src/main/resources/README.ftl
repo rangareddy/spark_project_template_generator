@@ -2,11 +2,7 @@
 
 ${projectBuilder.integrationImg}
 
-## Prerequisites
-
-<#list projectBuilder.prerequisitesList as prerequisite>
-* ${prerequisite}
-</#list>
+${projectBuilder.prerequisites}
 
 ${projectBuilder.setUpInstructions}
 
@@ -25,13 +21,38 @@ $ cd ranga_spark_experiments/${projectBuilder.projectName}
 
 ## Build the `${projectBuilder.projectName}` application.
 **Note:** Before building the application, update spark & other components library versions according to your cluster version.
+
+<#if projectBuilder.isMavenBuildTool>
+### 1) Building the project using maven build tool
+
 ```sh
-$ mvn clean package -DskipTests
+$ mvn clean package
 ```
 
-## Copy the `${projectBuilder.jarName}` uber jar and run script `${projectBuilder.runScriptName}` to spark gateway node `${projectBuilder.jarDeployPath}` directory.
+### 2) Copy the `${projectBuilder.jarName}` uber jar to spark gateway node `${projectBuilder.jarDeployPath}` directory.
+
 ```sh
 $ scp target/${projectBuilder.jarName} username@mynode.host.com:${projectBuilder.jarDeployPath}
+```
+</#if>
+
+<#if projectBuilder.isSbtBuildTool>
+### 1) Building the project using sbt build tool
+
+```sh
+$ sbt clean package
+```
+
+### 2) Copy the `${projectBuilder.jarName}` uber jar to spark gateway node `${projectBuilder.jarDeployPath}` directory.
+
+```sh
+$ scp target/${projectBuilder.scalaBinaryVersion}/${projectBuilder.jarName} username@mynode.host.com:${projectBuilder.jarDeployPath}
+```
+</#if>
+
+## Copy the run script `${projectBuilder.runScriptName}` to spark gateway node `${projectBuilder.jarDeployPath}` directory.
+
+```sh
 $ scp ${projectBuilder.runScriptName} username@mynode.host.com:${projectBuilder.jarDeployPath}
 ```
 

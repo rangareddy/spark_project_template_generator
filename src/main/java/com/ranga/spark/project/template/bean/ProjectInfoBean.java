@@ -32,7 +32,7 @@ public class ProjectInfoBean implements Serializable {
     private String jarPath;
     private String jarVersion;
     private boolean isJavaTemplate;
-    private String repoName;
+    private String mvnRepoName;
     private String runScriptName;
     private String runScriptPath;
     private String readMePath;
@@ -45,10 +45,11 @@ public class ProjectInfoBean implements Serializable {
     private String prerequisites;
     private String javaVersion;
     private String sparkVersion;
-    private List<String> prerequisitesList;
     private String setUpInstructions = "";
     private CodeTemplateBean scalaCodeTemplate;
     private CodeTemplateBean javaCodeTemplate;
+    private Boolean isMavenBuildTool;
+    private Boolean isSbtBuildTool;
     private MavenBuildToolBean mavenBuildToolBean;
     private SbtBuildToolBean sbtBuildToolBean;
     private String sparkSubmitCommand;
@@ -64,4 +65,5 @@ public class ProjectInfoBean implements Serializable {
     private boolean isCreateJavaBeanClass;
     private String integrationImg = "";
     private String authorEmail;
+    private String sbtRepoName;
 }

@@ -18,9 +18,7 @@ ${projectBuilder.sbtBuildToolBean.propertyVersions}
 val testScope = "test"
 
 resolvers ++= Seq(
-    "scala-tools" at "https://oss.sonatype.org/content/groups/scala-tools",
-    "Maven2 repository" at "https://repo1.maven.org/maven2/",
-    "cloudera-repo" at "https://repository.cloudera.com/artifactory/cloudera-repos/"
+${projectBuilder.sbtRepoName}
 )
 
 // Spark + Other Dependencies

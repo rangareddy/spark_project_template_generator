@@ -19,7 +19,7 @@
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <scalatest-maven-plugin.version>2.0.0</scalatest-maven-plugin.version>
-        ${projectBuilder.mavenBuildToolBean.propertyVersions}
+${projectBuilder.mavenBuildToolBean.propertyVersions}
     </properties>
 
     <!-- Developers -->
@@ -34,7 +34,7 @@
 
     <!-- Repositories -->
     <repositories>
-        ${projectBuilder.repoName}
+        ${projectBuilder.mvnRepoName}
     </repositories>
 
     <dependencies>
