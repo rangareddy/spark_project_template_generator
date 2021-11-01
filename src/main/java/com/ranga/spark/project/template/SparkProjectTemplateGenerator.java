@@ -99,6 +99,6 @@ public class SparkProjectTemplateGenerator {
         // README.md
         GenerateTemplateUtil.generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
 
-        System.out.println("=======================================");
+        System.out.println("Application <"+projectInfoBean.getProjectName()+"> created successfully.");
     }
 }

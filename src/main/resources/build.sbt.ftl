@@ -28,14 +28,14 @@ ${projectBuilder.sbtBuildToolBean.dependencies}
 
 // Test Dependencies
 lazy val testDependencies = Seq(
-    "org.scalatest" %% "scalatest" % scalaTestVersion  % testScope,
+ + "-" + module.revision + "." + artifact.extension
+}
+
+publish    "org.scalatest" %% "scalatest" % scalaTestVersion  % testScope,
     "junit" % "junit" % junitTestVersion % testScope
 )
 
 libraryDependencies ++= appDependencies ++ testDependencies
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-    artifact.name + "-" + module.revision + "." + artifact.extension
-}
-
-publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))
+    artifact.nameTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository")))

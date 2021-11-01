@@ -35,6 +35,10 @@ public class ProjectBuilders implements Serializable {
         if("true".equals(System.getProperty("is_fixed_date"))) {
             today = new Date(1634557885256L);
         }
+        boolean isBuildLocally = true;
+        if("false".equals(System.getProperty("is_build_locally"))) {
+            isBuildLocally = false;
+        }
 
         String createdDate = new SimpleDateFormat("MM/dd/yyyy").format(today);
         for (ProjectDetailBean projectDetail : projectDetails) {
@@ -95,6 +99,7 @@ public class ProjectBuilders implements Serializable {
             projectInfoBean.setAuthorId(projectConfig.getAuthor().toLowerCase().replace(" ", ""));
             projectInfoBean.setAuthorEmail(projectConfig.getAuthorEmail());
             projectInfoBean.setCreatedDate(createdDate);
+            projectInfoBean.setBuildLocally(isBuildLocally);
             TemplateBuilder.buildTemplates(projectConfig, projectInfoBean, projectConfigMap);
 
             if(projectInfoBean.getMavenBuildToolBean() != null) {

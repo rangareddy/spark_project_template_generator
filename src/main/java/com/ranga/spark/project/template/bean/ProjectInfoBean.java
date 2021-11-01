@@ -1,10 +1,7 @@
 package com.ranga.spark.project.template.bean;
 
 import com.ranga.spark.project.template.util.TemplateType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ProjectInfoBean implements Serializable {
 
     private String projectName;
@@ -48,8 +46,8 @@ public class ProjectInfoBean implements Serializable {
     private String setUpInstructions = "";
     private CodeTemplateBean scalaCodeTemplate;
     private CodeTemplateBean javaCodeTemplate;
-    private Boolean isMavenBuildTool;
-    private Boolean isSbtBuildTool;
+    private boolean mavenBuildTool;
+    private boolean sbtBuildTool;
     private MavenBuildToolBean mavenBuildToolBean;
     private SbtBuildToolBean sbtBuildToolBean;
     private String sparkSubmitCommand;
@@ -66,4 +64,5 @@ public class ProjectInfoBean implements Serializable {
     private String integrationImg = "";
     private String authorEmail;
     private String sbtRepoName;
+    private boolean buildLocally;
 }

@@ -6,23 +6,32 @@ ${projectBuilder.prerequisites}
 
 ${projectBuilder.setUpInstructions}
 
-## Login to spark gateway node (for example mynode.host.com) and create the application deployment directory `${projectBuilder.jarDeployPath}`.
+## Login to spark gateway node (for example mynode.host.com) and create the application deployment `${projectBuilder.jarDeployPath}` directory.
+
 ```sh
 $ ssh username@mynode.host.com
 $ mkdir -p ${projectBuilder.jarDeployPath}
 $ chmod 755 ${projectBuilder.jarDeployPath}
 ```
 
+<#if projectBuilder.buildLocally>
+## Goto the `${projectBuilder.projectDirectory}` directory.
+
+```sh
+$ cd ${projectBuilder.projectDirectory}
+```
+<#else>
 ## Download the `${projectBuilder.projectName}` application.
+
 ```sh
 $ git clone https://github.com/rangareddy/ranga_spark_experiments.git
 $ cd ranga_spark_experiments/${projectBuilder.projectName}
 ```
+</#if>
 
 ## Build the `${projectBuilder.projectName}` application.
-**Note:** Before building the application, update spark & other components library versions according to your cluster version.
 
-<#if projectBuilder.isMavenBuildTool>
+<#if projectBuilder.mavenBuildTool>
 ### 1) Building the project using maven build tool
 
 ```sh
@@ -36,7 +45,7 @@ $ scp target/${projectBuilder.jarName} username@mynode.host.com:${projectBuilder
 ```
 </#if>
 
-<#if projectBuilder.isSbtBuildTool>
+<#if projectBuilder.sbtBuildTool>
 ### 1) Building the project using sbt build tool
 
 ```sh

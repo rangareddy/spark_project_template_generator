@@ -27,23 +27,23 @@ public class CassandraTemplate extends ScalaBaseTemplate {
     public String setupInstructions() {
         return "## Cassandra schema\n" +
                 "\n" +
-                "### Launch `cqlsh` shell\n" +
+                "### Launch `cqlsh` shell\n\n" +
                 "```sh\n" +
                 "cqlsh\n" +
                 "```\n" +
                 "\n" +
-                "### Create a keyspace\n" +
+                "### Create a keyspace\n\n" +
                 "```sql\n" +
                 "cqlsh> CREATE KEYSPACE IF NOT EXISTS ranga_keyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\n" +
                 "cqlsh> use ranga_keyspace;\n" +
                 "```\n" +
                 "\n" +
-                "### Create a table\n" +
+                "### Create a table\n\n" +
                 "```sql\n" +
                 "cqlsh:ranga_keyspace> CREATE TABLE IF NOT EXISTS ranga_keyspace.employees(id bigint PRIMARY KEY, name TEXT, age int, salary float);\n" +
                 "```\n" +
                 "\n" +
-                "### Insert the data\n" +
+                "### Insert the data\n\n" +
                 "```sql\n" +
                 "cqlsh:ranga_keyspace> INSERT INTO ranga_keyspace.employees(id, name, age, salary) VALUES (1, 'Ranga Reddy', 33, 50000.00);\n" +
                 "cqlsh:ranga_keyspace> INSERT INTO ranga_keyspace.employees(id, name, age, salary) VALUES (2, 'Nishanth Reddy', 4, 80000.00);\n" +
@@ -51,7 +51,7 @@ public class CassandraTemplate extends ScalaBaseTemplate {
                 "cqlsh:ranga_keyspace> INSERT INTO ranga_keyspace.employees(id, name, age, salary) VALUES (4, 'Mani Reddy', 16, 90000.00);\n" +
                 "```\n" +
                 "\n" +
-                "### Select the data\n" +
+                "### Select the data\n\n" +
                 "```sql\n" +
                 "cqlsh:ranga_keyspace> SELECT * FROM ranga_keyspace.employees;\n" +
                 "\n" +

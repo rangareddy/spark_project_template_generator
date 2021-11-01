@@ -196,11 +196,11 @@ public class AppUtil implements Serializable {
             if (MAVEN_BUILD_TOOL.equals(buildTool)) {
                 MavenBuildToolBean mavenBuildToolBean = MavenBuildToolBean.build(dependencyBuilder);
                 projectInfoBean.setMavenBuildToolBean(mavenBuildToolBean);
-                projectInfoBean.setIsMavenBuildTool(true);
+                projectInfoBean.setMavenBuildTool(true);
             } else if (AppConstants.SBT_BUILD_TOOL.equals(buildTool)) {
                 SbtBuildToolBean sbtBuildToolBean = SbtBuildToolBean.build(dependencyBuilder);
                 projectInfoBean.setSbtBuildToolBean(sbtBuildToolBean);
-                projectInfoBean.setIsSbtBuildTool(true);
+                projectInfoBean.setSbtBuildTool(true);
             } else {
                 throw new RuntimeException(buildTool + " not yet implemented");
             }

@@ -5,13 +5,9 @@ import java.io.File;
 public class FileUtil {
     public static void createDir(File dirFile) {
         if (dirFile.exists()) {
-            boolean isDeleted = deleteProject(dirFile);
-            if (isDeleted)
-                System.out.println(dirFile + " deleted successfully");
+            deleteProject(dirFile);
         }
-        boolean isCreated = dirFile.mkdirs();
-        if (isCreated)
-            System.out.println(dirFile + " created successfully");
+        dirFile.mkdirs();
     }
 
     public static boolean deleteProject(File dir) {

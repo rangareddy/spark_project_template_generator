@@ -31,13 +31,9 @@ public class GenerateTemplateUtil {
     public static void generateTemplate(String filePath, Object templateData, String ftlFile, boolean isCreateDir) {
         File templateFile = new File(filePath);
         if (isCreateDir) {
-            boolean isCreated = templateFile.getParentFile().mkdirs();
-            if (isCreated) {
-                System.out.println(templateFile.getParentFile().getAbsolutePath() + " created.");
-            }
+            templateFile.getParentFile().mkdirs();
         }
         GenerateTemplateUtil.generateTemplate(templateData, ftlFile, templateFile);
-        System.out.println(templateFile + " created successfully");
     }
 
     public static void generateTemplate(Object templateData, String ftlFile, File outputFile) {
