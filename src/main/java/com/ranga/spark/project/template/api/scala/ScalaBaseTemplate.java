@@ -2,45 +2,53 @@ package com.ranga.spark.project.template.api.scala;
 
 import com.ranga.spark.project.template.api.BaseTemplate;
 
+import static com.ranga.spark.project.template.util.AppConstants.*;
+
 public abstract class ScalaBaseTemplate implements BaseTemplate {
 
-    private String className;
+    private final String className;
+
     public ScalaBaseTemplate(String className) {
         this.className = className;
     }
 
     @Override
     public String classTemplate() {
-        return "object "+className+" extends App with Serializable";
+        return "object " + className + " extends Serializable";
     }
 
     @Override
-     public String importTemplate() {
-        return "import java.lang\n" +
-                "\n" +
-                "import org.apache.spark.sql.{Dataset, SparkSession}\n" +
+    public String importTemplate() {
+        return "import org.apache.spark.sql.{Dataset, Row, SparkSession}\n" +
                 "import org.apache.spark.SparkConf\n" +
                 "import org.apache.log4j.Logger";
     }
 
     @Override
+    public String methodsTemplate() {
+        return EMPTY_STRING;
+    }
+
+    @Override
+    public String setupInstructions() {
+        return EMPTY_STRING;
+    }
+
+    @Override
     public String sparkSessionBuildTemplate() {
-         return "@transient lazy val logger: Logger = Logger.getLogger(getClass.getName)\n" +
-                 "\n" +
-                 "    val appName = \"${projectBuilder.className} Example\"\n" +
-                 "\n" +
-                 "    // Creating the SparkConf object\n" +
-                 "    val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
-                 "\n" +
-                 "    // Creating the SparkSession object\n" +
-                 "    val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()\n" +
-                 "    logger.info(\"SparkSession created successfully\")";
+        return NEW_LINE_DELIMITER +
+                DOUBLE_TAB_DELIMITER + "// Creating the SparkConf object\n" +
+                DOUBLE_TAB_DELIMITER + "val sparkConf = new SparkConf().setAppName(appName).setIfMissing(\"spark.master\", \"local[2]\")\n" +
+                NEW_LINE_DELIMITER +
+                DOUBLE_TAB_DELIMITER + "// Creating the SparkSession object\n" +
+                DOUBLE_TAB_DELIMITER + "val spark: SparkSession = SparkSession.builder().config(sparkConf).getOrCreate()\n" +
+                DOUBLE_TAB_DELIMITER + "logger.info(\"SparkSession created successfully\")";
     }
 
     @Override
     public String sparkSessionCloseTemplate() {
-        return "    // Close the SparkSession\n" +
-                "    spark.close()\n" +
-                "    logger.info(\"SparkSession closed successfully\")";
+        return "// Close the SparkSession\n" +
+                DOUBLE_TAB_DELIMITER+"spark.close()\n" +
+                DOUBLE_TAB_DELIMITER+"logger.info(\"SparkSession closed successfully\")";
     }
 }

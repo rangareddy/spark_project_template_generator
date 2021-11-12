@@ -1,14 +1,29 @@
 package ${projectBuilder.packageName}
 
-${projectBuilder.properties.importTemplate}
+${projectBuilder.scalaCodeTemplate.importTemplate}
 
-${projectBuilder.properties.classTemplate} {
+/**
+ * @author ${projectBuilder.author}
+ * Version: 1.0
+ * Created : ${projectBuilder.createdDate}
+ */
 
-    ${projectBuilder.properties.sparkSessionBuildTemplate}
+${projectBuilder.scalaCodeTemplate.classTemplate} {
 
-    ${projectBuilder.properties.codeTemplate}
+    @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)
 
-    logger.info("${projectBuilder.appName} Finished")
+    def main(args: Array[String]): Unit = {
+        ${projectBuilder.mainMethodArguments}
 
-    ${projectBuilder.properties.sparkSessionCloseTemplate}
+        val appName = "${projectBuilder.name}"
+        ${projectBuilder.scalaCodeTemplate.sparkSessionBuildTemplate}
+
+        ${projectBuilder.scalaCodeTemplate.codeTemplate}
+
+        logger.info("<${projectBuilder.name}> successfully finished")
+
+        ${projectBuilder.scalaCodeTemplate.sparkSessionCloseTemplate}
+    }
+
+    ${projectBuilder.scalaCodeTemplate.methodsTemplate}
 }

@@ -7,51 +7,34 @@
     <groupId>${projectBuilder.packageName}</groupId>
     <artifactId>${projectBuilder.projectName}</artifactId>
     <version>${projectBuilder.jarVersion}</version>
-    <name>${projectBuilder.appName} Application</name>
+    <name>${projectBuilder.name}</name>
+    <description>${projectBuilder.projectDescription}</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version>${projectBuilder.properties.javaVersion}</java.version>
-
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
-        <scala-maven-plugin.version>4.3.1</scala-maven-plugin.version>
+        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <scalatest-maven-plugin.version>2.0.0</scalatest-maven-plugin.version>
-
-        <scala.version>${projectBuilder.properties.scalaVersion}</scala.version>
-        <scala.binary.version>${projectBuilder.properties.scalaBinaryVersion}</scala.binary.version>
-
-        <spark.version>${projectBuilder.properties.sparkVersion}</spark.version>
-        <spark.scope>${projectBuilder.properties.sparkScope}</spark.scope>
-
-        <scalatest.version>3.0.8</scalatest.version>
-        <junit.version>4.13.1</junit.version>
+${projectBuilder.mavenBuildToolBean.propertyVersions}
     </properties>
 
     <!-- Developers -->
     <developers>
         <developer>
-            <id>rangareddy</id>
-            <name>Ranga Reddy</name>
-            <url>https://github.com/rangareddy</url>
+            <id>${projectBuilder.authorId}</id>
+            <name>${projectBuilder.author}</name>
+            <email>${projectBuilder.authorEmail}</email>
+            <url>https://github.com/${projectBuilder.authorId}</url>
         </developer>
     </developers>
 
     <!-- Repositories -->
     <repositories>
-        <repository>
-            <id>cldr-repo</id>
-            <name>Cloudera Public Repo</name>
-            <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>
-        </repository>
-        <repository>
-            <id>hdp-repo</id>
-            <name>Hortonworks Public Repo</name>
-            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
-        </repository>
+        ${projectBuilder.mvnRepoName}
     </repositories>
 
     <dependencies>
@@ -68,34 +51,12 @@
             <artifactId>scala-compiler</artifactId>
             <version>${r"${scala.version}"}</version>
         </dependency>
-
-        <!-- Spark dependencies -->
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-hive_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${spark.version}"}</version>
-            <scope>${r"${spark.scope}"}</scope>
-        </dependency>
-
+        ${projectBuilder.mavenBuildToolBean.dependencies}
         <!-- Scala Test dependencies -->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${r"${scala.binary.version}"}</artifactId>
-            <version>${r"${scalatest.version}"}</version>
+            <version>${r"${scala.test.version}"}</version>
             <scope>test</scope>
         </dependency>
 
@@ -103,7 +64,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${r"${junit.version}"}</version>
+            <version>${r"${junit.test.version}"}</version>
             <scope>test</scope>
         </dependency>
 
@@ -175,7 +136,7 @@
                 <configuration>
                     <reportsDirectory> ${r"${project.build.directory}"}/surefire-reports</reportsDirectory>
                     <junitxml>.</junitxml>
-                    <filereports>${projectBuilder.appName}TestSuites.txt</filereports>
+                    <filereports>${projectBuilder.projectName}TestSuites.txt</filereports>
                 </configuration>
                 <executions>
                     <execution>

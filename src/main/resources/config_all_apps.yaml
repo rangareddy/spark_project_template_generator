@@ -1,0 +1,148 @@
+baseProjectDir: "/Users/rangareddy.avula/project_templates"
+basePackageName: "com.ranga"
+baseDeployJarPath: "/apps/spark/"
+buildTools: "maven"
+jarVersion: "1.0.0-SNAPSHOT"
+scalaVersion: "2.11.12"
+scalaBinaryVersion: "2.11"
+javaVersion: "1.8"
+scope: "compile"
+secureCluster: "true"
+sslCluster: "true"
+author: "Ranga Reddy"
+authorEmail: "rangareddy.avula@gmail.com"
+projectDetails:
+  - projectName: "SparkHelloWorld"
+    templateName: "default"
+    description: "Spark Hello World Project"
+  - projectName: "SparkHive"
+    templateName: "hive"
+    description: "Spark Hive Integration Project"
+  - projectName: "SparkHbase"
+    templateName: "hbase"
+    description: "Spark HBase Integration Project"
+  - projectName: "SparkHwc"
+    templateName: "hwc"
+    description: "Spark Hive Warehouse Connector Integration Project"
+  - projectName: "SparkKafka"
+    templateName: "kafka"
+    description: "Spark Kafka Integration Project"
+  - projectName: "SparkPhoenix"
+    templateName: "phoenix"
+    description: "Spark Phoenix Integration Project"
+  - projectName: "SparkKudu"
+    templateName: "kudu"
+    description: "Spark Kudu Integration Project"
+  - projectName: "SparkORC"
+    templateName: "orc"
+    description: "Spark ORC Integration Project"
+  - projectName: "SparkAvro"
+    templateName: "avro"
+    description: "Spark Avro Integration Project"
+  - projectName: "SparkParquet"
+    templateName: "parquet"
+    description: "Spark Parquet Integration Project"
+  - projectName: "SparkCassandra"
+    templateName: "cassandra"
+    description: "Spark Cassandra Integration Project"
+  - projectName: "SparkS3"
+    templateName: "s3"
+    description: "Spark S3 Integration Project"
+  - projectName: "SparkGcs"
+    templateName: "gcs"
+    description: "Spark Google Cloud Integration Project"
+componentVersions:
+  - component: "spark"
+    version: "2.4.0.7.1.6.0-297"
+    scope: "provided"
+  - component: "hwc"
+    version: "1.0.0.7.1.6.0-297"
+  - component: "phoenix"
+    version: "6.0.0.7.1.6.0-297"
+  - component: "hbaseSpark"
+    version: "1.0.0.7.1.6.0-297"
+  - component: "kudu"
+    version: "1.13.0.7.1.6.23-1"
+  - component: "aws-java-sdk-bundle"
+    version: "1.11.375"
+  - component: "hadoop-aws"
+    version: "3.1.1.7.1.6.0-297"
+  - component: "gcs-connector"
+    version: "2.1.2.7.1.6.0-297"
+  - component: "spark-cassandra-connector"
+    version: "2.5.2"
+templates:
+  defaultTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-core_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hiveTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-hive_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hbaseTemplate:
+    - groupId: 'org.apache.hbase.connectors.spark'
+      artifactId: 'hbase-spark'
+      version: '${hbaseSparkVersion}'
+      scope: '${hbaseSparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-streaming_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  hwcTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-hive_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'com.hortonworks.hive'
+      artifactId: 'hive-warehouse-connector_${scalaBinaryVersion}'
+      version: '${hwcVersion}'
+      scope: '${hwcScope}'
+  avroTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-avro_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  kafkaTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-streaming_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql-kafka-0-10_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+  phoenixTemplate:
+    - groupId: 'org.apache.phoenix'
+      artifactId: 'phoenix5-spark'
+      version: '${phoenixVersion}'
+      scope: '${phoenixScope}'
+  kuduTemplate:
+    - groupId: 'org.apache.kudu'
+      artifactId: 'kudu-spark2_${scalaBinaryVersion}'
+      version: '${kuduVersion}'
+  s3Template:
+    - groupId: 'com.amazonaws'
+      artifactId: 'aws-java-sdk-bundle'
+      version: '${aws-java-sdk-bundleVersion}'
+      scope: '${aws-java-sdk-bundleScope}'
+    - groupId: 'org.apache.hadoop'
+      artifactId: 'hadoop-aws'
+      version: '${hadoop-awsVersion}'
+      scope: '${hadoop-awsScope}'
+  gcsTemplate:
+    - groupId: 'com.google.cloud.bigdataoss'
+      artifactId: 'gcs-connector'
+      version: '${gcs-connectorVersion}'
+      scope: '${gcs-connectorScope}'
+  cassandraTemplate:
+    - groupId: 'com.datastax.spark'
+      artifactId: 'spark-cassandra-connector_${scalaBinaryVersion}'
+      version: '${spark-cassandra-connectorVersion}'
+      scope: '${spark-cassandra-connectorScope}'

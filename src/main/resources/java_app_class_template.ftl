@@ -1,20 +1,29 @@
 package ${projectBuilder.packageName};
 
-${projectBuilder.properties.importJavaTemplate}
+${projectBuilder.javaCodeTemplate.importTemplate}
 
-${projectBuilder.properties.classJavaTemplate} {
+/**
+ * @author ${projectBuilder.author}
+ * Version: 1.0
+ * Created : ${projectBuilder.createdDate}
+ */
+
+${projectBuilder.javaCodeTemplate.classTemplate} {
 
     private static final Logger logger = Logger.getLogger(${projectBuilder.javaClassName}.class.getName());
 
     public static void main(String[] args) {
+${projectBuilder.mainMethodArguments}
 
-        ${projectBuilder.properties.sparkSessionBuildJavaTemplate}
+        String appName = "${projectBuilder.name}";
+        ${projectBuilder.javaCodeTemplate.sparkSessionBuildTemplate}
 
-        ${projectBuilder.properties.codeJavaTemplate}
+        ${projectBuilder.javaCodeTemplate.codeTemplate}
 
-        logger.info("${projectBuilder.appName} Finished");
+        logger.info("<${projectBuilder.name}> successfully finished");
 
-        ${projectBuilder.properties.sparkSessionCloseJavaTemplate}
+        ${projectBuilder.javaCodeTemplate.sparkSessionCloseTemplate}
     }
 
+    ${projectBuilder.javaCodeTemplate.methodsTemplate}
 }
