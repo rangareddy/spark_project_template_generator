@@ -8,10 +8,29 @@ The advantages of this application are:
 
 1. Create **sbt** or **maven** or both build based Spark applications.
 2. Through single configuration (`config.yaml` or `config_all_apps.yaml`) we can create **N number of Spark Applications**.
-3. Generate both **Scala** and **Java** based code. 
-4. Generate the **run script** to run the spark application.
-5. Deployment steps are mentioned in **README.md** file.
-6. Built in **Scala Test** code.
+3. Supports various Spark templates like hive, hbase, kudu, various file formats etc.
+4. Generate both **Scala** and **Java** based code. 
+5. Generate the **run script** to run the spark application.
+6. Deployment steps are mentioned in **README.md** file.
+7. Built in **Scala Test** code.
+
+## Supported Templates
+
+The following spark templates are supported:
+
+1. DEFAULT
+1. HBASE
+1. HIVE
+1. KAFKA
+1. PHOENIX
+1. KUDU
+1. HWC
+1. ORC
+1. AVRO
+1. PARQUET
+1. S3
+1. GCS
+1. CASSANDRA
 
 ## How to Use
 
@@ -26,16 +45,16 @@ cd spark_project_template_generator
 
 **Note:** 
 
-*. By `config.yaml` configuration file, we can create single project by default.
-*. By `config_all_apps.yaml` configuration file, we can create multiple project(s) by default.
+* By `config.yaml` configuration file, we can create single project by default.
+* By `config_all_apps.yaml` configuration file, we can create multiple project(s) by default.
 
-#### Open the `config_all_apps.yaml` file
+#### Update the Configuration 
+
+Open the `config_all_apps.yaml` file and Update the configuration according to your cluster like Java Version, Spark version, Scala versions.
 
 ```sh
 vi src/main/resources/config_all_apps.yaml
 ```
-
-Update the above configuration according to your cluster like Java Version, Spark version, Scala versions.
 
 ### Build the `spark_project_template_generator` project.
 
