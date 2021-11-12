@@ -86,6 +86,12 @@ Application <spark-s3-integration> created successfully.
 Application <spark-gcs-integration> created successfully.
 ```
 
+## Sample Applications
+
+By using this application i have created most of the spark applications mentioned in the following github. 
+
+https://github.com/rangareddy/ranga_spark_experiments
+
 ## Contribution
 
 Send pull requests to keep this project updated.
