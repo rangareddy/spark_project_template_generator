@@ -7,7 +7,7 @@ Used to generate multiple spark project templates using configuration file.
 The advantages of this application are:
 
 1. Create **sbt** or **maven** or both build based Spark applications.
-2. Through Single Configuration we can create **N number of Spark Applications**.
+2. Through single configuration (`config.yaml` or `config_all_apps.yaml`) we can create **N number of Spark Applications**.
 3. Generate both **Scala** and **Java** based code. 
 4. Generate the **run script** to run the spark application.
 5. Deployment steps are mentioned in **README.md** file.
@@ -22,34 +22,20 @@ git clone https://github.com/rangareddy/spark_project_template_generator.git
 cd spark_project_template_generator
 ```
 
-### Update the Spark application details in `application.properties` file to create Spark project(s)
+### Update the Spark application details in `config.yaml` or `config_all_apps.yaml` file to create Spark project(s).
 
-#### Open the `application.properties` file
+**Note:** 
 
-```sh
-vi src/main/resources/application.properties
-```
+*. By `config.yaml` configuration file, we can create single project by default.
+*. By `config_all_apps.yaml` configuration file, we can create multiple project(s) by default.
 
-#### Add your project names with comma separated. For example,
-
-```sh
-appName=SparkCassandra,SparkHbase
-```
-
-### Update target path where project needs to be created. For example,
-
-```
-targetDir=/Users/rangareddy.avula/project_templates
-```
-
-### According to your cluster update the Java Version, Spark version, Scala versions. For example,
+#### Open the `config_all_apps.yaml` file
 
 ```sh
-javaVersion=1.8
-scalaVersion=2.12.11
-sparkVersion=3.0.1
-sparkScope=compile
+vi src/main/resources/config_all_apps.yaml
 ```
+
+Update the above configuration according to your cluster like Java Version, Spark version, Scala versions.
 
 ### Build the `spark_project_template_generator` project.
 
@@ -66,27 +52,19 @@ $ java -jar target/spark-project-template-generator-1.0.0-SNAPSHOT.jar
 ### It will print the following output
 
 ```sh
-========================
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/README.md created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/run_spark_cassandra_integration_app.sh created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/pom.xml created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/src/main/scala/com/ranga/spark/cassandra/SparkCassandraIntegrationApp.scala created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/src/main/java/com/ranga/spark/cassandra/SparkCassandraIntegrationJavaApp.java created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/src/main/resources/log4j.properties created successfully
-/Users/rangareddy.avula/project_templates/spark-cassandra-integration/.gitignore created successfully
-========================
-
-========================
-/Users/rangareddy.avula/project_templates/spark-hbase-integration created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/README.md created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/run_spark_hbase_integration_app.sh created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/pom.xml created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/src/main/scala/com/ranga/spark/hbase/SparkHbaseIntegrationApp.scala created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/src/main/java/com/ranga/spark/hbase/SparkHbaseIntegrationJavaApp.java created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/src/main/resources/log4j.properties created successfully
-/Users/rangareddy.avula/project_templates/spark-hbase-integration/.gitignore created successfully
-========================
+Application <spark-hello-world-integration> created successfully.
+Application <spark-hive-integration> created successfully.
+Application <spark-hbase-integration> created successfully.
+Application <spark-hwc-integration> created successfully.
+Application <spark-kafka-integration> created successfully.
+Application <spark-phoenix-integration> created successfully.
+Application <spark-kudu-integration> created successfully.
+Application <spark-orc-integration> created successfully.
+Application <spark-avro-integration> created successfully.
+Application <spark-parquet-integration> created successfully.
+Application <spark-cassandra-integration> created successfully.
+Application <spark-s3-integration> created successfully.
+Application <spark-gcs-integration> created successfully.
 ```
 
 ## Contribution
