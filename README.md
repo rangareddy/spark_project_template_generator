@@ -86,6 +86,8 @@ vi src/main/resources/config_all_apps.yaml
 |componentVersions| We can specify what is the component name, version and its scope. If scope is not specified then it will pick global scope| |
 |templates|For each template what are all the jars files is required we need to specify here||
 
+**Note:** Please update your configuration file properly otherwise you will get configuration issues.
+
 ### Build the `spark_project_template_generator` project.
 
 ```sh
@@ -134,7 +136,7 @@ Application <spark-gcs-integration> created successfully.
 
 By using this application i have created most of the spark applications mentioned in the following github. 
 
-https://github.com/rangareddy/ranga_spark_experiments
+`https://github.com/rangareddy/ranga_spark_experiments`
 
 ## Contribution
 
