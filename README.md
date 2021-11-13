@@ -26,12 +26,12 @@ The following spark templates are supported:
 | KAFKA         | Spark Kafka Integration                    | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-kafka-integration)|
 | PHOENIX       | Spark Phoenix Integration                  | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-phoenix-integration)|
 | KUDU          | Spark Phoenix Integration                  | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-kudu-integration)|
-| HWC           | Spark Hive Warehouse Connector Integration | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-hwc-integration)|
-| ORC           | Spark ORC File Format Integration          | &check;    | &#10539;  | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-orc-integration)|
-| AVRO          | Spark Avro File Format Integration         | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-avro-integration)|
-| PARQUET       | Spark Parquet File Format Integration      | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-parquet-integration)|
+| HWC           | Spark Hive Warehouse Connector Integration | &check;    | &check;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-hwc-integration)|
+| ORC           | Spark ORC File Format Integration          | &check;    | &check;  | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-orc-integration)|
+| AVRO          | Spark Avro File Format Integration         | &check;    | &check;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-avro-integration)|
+| PARQUET       | Spark Parquet File Format Integration      | &check;    | &check;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-parquet-integration)|
 | S3            | Spark AWS S3 Storage Integration           | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-s3-integration)|
-| GCS           | Spark Google Cloud Storage Integration     | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark_gcs_integration)|
+| GCS           | Spark Google Cloud Storage Integration     | &check;    | &check;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark_gcs_integration)|
 | CASSANDRA     | Spark Cassandra Integration                | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-cassandra-integration)|
 
 ## How to Use
