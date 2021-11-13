@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo ""
-echo "Running the <$0> script"
-echo ""
+SCRIPT_NAME=`basename "$0"`
+
+printf "\nRunning the <${r"${SCRIPT_NAME}"}> script.\n"
 
 ${projectBuilder.runScriptArguments}
 ${projectBuilder.sparkSubmitCommand}
 
-echo "Finished <$0> script"
+printf "Finished <${r"${SCRIPT_NAME}"}> script.\n"

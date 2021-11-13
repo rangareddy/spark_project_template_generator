@@ -14,7 +14,6 @@ ${projectBuilder.scalaCodeTemplate.classTemplate} {
 
     def main(args: Array[String]): Unit = {
         ${projectBuilder.mainMethodArguments}
-
         val appName = "${projectBuilder.name}"
         ${projectBuilder.scalaCodeTemplate.sparkSessionBuildTemplate}
 

@@ -46,7 +46,7 @@ public class SparkSubmitBuilder {
             }
             mainMethodArguments.append("\");\n");
             mainMethodArguments.append("            System.exit(0);\n");
-            mainMethodArguments.append("        }");
+            mainMethodArguments.append("        }\n");
             projectInfoBean.setMainMethodArguments(mainMethodArguments.toString());
         }
 
@@ -59,8 +59,7 @@ public class SparkSubmitBuilder {
                 varArgsSB.append(argument).append("=$").append(i + 1).append("\n");
             }
             String usageArgumentsStr = "if [ $# -lt " + totalArguments.size() + " ]; then\n" +
-                    "    echo \"Usage   : $0 " + argumentsUsage.toString().trim() + "\"\n" +
-                    "    echo \" \"\n" +
+                    "    printf \"Usage  : ${SCRIPT_NAME} " + argumentsUsage.toString().trim() + "\\n\"\n" +
                     "    exit 1\n" +
                     "fi\n";
             usageArgumentsStr = usageArgumentsStr + "\n" + varArgsSB;

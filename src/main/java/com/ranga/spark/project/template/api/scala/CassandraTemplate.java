@@ -75,18 +75,13 @@ public class CassandraTemplate extends ScalaBaseTemplate {
 
     @Override
     public String codeTemplate() {
-        return "\n" +
-                "        val tableName = \"employees\"\n" +
+        return  "val tableName = \"employees\"\n" +
                 "        val keyspace = \"ranga_keyspace\"\n" +
                 "        val cassandraFormat = \"org.apache.spark.sql.cassandra\"\n" +
                 "        val options = Map( \"keyspace\" -> keyspace, \"table\" -> tableName)\n" +
                 "\n" +
                 "        val employeeDF = spark.read.format(cassandraFormat).options(options).load()\n" +
-                "        display(employeeDF)\n" +
-                "        \n" +
-                "        employeeDF.printSchema()\n" +
-                "        employeeDF.show(truncate=false)  \n" +
-                "\n" +
+                "        display(employeeDF)\n\n" +
                 "        import spark.implicits._\n" +
                 "        var employeeDS = Seq(\n" +
                 "          Employee(5L, \"Yashwanth\", 32, 80000.5f),\n" +

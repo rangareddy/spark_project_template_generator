@@ -51,7 +51,7 @@ public class SparkProjectTemplateGenerator {
         // Scala Test App Generator
         if (projectInfoBean.getTemplateType() == TemplateType.DEFAULT) {
             String scalaTestFilePath = testScalaPath + File.separator + packageName + File.separator + className + "Test.scala";
-            GenerateTemplateUtil.generateTemplate(scalaTestFilePath, projectInfoBean, "scala_app_class_test.ftl", true);
+            GenerateTemplateUtil.generateTemplate(scalaTestFilePath, projectInfoBean, "scala_app_class_test_template.ftl", true);
         }
 
         // Java App Generator

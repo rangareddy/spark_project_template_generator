@@ -14,7 +14,6 @@ ${projectBuilder.javaCodeTemplate.classTemplate} {
 
     public static void main(String[] args) {
 ${projectBuilder.mainMethodArguments}
-
         String appName = "${projectBuilder.name}";
         ${projectBuilder.javaCodeTemplate.sparkSessionBuildTemplate}
 

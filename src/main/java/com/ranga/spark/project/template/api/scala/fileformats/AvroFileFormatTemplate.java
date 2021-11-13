@@ -10,7 +10,8 @@ public class AvroFileFormatTemplate extends ScalaBaseTemplate {
 
     @Override
     public String methodsTemplate() {
-        return "def getEmployeeDS(spark: SparkSession): Dataset[Row] = {\n" +
+        return  "// Get the Employee Dataset\n"+
+                "    def getEmployeeDS(spark: SparkSession): Dataset[Row] = {\n" +
                 "        import spark.implicits._\n" +
                 "        Seq(\n" +
                 "            Employee(1L, \"Ranga Reddy\", 32, 80000.5f),\n" +
@@ -20,30 +21,24 @@ public class AvroFileFormatTemplate extends ScalaBaseTemplate {
                 "            Employee(5L, \"Vasundra Reddy\", 55, 580000.5f)\n" +
                 "        ).toDF()\n" +
                 "    }\n" +
-                "\n" +
-                "    def saveData(df: Dataset[Row], format:String, path: String): Unit = {\n" +
-                "        df.coalesce(1).write.format(format).mode(\"overwrite\").save(path)\n" +
-                "    }\n" +
+                "    // Display the Dataset\n" +
                 "    def display(df: Dataset[Row]): Unit = {\n" +
                 "        df.printSchema()\n" +
                 "        df.show()\n" +
-                "    }\n" +
-                "\n" +
-                "    def loadData(spark: SparkSession, format:String, path: String) : Dataset[Row] = {\n" +
-                "        spark.read.format(format).load(path)\n" +
-                "    }";
+                "    }\n";
     }
 
     @Override
     public String codeTemplate() {
-        return "val employeeDF = getEmployeeDS(spark)\n" +
-                "        employeeDF.printSchema()\n" +
+        return  "val avroFilePath = \"/tmp/avro_data\"\n\n" +
+                "        val employeeDF = getEmployeeDS(spark)\n" +
+                "        display(employeeDF)\n" +
                 "\n" +
-                "        // avro\n" +
-                "        val avroFilePath = \"/tmp/avro_data\"\n" +
-                "        saveData(employeeDF, \"avro\", avroFilePath)\n" +
+                "        // write avro data\n" +
+                "        df.coalesce(1).write.format(\"avro\").mode(\"overwrite\").save(avroFilePath)\n" +
                 "\n" +
-                "        val avroEmployeeDF = loadData(spark, \"avro\", avroFilePath)\n" +
+                "       // read avro data\n"+
+                "        val avroEmployeeDF = spark.read.format(\"avro\").load(avroFilePath)\n" +
                 "        display(avroEmployeeDF)";
     }
 }
