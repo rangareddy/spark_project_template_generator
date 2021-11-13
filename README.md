@@ -53,7 +53,19 @@ cd spark_project_template_generator
 
 #### Update the Configuration 
 
-Open the `config_all_apps.yaml` file and Update the configuration according to your cluster like Java Version, Spark version, Scala versions.
+Open the configuration file and update the configuration according to your cluster like Java Version, Spark version, Scala versions.
+
+**Single Project Template Configuration file**
+
+```sh
+vi src/main/resources/config.yaml
+```
+
+**Multiple Projects Template Configuration file**
+
+```sh
+vi src/main/resources/config_all_apps.yaml
+```
 
 |Property Name|Property Description|Default Value| 
 |---|---|---|
@@ -73,20 +85,6 @@ Open the `config_all_apps.yaml` file and Update the configuration according to y
 |projectDetails|We can specify the project details like projectName, templateName, project description | |
 |componentVersions| We can specify what is the component name, version and its scope. If scope is not specified then it will pick global scope| |
 |templates|For each template what are all the jars files is required we need to specify here||
-
-According to your requirement you can update the configuration file mentioned below.
-
-**Single Project Template Configuration file**
-
-```sh
-vi src/main/resources/config.yaml
-```
-
-**Multiple Projects Template Configuration file**
-
-```sh
-vi src/main/resources/config_all_apps.yaml
-```
 
 ### Build the `spark_project_template_generator` project.
 
