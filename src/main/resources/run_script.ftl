@@ -1,14 +1,10 @@
 #!/bin/bash
-echo "Running <$0> script"
 
-spark-submit \
-  --master yarn \
-  --deploy-mode client \
-  --driver-memory 1g \
-  --executor-memory 1g \
-  --num-executors 2 \
-  --executor-cores 3 \
-  --class ${projectBuilder.fullClassName} \
-  ${projectBuilder.jarPath}
+SCRIPT_NAME=`basename "$0"`
 
-echo "Finished <$0> script"
+printf "\nRunning the <${r"${SCRIPT_NAME}"}> script.\n"
+
+${projectBuilder.runScriptArguments}
+${projectBuilder.sparkSubmitCommand}
+
+printf "Finished <${r"${SCRIPT_NAME}"}> script.\n"

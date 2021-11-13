@@ -1,0 +1,28 @@
+baseProjectDir: "/Users/rangareddy.avula/project_templates"
+basePackageName: "com.ranga"
+baseDeployJarPath: "/apps/spark/"
+buildTools: "sbt"
+jarVersion: "1.0.0-SNAPSHOT"
+scalaVersion: "2.11.12"
+scalaBinaryVersion: "2.11"
+javaVersion: "1.8"
+author: "Ranga Reddy"
+authorEmail: "rangareddy.avula@gmail.com"
+projectDetails:
+  - projectName: "SparkHelloWorld"
+    templateName: "default"
+    description: "Spark Hello World Application"
+componentVersions:
+  - component: "spark"
+    version: "2.4.0.7.1.6.0-297"
+    scope: "provided"
+templates:
+  defaultTemplate:
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-core_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
+    - groupId: 'org.apache.spark'
+      artifactId: 'spark-sql_${scalaBinaryVersion}'
+      version: '${sparkVersion}'
+      scope: '${sparkScope}'
