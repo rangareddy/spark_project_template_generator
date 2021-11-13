@@ -1,6 +1,6 @@
 # Spark Project Template Generator
 
-Used to generate multiple spark project templates using configuration file. 
+Used to generate single or multiple spark projects using existing or customized templates by specifying configuration file(yaml). 
 
 ## Advantages
 
@@ -13,6 +13,7 @@ The advantages of this application are:
 5. Generate the **run script** to run the spark application.
 6. Deployment steps are mentioned in **README.md** file.
 7. Built in **Scala Test** code.
+8. If your cluster is enabled **kerberos** or **ssl** or **both**, according to your cluster it will generate appropriate type of applications. 
 
 ## Supported Templates
 
@@ -54,6 +55,35 @@ cd spark_project_template_generator
 
 Open the `config_all_apps.yaml` file and Update the configuration according to your cluster like Java Version, Spark version, Scala versions.
 
+|Property Name|Property Description|Default Value| 
+|---|---|---|
+|baseProjectDir|Base Project Template Directory| User Home Directory - System.getProperty("user.home") |
+|basePackageName|Base Package Name for your project | com.ranga |
+|baseDeployJarPath|Based Deploy Path to deploy your application in cluster |/apps/spark/ |
+|buildTools| Supported Build tools: **maven, sbt** | maven|
+|jarVersion|Jar Version for your project |1.0.0-SNAPSHOT |
+|scalaVersion| Scala Version for your project |2.12.10|
+|javaVersion| Java Version for your project| 1.8|
+|sbtVersion| SBT Build tool Version for your project |0.13.17|
+|scope| Spark jars global application scope|compile|
+|secureCluster| If your cluster is enabled kerberized then you can use this parameter|false |
+|sslCluster|If your cluster is enabled ssl then you can use this parameter |false|
+|author| Specify the author name |Ranga Reddy |
+|authorEmail|Specify the author email | |
+|projectDetails|We can specify the project details like projectName, templateName, project description | |
+|componentVersions| We can specify what is the component name, version and its scope. If scope is not specified then it will pick global scope| |
+|templates|For each template what are all the jars files is required we need to specify here||
+
+According to your requirement you can update the configuration file mentioned below.
+
+**Single Project Template Configuration file**
+
+```sh
+vi src/main/resources/config.yaml
+```
+
+**Multiple Projects Template Configuration file**
+
 ```sh
 vi src/main/resources/config_all_apps.yaml
 ```
@@ -66,8 +96,22 @@ $ mvn clean package
 
 ### Run the `spark_project_template_generator` project to create Spark Project Templates.
 
+**Creating the Single project using config.yaml.**
+
 ```sh
 $ java -jar target/spark-project-template-generator-1.0.0-SNAPSHOT.jar
+```
+
+**or**
+
+```sh
+$ java -jar target/spark-project-template-generator-1.0.0-SNAPSHOT.jar src/main/resources/config.yaml
+```
+
+**Creating the Multiple projects using src/main/resources/config_all_apps.yaml.**
+
+```sh
+$ java -jar target/spark-project-template-generator-1.0.0-SNAPSHOT.jar src/main/resources/config_all_apps.yaml
 ```
 
 ### It will print the following output
