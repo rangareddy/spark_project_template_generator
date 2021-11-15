@@ -13,5 +13,6 @@ public enum TemplateType {
     PARQUET,
     S3,
     GCS,
-    CASSANDRA
+    CASSANDRA,
+    DELTA
 }

@@ -17,7 +17,7 @@ public class AvroFileFormatJavaTemplate extends JavaBaseTemplate {
                 "        // write avro data\n"+
                 "        employeeDF.coalesce(1).write().format(\"avro\").mode(\"overwrite\").save(avroFilePath);\n\n"+
                 "        // read avro data\n"+
-                "        Dataset<Row> avroEmployeeDF = spark.read().format(\"avro\").load(avroFilePath);\n" +
+                "        Dataset<Row> avroEmployeeDF = spark.read().format(\"avro\").load(avroFilePath);\n";
     }
 
     @Override
