@@ -191,6 +191,11 @@ public class TemplateBuilder implements Serializable {
                 usageArguments.addAll(cassandraUsageList);
                 appArgumentList.addAll(cassandraUsageList);
                 break;
+            case DELTA:
+                String deltaVersion = projectConfigMap.get("scalaBinaryVersion") + ":" +projectConfigMap.get("deltaVersion");
+                templateImg = "https://docs.delta.io/latest/_static/delta-lake-logo.png";
+                template = new DeltaTableTemplate(className, deltaVersion);
+                break;
             default:
                 isJavaBeanClass = isScalaBeanClass = true;
                 template = new DefaultTemplate(className);

@@ -51,6 +51,9 @@ projectDetails:
   - projectName: "SparkGcs"
     templateName: "gcs"
     description: "Spark Google Cloud Integration Project"
+  - projectName: "SparkDeltaLake"
+    templateName: "delta"
+    description: "Spark Delta Lake Integration Project"
 componentVersions:
   - component: "spark"
     version: "2.4.0.7.1.6.0-297"
@@ -71,6 +74,8 @@ componentVersions:
     version: "2.1.2.7.1.6.0-297"
   - component: "spark-cassandra-connector"
     version: "2.5.2"
+  - component: "delta"
+    version: "0.6.1"
 templates:
   defaultTemplate:
     - groupId: 'org.apache.spark'
@@ -146,3 +151,7 @@ templates:
       artifactId: 'spark-cassandra-connector_${scalaBinaryVersion}'
       version: '${spark-cassandra-connectorVersion}'
       scope: '${spark-cassandra-connectorScope}'
+  deltaTemplate:
+    - groupId: 'io.delta'
+      artifactId: 'delta-core_${scalaBinaryVersion}'
+      version: '${deltaVersion}'
