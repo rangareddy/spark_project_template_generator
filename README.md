@@ -34,6 +34,7 @@ The following spark templates are supported:
 | S3            | Spark AWS S3 Storage Integration           | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-s3-integration)|
 | GCS           | Spark Google Cloud Storage Integration     | &check;    | &check;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark_gcs_integration)|
 | CASSANDRA     | Spark Cassandra Integration                | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-cassandra-integration)|
+| DELTA         | Spark Delta Lake Integration               | &check;    | &#10539;   | &#10539;    | &#10539;  |[Code](https://github.com/rangareddy/ranga_spark_experiments/tree/master/spark-delta-lake-integration)|
 
 ## How to Use
 
@@ -130,6 +131,7 @@ Application <spark-parquet-integration> created successfully.
 Application <spark-cassandra-integration> created successfully.
 Application <spark-s3-integration> created successfully.
 Application <spark-gcs-integration> created successfully.
+Application <spark-delta-lake-integration> created successfully.
 ```
 
 ## Sample Applications
