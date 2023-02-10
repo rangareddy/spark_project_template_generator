@@ -5,10 +5,7 @@ import com.ranga.spark.project.template.bean.ProjectConfig;
 import com.ranga.spark.project.template.bean.ProjectInfoBean;
 import com.ranga.spark.project.template.bean.SbtBuildToolBean;
 import com.ranga.spark.project.template.builder.ProjectBuilders;
-import com.ranga.spark.project.template.util.FileUtil;
-import com.ranga.spark.project.template.util.GenerateTemplateUtil;
-import com.ranga.spark.project.template.util.TemplateType;
-import com.ranga.spark.project.template.util.YamlUtil;
+import com.ranga.spark.project.template.util.*;
 
 import java.io.File;
 import java.util.List;
@@ -97,7 +94,9 @@ public class SparkProjectTemplateGenerator {
         GenerateTemplateUtil.generateTemplate(projectInfoBean.getRunScriptPath(), projectInfoBean, "run_script.ftl");
 
         // README.md
-        GenerateTemplateUtil.generateTemplate(projectInfoBean.getReadMePath(), projectInfoBean, "README.ftl");
+        String readMePath = projectInfoBean.getReadMePath();
+        GenerateTemplateUtil.generateTemplate(readMePath, projectInfoBean, "README.ftl");
+        ReadMdFormatter.processMDFile(readMePath);
 
         System.out.println("Application <"+projectInfoBean.getProjectName()+"> created successfully.");
     }

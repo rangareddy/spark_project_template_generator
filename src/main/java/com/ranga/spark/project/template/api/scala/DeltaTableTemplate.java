@@ -20,7 +20,7 @@ public class DeltaTableTemplate extends ScalaBaseTemplate {
     public String setupInstructions() {
 
         StringBuilder setUpInstructionSB = new StringBuilder();
-        setUpInstructionSB.append("## Run interactively\n\n");
+        setUpInstructionSB.append("## Run the code Interactively\n\n");
 
         setUpInstructionSB
                 .append("### Spark Scala Shell\n\n")

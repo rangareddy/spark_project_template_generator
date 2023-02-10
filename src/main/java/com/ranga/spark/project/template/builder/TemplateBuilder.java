@@ -70,6 +70,7 @@ public class TemplateBuilder implements Serializable {
         boolean isJavaBeanClass = true, isScalaBeanClass = true;
         List<Map> othersTemplatesDependency = "default".equals(templateName) ? null : templates.get(templateName + "Template");
         String templateImg = "";
+        String aboutTemplate = null;
         switch (templateType) {
             case HBASE:
                 templateImg = "https://github.com/rangareddy/ranga-logos/blob/main/dbs/nosql/hbase/hbase_logo.png?raw=true";
@@ -195,6 +196,7 @@ public class TemplateBuilder implements Serializable {
                 String deltaVersion = projectConfigMap.get("scalaBinaryVersion") + ":" +projectConfigMap.get("deltaVersion");
                 templateImg = "https://docs.delta.io/latest/_static/delta-lake-logo.png";
                 template = new DeltaTableTemplate(className, deltaVersion);
+                aboutTemplate = "**Delta Lake** is a storage layer that brings scalable, ACID transactions to [Apache Spark](https://spark.apache.org/) and other big-data engines.";
                 break;
             default:
                 isJavaBeanClass = isScalaBeanClass = true;
@@ -213,7 +215,12 @@ public class TemplateBuilder implements Serializable {
         projectInfoBean.setRunScriptNotesList(runScriptNotesList);
         CodeTemplateBean codeTemplateBean = TemplateBuilder.getCodeTemplateBean(template);
         projectInfoBean.setScalaCodeTemplate(codeTemplateBean);
-        projectInfoBean.setSetUpInstructions(StringUtils.isNotEmpty(template.setupInstructions()) ? template.setupInstructions() : "");
+        projectInfoBean.setAboutTemplate(aboutTemplate);
+        String setupInstructions = "";
+        if(StringUtils.isNotEmpty(template.setupInstructions())) {
+            setupInstructions = template.setupInstructions();
+        }
+        projectInfoBean.setSetUpInstructions(setupInstructions);
 
         if (javaTemplate != null) {
             projectInfoBean.setJavaTemplate(true);

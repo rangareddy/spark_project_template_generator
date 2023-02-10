@@ -1,4 +1,4 @@
-# Spark Project Template Generator
+<h1 style="color:blue">Spark Project Template Generator</h1>
 
 Used to generate single or multiple spark projects using existing or customized templates by specifying configuration file(yaml). 
 
@@ -49,8 +49,8 @@ cd spark_project_template_generator
 
 **Note:** 
 
-* By `config.yaml` configuration file, we can create single project by default.
-* By `config_all_apps.yaml` configuration file, we can create multiple project(s) by default.
+* By using `config.yaml` configuration file, we can create single project by default.
+* By using `config_all_apps.yaml` configuration file, we can create multiple project(s) by default.
 
 #### Update the Configuration 
 

@@ -65,4 +65,5 @@ public class ProjectInfoBean implements Serializable {
     private String authorEmail;
     private String sbtRepoName;
     private boolean buildLocally;
+    private String aboutTemplate;
 }
